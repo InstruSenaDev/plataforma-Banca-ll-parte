@@ -14,14 +14,14 @@ const getPendiente = async (req, res) => {
     tp.Descripcion AS Producto,
     dp.N_Cuenta,
     dp.fecha
-FROM
+    FROM
     DetalleProducto dp
     JOIN cliente c ON dp.Cliente = c.ID_Cliente
     JOIN FormPersonNatural fpn ON c.inf_cliente = fpn.ID_FormPN
     JOIN producto p ON dp.Producto = p.ID_Producto
     JOIN tipoproducto tp ON p.Tipo = tp.ID_tipo
-  WHERE
-   c.Estado = 'Pendiente';
+    WHERE
+    c.Estado = 'Pendiente';
     `);
 
     if (result.rows.length > 0) {
@@ -36,6 +36,5 @@ FROM
 };
 
 module.exports = {
-    getPendiente
-  };
-  
+  getPendiente,
+};

@@ -92,7 +92,7 @@ export const DashboardComponent = () => {
         // Verificar que se haya almacenado el nombre de usuario en el estado
         if (userName) {
           const response = await fetch(
-            `https://simulador-banca.onrender.com/getcliente/${userName}`
+            `http://localhost:3000/getcliente/${userName}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

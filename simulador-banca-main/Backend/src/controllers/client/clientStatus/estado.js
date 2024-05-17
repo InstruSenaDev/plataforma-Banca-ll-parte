@@ -1,19 +1,19 @@
 const { Pool } = require("pg");
-const { CONFIG_BD } = require("../../config/db");
+const { CONFIG_BD } = require("../../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const UpdateCliente = async (req, res) => {
+const Estado = async (req, res) => {
   const Id = req.params.id;
-  const saldo = req.body.nuevoSaldo;
+  const estado = req.body.nuevoEstado;
 
   try {
     // Verifica que estado esté definido antes de utilizarlo
-    if (typeof saldo !== "undefined") {
+    if (typeof estado !== "undefined") {
       // Realiza la actualización en la base de datos utilizando el ID
       const updateQueryA =
-        "UPDATE cliente SET saldo = $1 WHERE id_cliente = $2";
-      const updateValuesA = [saldo, Id];
+        "UPDATE cliente SET estado = $1 WHERE id_cliente = $2";
+      const updateValuesA = [estado, Id];
       await pool.query(updateQueryA, updateValuesA);
 
       res
@@ -35,5 +35,5 @@ const UpdateCliente = async (req, res) => {
   }
 };
 module.exports = {
-  UpdateCliente,
+  Estado,
 };

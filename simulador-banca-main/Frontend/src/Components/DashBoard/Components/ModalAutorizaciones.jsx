@@ -13,7 +13,7 @@ export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
     console.log(id);
     try {
       // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-      fetch(`https://simulador-banca.onrender.com/EstadoD/${id}`, {
+      fetch(`http://localhost:3000/EstadoD/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

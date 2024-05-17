@@ -4,6 +4,7 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const yaml = require("js-yaml");
 const fs = require("fs");
+require("dotenv").config();
 
 app.use(
   cors({
@@ -21,11 +22,12 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Configuración de Rutas
 
 const dataRoutes = require("./src/routes/dataRoutes");
-app.use("/", dataRoutes);
+const userRoutes = require("./src/routes/users.routes");
+app.use("/", dataRoutes, userRoutes);
 
 // Puerto en el que el servidor escuchará las peticiones
 const puerto = 3000;
 
 app.listen(puerto, () => {
-  console.log(`Servidor escuchando en https://simulador-banca.onrender.com/`);
+  console.log(`Servidor escuchando en ${process.env.HOST}`);
 });

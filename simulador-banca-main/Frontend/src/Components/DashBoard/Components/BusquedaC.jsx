@@ -10,9 +10,7 @@ export const BusquedaC = () => {
   useEffect(() => {
     const fecthData = async () => {
       try {
-        const response = await fetch(
-          "https://simulador-banca.onrender.com/getBusqueda"
-        );
+        const response = await fetch("http://localhost:3000/getBusqueda");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
