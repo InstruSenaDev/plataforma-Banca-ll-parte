@@ -10,7 +10,7 @@ export const BusquedaC = () => {
   useEffect(() => {
     const fecthData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/getBusqueda");
+        const response = await fetch("http://localhost:3000/get_search");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const getBusqueda = async (req, res) => {
+const getSearch = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT
@@ -57,5 +57,5 @@ const getBusqueda = async (req, res) => {
 };
 
 module.exports = {
-  getBusqueda,
+  getSearch,
 };

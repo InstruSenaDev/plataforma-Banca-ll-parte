@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const Estado = async (req, res) => {
+const clientStatus = async (req, res) => {
   const Id = req.params.id;
   const estado = req.body.nuevoEstado;
 
@@ -35,5 +35,5 @@ const Estado = async (req, res) => {
   }
 };
 module.exports = {
-  Estado,
+  clientStatus,
 };

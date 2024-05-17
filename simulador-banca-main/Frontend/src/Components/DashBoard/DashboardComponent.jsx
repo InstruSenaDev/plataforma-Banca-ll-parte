@@ -92,7 +92,7 @@ export const DashboardComponent = () => {
         // Verificar que se haya almacenado el nombre de usuario en el estado
         if (userName) {
           const response = await fetch(
-            `http://localhost:3000/getcliente/${userName}`
+            `http://localhost:3000/get_client/${userName}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

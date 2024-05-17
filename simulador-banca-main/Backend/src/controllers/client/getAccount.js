@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const getInfoCliente = async (req, res) => {
+const getAccount = async (req, res) => {
   try {
     // Obtén el número de cuenta proporcionado en la URL
     const { accountNumberInt } = req.params;
@@ -41,5 +41,5 @@ const getInfoCliente = async (req, res) => {
   }
 };
 module.exports = {
-  getInfoCliente,
+  getAccount,
 };

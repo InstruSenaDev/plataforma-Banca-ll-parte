@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const getcliente = async (req, res) => {
+const getClient = async (req, res) => {
   try {
     const nameUser = req.params.userName; // Obtener el valor de name_user de los parámetros de la ruta
 
@@ -46,5 +46,5 @@ const getcliente = async (req, res) => {
   }
 };
 module.exports = {
-  getcliente,
+  getClient,
 };

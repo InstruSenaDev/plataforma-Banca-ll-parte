@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const UpdateCliente = async (req, res) => {
+const updateClient = async (req, res) => {
   const Id = req.params.id;
   const saldo = req.body.nuevoSaldo;
 
@@ -35,5 +35,5 @@ const UpdateCliente = async (req, res) => {
   }
 };
 module.exports = {
-  UpdateCliente,
+  updateClient,
 };
