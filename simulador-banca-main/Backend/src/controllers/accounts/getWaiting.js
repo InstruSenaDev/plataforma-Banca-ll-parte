@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const getPendiente = async (req, res) => {
+const getWaiting = async (req, res) => {
   try {
     const result = await pool.query(`
     SELECT
@@ -36,5 +36,5 @@ const getPendiente = async (req, res) => {
 };
 
 module.exports = {
-  getPendiente,
+  getWaiting,
 };

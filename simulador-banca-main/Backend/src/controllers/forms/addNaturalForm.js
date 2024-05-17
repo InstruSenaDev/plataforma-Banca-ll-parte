@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const AddFormData = async (req, res) => {
+const addNaturalForm = async (req, res) => {
   const formData = req.body;
 
   if (!formData.FechaCV) {
@@ -218,5 +218,5 @@ const AddFormData = async (req, res) => {
 };
 
 module.exports = {
-  AddFormData,
+  addNaturalForm,
 };

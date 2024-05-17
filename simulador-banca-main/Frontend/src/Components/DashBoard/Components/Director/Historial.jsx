@@ -8,7 +8,7 @@ export const Historial = () => {
   useEffect(() => {
     const fecthData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/getclienteA");
+        const response = await fetch("http://localhost:3000/authorized");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

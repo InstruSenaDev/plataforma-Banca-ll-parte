@@ -3,7 +3,7 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const getAutorizado = async (req, res) => {
+const getAuthorized = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT
@@ -36,5 +36,5 @@ const getAutorizado = async (req, res) => {
 };
 
 module.exports = {
-  getAutorizado,
+  getAuthorized,
 };

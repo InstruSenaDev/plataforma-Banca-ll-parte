@@ -23,7 +23,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const dataRoutes = require("./src/routes/dataRoutes");
 const userRoutes = require("./src/routes/users.routes");
-app.use("/", dataRoutes, userRoutes);
+const detailsRoutes = require("./src/routes/details.routes");
+const formsRoutes = require("./src/routes/form.routes");
+app.use("/", dataRoutes, userRoutes, detailsRoutes, formsRoutes);
 
 // Puerto en el que el servidor escuchará las peticiones
 const puerto = 3000;
