@@ -241,35 +241,35 @@ export const Movimientos = () => {
                   >
                     <div className="flex flex-col items-center justify-center w-32 h-32">
                       <svg
-                        class="w-14 text-darkGreen dark:text-white"
+                        className="w-14 text-darkGreen dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                       >
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M12 6v13m0-13 4 4m-4-4-4 4"
                         />
                       </svg>
                       <svg
-                        class="w-24 text-green dark:text-white group-hover:text-green"
+                        className="w-24 text-green dark:text-white group-hover:text-green"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                         <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
                       </svg>
@@ -286,9 +286,9 @@ export const Movimientos = () => {
                     popup
                   >
                     <Modal.Header>
-                      <h3 className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                      <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
                         Consignar
-                      </h3>
+                      </span>
                     </Modal.Header>
                     <Modal.Body className="px-5 pt-2 pb-5">
                       <div className="space-y-6">
@@ -398,26 +398,26 @@ export const Movimientos = () => {
                   >
                     <div className="flex flex-col items-center justify-center w-32 h-32">
                       <svg
-                        class="w-24 text-red-600 dark:text-white"
+                        className="w-24 text-red-600 dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                         <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
                       </svg>
                       <svg
-                        class="w-14 text-red-600 dark:text-white"
+                        className="w-14 text-red-600 dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -425,9 +425,9 @@ export const Movimientos = () => {
                       >
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M12 19V5m0 14-4-4m4 4 4-4"
                         />
                       </svg>
@@ -444,9 +444,9 @@ export const Movimientos = () => {
                     popup
                   >
                     <Modal.Header>
-                      <h3 className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                      <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
                         Retirar
-                      </h3>
+                      </span>
                     </Modal.Header>
                     {/* retirar-------------------------------------------------------------------------------------------------- */}
                     <Modal.Body className="px-5 pt-2 pb-5">
