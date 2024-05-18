@@ -148,7 +148,7 @@ export const DashboardComponent = () => {
                       arrowIcon={false}
                       inline
                       label={
-                        <button className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
+                        <div className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
                           {" "}
                           <p className=" flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 ">
                             {user?.name_user} -{" "}
@@ -157,7 +157,7 @@ export const DashboardComponent = () => {
                             {user?.rol == 3 && <> Cajero </>}{" "}
                           </p>
                           <HiUserCircle color="gray" className="w-16 h-10 " />{" "}
-                        </button>
+                        </div>
                       }
                     >
                       <Dropdown.Header>
@@ -231,7 +231,7 @@ export const DashboardComponent = () => {
                           onClick={() =>
                             handleBotonClick("FormularioPersonaNatural")
                           }
-                          class="flex items-center  relative left-4 w-full p-2 text-base text-white transition duration-75 rounded-lg group hover:text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                          className="flex items-center  relative left-4 w-full p-2 text-base text-white transition duration-75 rounded-lg group hover:text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                         >
                           {
                             <p className="flex  flex-row  relative right-5 items-center">
@@ -243,12 +243,12 @@ export const DashboardComponent = () => {
                             </p>
                           }
                         </Sidebar.Item>
-                        {/* <Sidebar.Item onClick={() => handleBotonClick('FormularioPersonaJuridica')} class="flex items-center relative left-4  w-full p-2 text-base text-white transition duration-75 rounded-lg group  hover:bg-gray-100 hover:text-black dark:text-white dark:hover:bg-gray-700">{<p className='flex  flex-row  relative right-5 items-center'><HiUserGroup color='white || black' className='flex relative right-1 items-center justify-center w-12' /> Persona Juridica</p>}</Sidebar.Item> */}
+                        {/* <Sidebar.Item onClick={() => handleBotonClick('FormularioPersonaJuridica')} className="flex items-center relative left-4  w-full p-2 text-base text-white transition duration-75 rounded-lg group  hover:bg-gray-100 hover:text-black dark:text-white dark:hover:bg-gray-700">{<p className='flex  flex-row  relative right-5 items-center'><HiUserGroup color='white || black' className='flex relative right-1 items-center justify-center w-12' /> Persona Juridica</p>}</Sidebar.Item> */}
                       </Sidebar.Collapse>
                     </Sidebar.Collapse>
                     <Sidebar.Item
                       onClick={() => handleBotonClick("Busqueda")}
-                      class=" flex items-center justify-start p-2 text-white w-full rounded-lg hover:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      className=" flex items-center justify-start p-2 text-white w-full rounded-lg hover:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
                       {
                         <p className="flex justify-start items-center relative right-5">
@@ -343,7 +343,7 @@ export const DashboardComponent = () => {
                         className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 group"
                       >
                         <svg
-                          class="w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                          className="w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="currentColor"
@@ -351,9 +351,9 @@ export const DashboardComponent = () => {
                         >
                           <path d="M9 7V2.2a2 2 0 0 0-.5.4l-4 3.9a2 2 0 0 0-.3.5H9Z" />
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M11 7V2h7a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Zm4.7 5.7a1 1 0 0 0-1.4-1.4L11 14.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l4-4Z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           />
                         </svg>
 
@@ -369,16 +369,16 @@ export const DashboardComponent = () => {
                         className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 group"
                       >
                         <svg
-                          class="w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                          className="w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="currentColor"
                           viewBox="0 0 24 24"
                         >
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M9 2.2V7H4.2l.4-.5 3.9-4 .5-.3Zm2-.2v5a2 2 0 0 1-2 2H4v11c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           />
                         </svg>
 
@@ -398,7 +398,7 @@ export const DashboardComponent = () => {
                         className="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-100 hover:text-black dark:hover:bg-gray-700 group"
                       >
                         <svg
-                          class="w-6 h-6 text-white dark:text-white group-hover:text-gray-800"
+                          className="w-6 h-6 text-white dark:text-white group-hover:text-gray-800"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -407,14 +407,14 @@ export const DashboardComponent = () => {
                           viewBox="0 0 24 24"
                         >
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           />
                           <path
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           />
                           <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
                         </svg>
@@ -511,14 +511,14 @@ export const DashboardComponent = () => {
                 arrowIcon={false}
                 inline
                 label={
-                  <button className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
+                  <div className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
                     {" "}
                     <p className=" flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 ">
                       {user?.name_user} - {user?.rol == 2 && <> Asesor </>}
                       {user?.rol == 1 && <> Director </>}{" "}
                     </p>
                     <HiUserCircle color="gray" className="w-16 h-10 " />{" "}
-                  </button>
+                  </div>
                 }
               >
                 <Dropdown.Header>
