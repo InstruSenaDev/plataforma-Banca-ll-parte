@@ -207,7 +207,7 @@ export const Formulario = ({
                         name="Nombre"
                         defaultValue={getform.Nombre}
                         onChange={valorInput}
-                        class="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                        className="rounded-md border-gray-300 focus:ring-green focus:border-green"
                       />
                       {errors.Nombre && (
                         <span className="text-red-600 flex items-end">
@@ -241,7 +241,7 @@ export const Formulario = ({
                         defaultValue={getform.Apellido1}
                         onChange={valorInput}
                         id={getform.Apellido1}
-                        class="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                        className="rounded-md border-gray-300 focus:ring-green focus:border-green"
                       />
                       {errors.Apellido1 && (
                         <span className="text-red-600 flex items-end">
@@ -303,13 +303,13 @@ export const Formulario = ({
                         onChange={valorInput}
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="CC">C.C.</option>
-                        <option Value="TI">T.I.</option>
-                        <option Value="RCivil">R. Civil</option>
-                        <option Value="CE">Cédula extranjería</option>
-                        <option Value="PP">Pasaporte</option>
-                        <option Value="CD">Carné diplomático</option>
+                        <option value="">Seleccionar</option>
+                        <option value="CC">C.C.</option>
+                        <option value="TI">T.I.</option>
+                        <option value="RCivil">R. Civil</option>
+                        <option value="CE">Cédula extranjería</option>
+                        <option value="PP">Pasaporte</option>
+                        <option value="CD">Carné diplomático</option>
                       </select>
                       {errors.opciones1 && (
                         <span className="text-red-600 flex items-end">
@@ -472,9 +472,9 @@ export const Formulario = ({
                         onChange={valorInput}
                         className="p-2 rounded border-gray-300 focus:ring-green focus:border-green w-52"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="F">Femenino</option>
-                        <option Value="M">Masculino</option>
+                        <option value="">Seleccionar</option>
+                        <option value="F">Femenino</option>
+                        <option value="M">Masculino</option>
                       </select>
                       {errors.opciones2 && (
                         <span className="text-red-600 flex items-end">
@@ -499,10 +499,10 @@ export const Formulario = ({
                         onChange={valorInput}
                         className="p-2 rounded border-gray-300 focus:ring-green focus:border-green w-52"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Soltero">Soltero</option>
-                        <option Value="Casado">Casado</option>
-                        <option Value="UL">Unión libre</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Soltero">Soltero</option>
+                        <option value="Casado">Casado</option>
+                        <option value="UL">Unión libre</option>
                       </select>
                       {errors.opciones3 && (
                         <span className="text-red-600 flex items-end">
@@ -994,20 +994,20 @@ export const Formulario = ({
                         name="opciones4"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Empleado">Empleado</option>
-                        <option Value="Pensionado">Pensionado</option>
-                        <option Value="Ama de casa">Ama de casa</option>
-                        <option Value="Estudiante">Estudiante</option>
-                        <option Value="Ganadero">Ganadero</option>
-                        <option Value="Comerciante">Comerciante</option>
-                        <option Value="Agricultor">Agricultor</option>
-                        <option Value="RC">Rentista de capital</option>
-                        <option Value="Independiente">Independiente</option>
-                        <option Value="DSI">Desempleado sin ingresos</option>
-                        <option Value="DCI">Desempleado con ingresos</option>
-                        <option Value="PI">Profesional independiente</option>
-                        <option Value="SOE">Socio o Empleado-socio</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Empleado">Empleado</option>
+                        <option value="Pensionado">Pensionado</option>
+                        <option value="Ama de casa">Ama de casa</option>
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Ganadero">Ganadero</option>
+                        <option value="Comerciante">Comerciante</option>
+                        <option value="Agricultor">Agricultor</option>
+                        <option value="RC">Rentista de capital</option>
+                        <option value="Independiente">Independiente</option>
+                        <option value="DSI">Desempleado sin ingresos</option>
+                        <option value="DCI">Desempleado con ingresos</option>
+                        <option value="PI">Profesional independiente</option>
+                        <option value="SOE">Socio o Empleado-socio</option>
                       </select>
                       {errors.opciones4 && (
                         <span className="text-red-600 flex items-end">
@@ -1597,7 +1597,7 @@ export const Formulario = ({
                       <div className=" flex-row- flex max-[1024px]:flex-col  max-[1024px]:justify-center  ">
                         <label
                           htmlFor=""
-                          class="absolute text-sm flex flex-row max-[1024px]:xs w-72 min-[1324px]:w-80 max-[1024px]:flex-col "
+                          className="absolute text-sm flex flex-row max-[1024px]:xs w-72 min-[1324px]:w-80 max-[1024px]:flex-col "
                         >
                           {" "}
                           Si su ocupación es agricultor, comerciante,
@@ -1735,9 +1735,9 @@ export const Formulario = ({
                         name="opciones5"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Si">Si</option>
-                        <option Value="No">No</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
                       </select>
                       {errors.opciones5 && (
                         <span className="text-red-600 flex items-end">
@@ -1762,9 +1762,9 @@ export const Formulario = ({
                         name="opciones6"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Si">Si</option>
-                        <option Value="No">No</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
                       </select>
                       {errors.opciones6 && (
                         <span className="text-red-600 flex items-end">
@@ -1793,10 +1793,10 @@ export const Formulario = ({
                         name="opciones7"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Comun">Común</option>
-                        <option Value="Simplificado">Simplificado</option>
-                        <option Value="Ninguno">Ninguno</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Comun">Común</option>
+                        <option value="Simplificado">Simplificado</option>
+                        <option value="Ninguno">Ninguno</option>
                       </select>
                       {errors.opciones7 && (
                         <span className="text-red-600 flex items-end">
@@ -1816,9 +1816,9 @@ export const Formulario = ({
                         name="opciones8"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Si">Si</option>
-                        <option Value="No">No</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
                       </select>
                     </div>
                     <div className="flex flex-col w-52 justify-end">
@@ -2075,9 +2075,9 @@ export const Formulario = ({
                         name="opciones9"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="Si">Si</option>
-                        <option Value="No">No</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
                       </select>
                       {errors.opciones9 && (
                         <span className="text-red-600 flex items-end">
@@ -2097,17 +2097,17 @@ export const Formulario = ({
                         name="opciones10"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="EI">Exportador e importador</option>
-                        <option Value="Exportador">Exportador</option>
-                        <option Value="Importador">Importador</option>
-                        <option Value="EGR">
+                        <option value="">Seleccionar</option>
+                        <option value="EI">Exportador e importador</option>
+                        <option value="Exportador">Exportador</option>
+                        <option value="Importador">Importador</option>
+                        <option value="EGR">
                           Envío/Recepción de giros y remesas
                         </option>
-                        <option Value="PS">Pago de servicios</option>
-                        <option Value="Prestamos">Préstamos</option>
-                        <option Value="Inversiones">Inversiones</option>
-                        <option Value="otra">otra: </option>
+                        <option value="PS">Pago de servicios</option>
+                        <option value="Prestamos">Préstamos</option>
+                        <option value="Inversiones">Inversiones</option>
+                        <option value="otra">otra: </option>
                       </select>
                       {errors.opciones10 && (
                         <span className="text-red-600 flex items-end">
@@ -2150,10 +2150,10 @@ export const Formulario = ({
                         name="opciones11"
                         className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
                       >
-                        <option Value="">Seleccionar</option>
-                        <option Value="prestamos">Préstamos</option>
-                        <option Value="Inversiones">Inversiones</option>
-                        <option Value="Otra">otra</option>
+                        <option value="">Seleccionar</option>
+                        <option value="prestamos">Préstamos</option>
+                        <option value="Inversiones">Inversiones</option>
+                        <option value="Otra">otra</option>
                       </select>
                       {errors.opciones11 && (
                         <span className="text-red-600 flex items-end">

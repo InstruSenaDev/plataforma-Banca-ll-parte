@@ -86,7 +86,7 @@ export const BusquedaC = () => {
                     </th>
                     <th scope="col" className="px-11 py-3">
                       <svg
-                        class="w-6 h-6 text-gray-800  dark:text-white"
+                        className="w-6 h-6 text-gray-800  dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -96,9 +96,9 @@ export const BusquedaC = () => {
                       >
                         <path
                           stroke="currentColor"
-                          stroke-linecap="square"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="square"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                         />
                       </svg>
@@ -115,13 +115,13 @@ export const BusquedaC = () => {
                         >
                           <th
                             scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
                             {data.ip_documento}
                           </th>
                           <th
                             scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
                             {data.nombre}
                           </th>
@@ -135,7 +135,7 @@ export const BusquedaC = () => {
                               className="hover:bg-green focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                             >
                               <svg
-                                class="w-6 h-6 text-gray-800 dark:text-white"
+                                className="w-6 h-6 text-gray-800 dark:text-white"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
