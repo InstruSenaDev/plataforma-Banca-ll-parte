@@ -29,7 +29,7 @@ export const CrearUsuario = () => {
   const abrir = () => {
     setactiveModal((prev) =>
       prev ===
-        "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
+      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
         ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
         : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
     );
@@ -120,10 +120,7 @@ export const CrearUsuario = () => {
                   {datauser?.map((date) => (
                     <React.Fragment key={date.id_usuario}>
                       {date.rol !== 1 && date.rol !== 4 && (
-                        <tr
-                          className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                          key={date.id_usuario}
-                        >
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                           <th
                             scope="row"
                             className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
@@ -207,7 +204,6 @@ export const CrearUsuario = () => {
                         </tr>
                       )}
                     </React.Fragment>
-
                   ))}
                 </tbody>
               </table>
