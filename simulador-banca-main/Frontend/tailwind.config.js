@@ -19,6 +19,7 @@ module.exports = {
         lightGray: '#F2F2F2',
         black: colors.black,
         white: colors.white,
+        greenlight: '#E3F2EF',
       },
       spacing: {
         '128': '32rem',
