@@ -1,12 +1,12 @@
 
 import React from 'react'
-import { CajeroPrincipal } from '../Components/Cashier/Cashier'
+import { Sidebar } from '../Components/Sidebar/Sidebar'
 
 
 export const DashboardMenu = () => {
     return (
         <>
-            <CajeroPrincipal/> 
+            <Sidebar/> 
         </>
     )
 }
