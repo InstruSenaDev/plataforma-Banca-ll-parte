@@ -20,6 +20,10 @@ module.exports = {
         black: colors.black,
         white: colors.white,
         greenlight: '#E3F2EF',
+        gray: '8B8B8B',
+        darkGray: '#325259',
+        DarkSlate: '#038C73',
+        beige: '#F2F5F8',
       },
       spacing: {
         '128': '32rem',

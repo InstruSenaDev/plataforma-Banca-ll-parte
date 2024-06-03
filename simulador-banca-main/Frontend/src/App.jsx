@@ -9,7 +9,7 @@ import { AutorizacionCuentas } from "./Components/DashBoard/Components/Director/
 import { ContentCuentaAhorroJuridica } from "./Components/DashBoard/Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
 import { LoaderMenu } from "./Components/Loader/LoaderMenu"; // Importa tu componente de loader
 
-import Sidebar from './Components/Sidebar/Sidebar';
+import DashboardCajero from './Pages/DashboardCajero';
 
 export default function MyPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function MyPage() {
           />
           <Route path="/juridica" element={<ContentCuentaAhorroJuridica />} />
 
-          <Route path="/Sidebar" element={<Sidebar/>} />
+          <Route path="/DashboardCajero" element={<DashboardCajero/>} />
         </Routes>
       )}
     </Router>
