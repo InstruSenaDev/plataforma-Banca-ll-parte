@@ -12,7 +12,7 @@ const clientStatus = async (req, res) => {
     if (typeof estado !== "undefined") {
       // Realiza la actualización en la base de datos utilizando el ID
       const updateQueryA =
-        "UPDATE cliente SET estado = $1 WHERE id_cliente = $2";
+        "UPDATE detalle_cuenta SET estado = $1 WHERE id_detalle = $2";
       const updateValuesA = [estado, Id];
       await pool.query(updateQueryA, updateValuesA);
 

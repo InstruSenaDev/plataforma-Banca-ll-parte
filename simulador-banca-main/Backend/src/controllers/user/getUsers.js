@@ -5,7 +5,7 @@ const pool = new Pool(CONFIG_BD);
 
 const getUsers = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM usuarios ");
+    const result = await pool.query("SELECT * FROM empleado");
 
     if (result.rows.length > 0) {
       return res.status(200).json({ result });

@@ -13,7 +13,7 @@ const EstadoD = async (req, res) => {
     if (typeof estado !== "undefined") {
       // Realiza la actualización en la base de datos utilizando el ID
       const updateQueryA =
-        "UPDATE cliente SET estado = $1, razon = $2 WHERE id_cliente = $3"; // Modificar la consulta para incluir la razon
+        "UPDATE detalle_cuenta SET estado = $1, razon_rechazo = $2 WHERE id_detalle = $3"; // Modificar la consulta para incluir la razon
       const updateValuesA = [estado, razon, Id]; // Modificar los valores para incluir la razon
       await pool.query(updateQueryA, updateValuesA);
 

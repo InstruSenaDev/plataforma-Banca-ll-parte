@@ -17,7 +17,7 @@ export const Formulario = ({
   } = useForm();
   const { user } = useAuth();
 
-  let id = user?.id_usuario;
+  let id = user?.id_empleado;
 
   const [getform, setgetfrom] = useState({
     Nombre: "",
@@ -128,7 +128,7 @@ export const Formulario = ({
   const OnsumitInfo6 = async (data) => {
     setdatainfo(data); // Agregar el id_usuario al objeto datainfo
     console.log("datainfo:", datainfo);
-    console.log("user?.id_usuario:", user?.id_usuario);
+    console.log("user?.id_empleado:", user?.id_empleado);
     CrearCliente(data);
   };
 

@@ -100,7 +100,7 @@ export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
                 </div>
                 <button
                   type="submit"
-                  onClick={() => denegar(data.id_cliente)}
+                  onClick={() => denegar(data.id_detalle)}
                   className="text-white inline-flex items-center bg-red-600 focus:ring-4 focus:outline-none focus:ring-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green dark:hover:bg-green dark:focus:ring-green"
                 >
                   Denegar

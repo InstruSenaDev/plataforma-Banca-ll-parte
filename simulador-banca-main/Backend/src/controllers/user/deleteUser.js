@@ -8,16 +8,13 @@ const deleteUser = async (req, res) => {
     const userId = req.params.userId;
 
     const result2 = await pool.query(`
-      UPDATE DetalleProducto
-      SET responsable = NULL
-      WHERE responsable = ${userId}
-      `);
+      UPDATE detalle_cuenta SET id_empleado = NULL WHERE id_empleado = ${userId}
+    `);
 
     // Buscar el usuario por su ID
-    const result = await pool.query(
-      `DELETE FROM public.usuarios
-      WHERE ID_Usuario = ${userId};`
-    );
+    const result = await pool.query(`
+      DELETE FROM empleado WHERE id_empleado = ${userId};
+    `);
 
     // Enviar una respuesta de éxito
     res.status(200).json({ message: "Usuario eliminado correctamente" });
