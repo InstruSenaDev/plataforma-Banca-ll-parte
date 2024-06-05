@@ -23,7 +23,7 @@ export const AutorizacionCuentas = () => {
     fecthData();
   }, []);
 
-  const estado = datauser.map((user) => user.estadocliente == "Pendiente");
+  const estado = datauser.map((user) => user.estado_cliente == "Pendiente");
 
   const autorizar = (id) => {
     console.log(id);
@@ -152,7 +152,7 @@ export const AutorizacionCuentas = () => {
                   {datauser?.map((data) => (
                     <tr
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      key={data.id_cliente}
+                      key={data.id_detalle}
                     >
                       <th
                         scope="row"
@@ -161,9 +161,9 @@ export const AutorizacionCuentas = () => {
                         {data.nombre}
                       </th>
 
-                      <td className="px-6 py-4">{data.producto}</td>
-                      <td className="px-6 py-4">{data.n_cuenta}</td>
-                      <td className="px-6 py-4">{data.estadocliente}</td>
+                      <td className="px-6 py-4">{data.descripcion}</td>
+                      <td className="px-6 py-4">{data.num_cuenta}</td>
+                      <td className="px-6 py-4">{data.estado_cliente}</td>
                       <td class="px-6 py-4 flex gap-5 justify-center">
                         <button
                           onClick={() => openModal(data)}
@@ -188,7 +188,7 @@ export const AutorizacionCuentas = () => {
                         </button>
 
                         <button
-                          onClick={() => autorizar(data.id_cliente)}
+                          onClick={() => autorizar(data.id_detalle)}
                           href="#"
                           class="hover:bg-gray-200 p-1 rounded-sm"
                         >

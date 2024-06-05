@@ -5,45 +5,38 @@ const pool = new Pool(CONFIG_BD);
 
 const loginUser = async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { username, password } = req.body;
 
-    // Verificar si el correo ya está registrado
-    const nameExistsQuery = "SELECT * FROM usuarios WHERE name_user = $1";
-    const nameExistsValues = [name];
-    const nameExistsResult = await pool.query(
-      nameExistsQuery,
-      nameExistsValues
-    );
+    // Verificar si el username ya está registrado como empleado
+    const employeeQuery = "SELECT * FROM empleado WHERE username = $1";
+    const employeeResult = await pool.query(employeeQuery, [username]);
 
-    if (nameExistsResult.rows.length === 0) {
-      return res.status(400).json({ message: "ese nombre no está registrado" });
+    // Verificar si el username ya está registrado como cliente
+    const clientQuery = "SELECT * FROM cliente WHERE username = $1";
+    const clientResult = await pool.query(clientQuery, [username]);
+
+    if (employeeResult.rows.length === 0 && clientResult.rows.length === 0) {
+      return res.status(400).json({ message: "El usuario no está registrado" });
     }
 
-    // Verificar el password
-    const bankPassword = nameExistsResult.rows[0].password;
+    // Verificar el password para el empleado o el cliente
+    let userType;
+    let userData;
+    if (employeeResult.rows.length > 0) {
+      userType = "empleado";
+      userData = employeeResult.rows[0];
+    } else {
+      userType = "cliente";
+      userData = clientResult.rows[0];
+    }
+
+    const bankPassword = userData.password;
 
     if (password !== bankPassword) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
-    // Obtener el tipo de usuario (admin o cliente)
-    const userType = nameExistsResult.rows[0].rol;
-
-    // Si las credenciales son válidas, obtener todos los datos del usuario
-    const userQuery = "SELECT * FROM usuarios WHERE name_user = $1";
-    const userValues = [name];
-    const userResult = await pool.query(userQuery, userValues);
-
-    if (userResult.rows.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "No se encontró información del usuario" });
-    }
-
     // Acceder a los datos del usuario en la respuesta
-    const userData = userResult.rows[0];
-
-    // Determinar el tipo de usuario en la respuesta
     userData.rol = userType;
 
     // Enviar los datos del usuario en la respuesta JSON

@@ -118,8 +118,8 @@ export const CrearUsuario = () => {
                 </thead>
                 <tbody>
                   {datauser?.map((date) => (
-                    <React.Fragment key={date.id_usuario}>
-                      {date.rol !== 1 && date.rol !== 4 && (
+                    <React.Fragment key={date.id_empleado}>
+                      {date.rol !== 1 && date.rol !== 5 && (
                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                           <th
                             scope="row"
@@ -142,14 +142,15 @@ export const CrearUsuario = () => {
                             </svg>
                             <div className="ps-3">
                               <div className="text-base font-semibold">
-                                {date.name_user}
+                                {date.username}
                               </div>
                             </div>
                           </th>
                           <td className="px-6 py-4">
-                            {date.rol === 2 && <>Asesor</>}
-                            {date.rol === 1 && <>Director</>}
-                            {date.rol === 3 && <>Cajero</>}
+                            {date.id_rol === 1 && <>Director</>}
+                            {date.id_rol === 2 && <>Asesor</>}
+                            {date.id_rol === 3 && <>Cajero</>}
+                            {date.id_rol === 4 && <>Cajero Principal</>}
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center">
@@ -181,7 +182,7 @@ export const CrearUsuario = () => {
                             </button>
                             <button
                               href="#"
-                              onClick={() => eliminarUsuario(date.id_usuario)}
+                              onClick={() => eliminarUsuario(date.id_empleado)}
                               className="hover:bg-gray-200 p-1 rounded-sm"
                             >
                               <svg

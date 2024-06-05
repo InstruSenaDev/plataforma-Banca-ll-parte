@@ -7,22 +7,20 @@ const getDenied = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT
-      c.ID_Cliente,
-      fpn.IP_primerNombre AS Nombre,
-      fpn.IP_documento,
-      c.Estado AS EstadoCliente,
-      tp.Descripcion AS Producto,
-      dp.N_Cuenta,
-      dp.fecha
-      FROM
-      DetalleProducto dp
-      JOIN cliente c ON dp.Cliente = c.ID_Cliente
-      JOIN FormPersonNatural fpn ON c.inf_cliente = fpn.ID_FormPN
-      JOIN producto p ON dp.Producto = p.ID_Producto
-      JOIN tipoproducto tp ON p.Tipo = tp.ID_tipo
-      WHERE
-      c.Estado = 'Denegado';
-      `);
+      dc.id_detalle,
+      c.id_cliente,
+      fpn.ip_primerNombre AS nombre,
+      fpn.ip_documento,
+      tc.descripcion,
+      dc.num_cuenta,
+      dc.estado AS estado_cliente,
+      dc.fecha
+      FROM detalle_cuenta AS dc
+      JOIN cliente AS c ON dc.id_cliente = c.id_cliente
+      JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
+      JOIN tipo_cuentas AS tc ON dc.id_tcuenta = tc.id_tcuenta
+      WHERE dc.estado = 'Denegado';
+    `);
 
     if (result.rows.length > 0) {
       return res.status(200).json({ result });
