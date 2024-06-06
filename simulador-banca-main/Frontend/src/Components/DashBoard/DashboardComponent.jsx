@@ -83,7 +83,7 @@ export const DashboardComponent = () => {
   useEffect(() => {
     // Verificar si el usuario está autenticado y obtener su nombre de usuario si es así
     if (isLoggedIn && user) {
-      setUserName(user.name_user); // Almacenar el nombre de usuario en el estado
+      setUserName(user.username); // Almacenar el nombre de usuario en el estado
       // Mostrar el nombre de usuario en la consola
     }
 
@@ -116,7 +116,7 @@ export const DashboardComponent = () => {
 
   return (
     <>
-      {isLoggedIn && user.rol !== 4 && (
+      {isLoggedIn && user.id_rol !== 5 && (
         <>
           <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -151,19 +151,19 @@ export const DashboardComponent = () => {
                         <div className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
                           {" "}
                           <p className=" flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 ">
-                            {user?.name_user} -{" "}
-                            {user?.rol == 2 && <> Asesor </>}
-                            {user?.rol == 1 && <> Director </>}
-                            {user?.rol == 3 && <> Cajero </>}{" "}
+                            {user?.username} -{" "}
+                            {user?.id_rol == 2 && <> Asesor </>}
+                            {user?.id_rol == 1 && <> Director </>}
+                            {user?.id_rol == 3 && <> Cajero </>}{" "}
                           </p>
                           <HiUserCircle color="gray" className="w-16 h-10 " />{" "}
                         </div>
                       }
                     >
                       <Dropdown.Header>
-                        <span className="block text-sm">{user?.name_user}</span>
+                        <span className="block text-sm">{user?.username}</span>
                         <span className="block truncate text-sm font-medium">
-                          {user?.name_user}@ClarBank.com
+                          {user?.username}@ClarBank.com
                         </span>
                       </Dropdown.Header>
                       <Dropdown.Divider />
@@ -199,7 +199,7 @@ export const DashboardComponent = () => {
                   </button>
                 </li>
 
-                {user?.rol == 2 && (
+                {user?.id_rol == 2 && (
                   <>
                     <Sidebar.Collapse
                       className="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group hover:bg-white hover:text-black dark:text-white dark:hover:bg-gray-700"
@@ -262,7 +262,7 @@ export const DashboardComponent = () => {
                     </Sidebar.Item>
                   </>
                 )}
-                {user?.rol == 1 && (
+                {user?.id_rol == 1 && (
                   <>
                     <li>
                       <a
@@ -389,7 +389,7 @@ export const DashboardComponent = () => {
                     </li>
                   </>
                 )}
-                {user?.rol == 3 && (
+                {user?.id_rol == 3 && (
                   <>
                     <li>
                       <a
@@ -450,7 +450,7 @@ export const DashboardComponent = () => {
           </div>
         </>
       )}
-      {isLoggedIn && user.rol === 4 && userData && (
+      {isLoggedIn && user.id_rol === 5 && userData && (
         <>
           <section className="w-screen h-screen  flex justify-center items-center flex-col">
             <header>
@@ -494,8 +494,8 @@ export const DashboardComponent = () => {
                     <div
                       className={`text-gray-800 mt-24 flex flex-col justify-end items-end px-2 `}
                     >
-                      <p>{userData.nombre_producto}</p>
-                      <p>{userData.n_cuenta}</p>
+                      <p>{userData.descripcion}</p>
+                      <p>{userData.num_cuenta}</p>
                       <p className="text-lg">
                         {userData.ip_primernombre} {userData.ip_primerapellido}{" "}
                         {userData.ip_segundoapellido}
@@ -514,17 +514,17 @@ export const DashboardComponent = () => {
                   <div className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
                     {" "}
                     <p className=" flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 ">
-                      {user?.name_user} - {user?.rol == 2 && <> Asesor </>}
-                      {user?.rol == 1 && <> Director </>}{" "}
+                      {user?.username} - {user?.id_rol == 2 && <> Asesor </>}
+                      {user?.id_rol == 1 && <> Director </>}{" "}
                     </p>
                     <HiUserCircle color="gray" className="w-16 h-10 " />{" "}
                   </div>
                 }
               >
                 <Dropdown.Header>
-                  <span className="block text-sm">{user?.name_user}</span>
+                  <span className="block text-sm">{user?.username}</span>
                   <span className="block truncate text-sm font-medium">
-                    {user?.name_user}@ClarBank.com
+                    {user?.username}@ClarBank.com
                   </span>
                 </Dropdown.Header>
                 <Dropdown.Divider />

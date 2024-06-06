@@ -13,9 +13,9 @@ export const ModalCreacionU = ({ data, showModal, closeModal }) => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          name: data.name,
+          username: data.username,
           password: data.password,
-          rol: data.rol,
+          id_rol: data.id_rol,
         }),
       });
 
@@ -85,11 +85,11 @@ export const ModalCreacionU = ({ data, showModal, closeModal }) => {
                       </label>
                       <input
                         type="text"
-                        name="name"
-                        id="name"
+                        name="username"
+                        id="username"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green focus:border-green block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
                         placeholder="Nombre"
-                        {...register("name", { required: true })}
+                        {...register("username", { required: true })}
                         required=""
                       />
                     </div>
@@ -118,10 +118,10 @@ export const ModalCreacionU = ({ data, showModal, closeModal }) => {
                         Rol
                       </label>
                       <select
-                        name="rol"
-                        id="rol"
+                        name="id_rol"
+                        id="id_rol"
                         className="rounded-md w-full border bg-gray-50 border-gray-300 text-gray-900 text-sm p-2.5 focus:ring-green focus:border-green dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
-                        {...register("rol", { required: true })}
+                        {...register("id_rol", { required: true })}
                       >
                         <option value="" disabled>
                           Seleccionar

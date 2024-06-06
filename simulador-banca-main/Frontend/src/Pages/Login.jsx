@@ -86,9 +86,9 @@ export default function Login() {
               </label>
               <input
                 type="Text"
-                {...register("name")}
-                name="name"
-                id="name"
+                {...register("username")}
+                name="username"
+                id="username"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green focus:border-green block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-green dark:text-white"
                 placeholder="Nombre de usuario"
                 required

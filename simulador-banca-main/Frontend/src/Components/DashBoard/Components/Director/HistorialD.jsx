@@ -138,7 +138,7 @@ export const HistorialD = () => {
                   {dataFiltrados?.map((data) => (
                     <tr
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      key={data.id_cliente}
+                      key={data.id_detalle}
                     >
                       <th
                         scope="row"
@@ -147,9 +147,9 @@ export const HistorialD = () => {
                         {data.nombre}
                       </th>
 
-                      <td className="px-6 py-4">{data.producto}</td>
-                      <td className="px-6 py-4">{data.n_cuenta}</td>
-                      <td className="px-6 py-4">{data.estadocliente}</td>
+                      <td className="px-6 py-4">{data.descripcion}</td>
+                      <td className="px-6 py-4">{data.num_cuenta}</td>
+                      <td className="px-6 py-4">{data.estado_cliente}</td>
                     </tr>
                   ))}
                 </tbody>

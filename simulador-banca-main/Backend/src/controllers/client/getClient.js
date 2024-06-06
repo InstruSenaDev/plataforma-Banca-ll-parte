@@ -9,20 +9,20 @@ const getClient = async (req, res) => {
 
     // Realizar la consulta SQL con el nombre de usuario como filtro
     const userDetailsQuery = `
-      SELECT c.ID_Cliente, 
-      fpn.IP_documento, 
-      fpn.IP_primerNombre, 
-      fpn.IP_primerApellido, 
-      fpn.IP_segundoApellido, 
-      c.Saldo, 
-      tp.Descripcion as nombre_producto, 
-      dp.N_Cuenta
-      FROM cliente c
-      JOIN FormPersonNatural fpn ON c.inf_cliente = fpn.ID_FormPN
-      JOIN DetalleProducto dp ON c.ID_Cliente = dp.Cliente
-      JOIN producto p ON dp.producto = p.ID_Producto
-      JOIN tipoproducto tp ON p.Tipo = tp.ID_tipo
-      WHERE fpn.IP_documento = $1;`;
+      SELECT 
+      c.id_cliente, 
+      fpn.ip_documento, 
+      fpn.ip_primerNombre, 
+      fpn.ip_primerApellido, 
+      fpn.ip_segundoApellido,
+      dc.saldo,
+      dc.num_cuenta,
+      tc.descripcion
+      FROM cliente AS c
+      INNER JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
+      INNER JOIN detalle_cuenta AS dc ON c.id_cliente = dc.id_cliente
+      INNER JOIN tipo_cuentas AS tc ON tc.id_tcuenta = dc.id_detalle
+      WHERE fpn.ip_documento = $1;`;
 
     const userDetailsValues = [nameUser]; // Parámetros de la consulta SQL
     const userDetailsResult = await pool.query(
