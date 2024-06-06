@@ -16,7 +16,7 @@ const DashboardCajero = () => {
         <main className="relative flex-grow overflow-auto rounded-xl">
           <div className="w-full px-4 sm:px-6 lg:px-8 py-6 mx-auto">
             <Card />
-            <Transfers/>
+            <Transfers />
           </div>
         </main>
       </div>
