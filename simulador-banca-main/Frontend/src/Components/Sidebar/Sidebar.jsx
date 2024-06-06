@@ -54,7 +54,7 @@ const Sidebar = () => {
               </div>
               <span className="ml-1 duration-300 opacity-100 pointer-events-none ease flex items-center">
                 <box-icon name="group" color="currentColor"></box-icon>
-                <span className="ml-1 text-slate-700">Usuarios</span>
+                <span className="ml-1 text-slate-700">Empleados</span>
               </span>
             </a>
           </li>
