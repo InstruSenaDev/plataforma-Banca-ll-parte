@@ -4,15 +4,15 @@ import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
 
 const Navbar = () => {
   return (
-    <nav className="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start">
-      <div className="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
-        <div className="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-          <div className="flex items-center md:ml-auto md:pr-4">
-            {/* Barra de búsqueda */}
-          </div>
+    <nav className="relative flex flex-wrap items-center justify-between px-5 py-3  transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start">
+      <div className="w-full xl:mt-9 mx-auto flex-wrap-inherit">
+        <div className="flex items-center justify-between xl:justify-end">
+          {/* <div className="flex items-center md:ml-auto md:pr-4">
+            {/* Barra de búsqueda
+          </div> */}
 
           {/* Botón para abrir el menú lateral en pantallas pequeñas */}
-          <div className="flex items-center pl-4 xl:hidden">
+          <div className="flex items-center xl:hidden">
             <button className="block p-0 text-sm text-gray transition-all ease-nav-brand">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -34,13 +34,16 @@ const Navbar = () => {
           {/* Botón para configuraciones */}
           <Dropdown
             arrowIcon={false}
+            inline
             label={
-              <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
-                <div className="flex flex-col justify-end mx-5 my-0">
-                  <p className="flex items-center text-sm text-darkGray">
+              <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
+                <div className="flex flex-col justify-end ps-8 my-0">
+                  <p className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-200">
                     Angelica Cuero
                   </p>
-                  <p className="text-darkGray text-xs">Cajero Principal</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Cajero Principal
+                  </p>
                 </div>
                 <div class="flex items-center gap-x-6">
                   <div class="relative">
