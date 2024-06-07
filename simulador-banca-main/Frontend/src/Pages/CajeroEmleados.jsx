@@ -5,7 +5,7 @@ import Navbar from "../Components/Navbar/Navbar";
 
 const CajeroEmleados = () => {
   return (
-    <div className="bg-beige flex">
+    <div className="bg-White flex">
       <Sidebar />
       <div className="flex flex-col flex-grow">
         <Navbar />

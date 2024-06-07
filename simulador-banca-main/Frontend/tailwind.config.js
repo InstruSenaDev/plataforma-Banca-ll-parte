@@ -26,6 +26,8 @@ module.exports = {
         beige: '#F2F5F8',
         green: '#038C73',
         lightgreen: '#E3F2EF',
+        verde: '#7DC09E',
+        lightWhite: '#8B8B8B',
       },
       spacing: {
         '128': '32rem',
