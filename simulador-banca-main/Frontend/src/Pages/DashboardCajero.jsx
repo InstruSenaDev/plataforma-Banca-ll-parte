@@ -6,9 +6,9 @@ import Transfers from "../Components/Transfers/Transfers";
 
 const DashboardCajero = () => {
   return (
-    <div className="flex flex-col xl:flex-row bg-beige">
+    <div className="flex flex-col xl:flex-row bg-beige h-screen">
       {/* El Sidebar solo se mostrará en dispositivos grandes */}
-      <div className="hidden xl:block xl:w-68">
+      <div className="hidden xl:block xl:w-1/6">
         <Sidebar />
       </div>
       <div className="flex flex-col flex-grow">
