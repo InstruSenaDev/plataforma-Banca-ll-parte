@@ -19,7 +19,7 @@ module.exports = {
         lightGray: '#F2F2F2',
         black: colors.black,
         white: colors.white,
-        greenlight: '#E3F2EF',
+        Greenlight: '#E3F2EF',
         gray: '8B8B8B',
         darkGray: '#325259',
         DarkSlate: '#038C73',
@@ -28,6 +28,7 @@ module.exports = {
         lightgreen: '#E3F2EF',
         verde: '#7DC09E',
         lightWhite: '#8B8B8B',
+        red: '#E02424',
       },
       spacing: {
         '128': '32rem',

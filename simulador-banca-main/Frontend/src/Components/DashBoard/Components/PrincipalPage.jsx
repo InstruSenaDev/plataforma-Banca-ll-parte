@@ -10,7 +10,7 @@ export const PrincipalPage = () => {
           className="flex justify-center items-center flex-col gap-24"
           style={{ minHeight: "85vh" }}
         >
-          <p className="font-bold text-5xl">Bienvenido, {user?.name_user}</p>
+          <p className="font-bold text-5xl">Bienvenido, {user?.username}</p>
           <img className="w-1/3" src={PrincipalImage} alt="" />
         </div>
       </div>
