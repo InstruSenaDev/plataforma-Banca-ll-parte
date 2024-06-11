@@ -5,13 +5,17 @@ import Navbar from "../Components/Navbar/Navbar";
 
 const CajeroEmleados = () => {
   return (
-    <div className="bg-White flex">
-      <Sidebar />
+    <div className="flex flex-col xl:flex-row bg-beige h-screen">
+      {/* El Sidebar solo se mostrará en dispositivos grandes */}
+      <div className="hidden xl:block xl:w-1/6">
+        <Sidebar />
+      </div>
       <div className="flex flex-col flex-grow">
         <Navbar />
-        <main className="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl ps ps--active-y">
-          <div className="w-full px-6 py-6 mx-auto">
-           <Empleados/>
+        <main className="relative flex-grow overflow-auto rounded-xl">
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-6 mx-auto">
+           
+            <Empleados />
           </div>
         </main>
       </div>
