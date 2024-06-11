@@ -3,6 +3,7 @@ import React from "react";
 import { Button, Modal } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../../context/AuthContext";
 
 export const Movimientos = () => {
   //Disable Modales
@@ -11,6 +12,9 @@ export const Movimientos = () => {
   const [amount, setAmount] = useState("");
   const [isAccountNumberFilled, setIsAccountNumberFilled] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(true);
+
+  const { user, isLoggedIn } = useAuth();
+  const [empleadoDetails, setEmpleadoDetails] = useState("");
 
   // Abrir Modal
   const [openModal, setOpenModal] = useState(false);
@@ -21,14 +25,15 @@ export const Movimientos = () => {
     setEmail("");
   }
 
-  // Funciones Consignar-----------------------------------------------------------------------------------------------------------------------------
+  // Funciones Consignar -----------------------------------------------------------------------------------------------------------------------------
   const handleAccountNumberChange = (event) => {
     const value = event.target.value;
     setAccountNumber(value);
     setIsAccountNumberFilled(value.trim() !== "");
     setIsFormDisabled(value.trim() === "");
   };
-  const [datauser, setdatauser] = useState();
+
+  const [dataUser, setDataUser] = useState();
 
   const handleConsultClick = async () => {
     try {
@@ -50,7 +55,7 @@ export const Movimientos = () => {
         console.log(ownerName);
         setAccountOwner(ownerName);
         setIsFormDisabled(false);
-        setdatauser(data);
+        setDataUser(data);
         console.log(data);
         console.log(accountOwner); // Habilitar el formulario después de obtener los datos
       } else {
@@ -65,54 +70,77 @@ export const Movimientos = () => {
     }
   };
 
-  console.log(datauser);
+  console.log(dataUser);
 
-  const handleConsign = () => {
-    const id = datauser.id_cliente;
-    console.log(id);
-    const saldo = datauser.saldo;
+  const handleConsign = async () => {
+    const id = dataUser.id_cliente;
+    const saldo = dataUser.saldo;
+    const idEmpleado = empleadoDetails.id_empleado;
+    const saldoEmpleado = empleadoDetails.saldo;
 
-    const nuevoSaldo = parseFloat(amount) + parseFloat(saldo);
-    try {
-      // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-      fetch(`http://localhost:3000/update_balance/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nuevoSaldo: nuevoSaldo,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
+    const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
+    const newBalanceEmploye = saldoEmpleado - parseFloat(amount);
+
+    if (saldoEmpleado > 0) {
+      try {
+        // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
+        const responseClient = await fetch(
+          `http://localhost:3000/update_balance/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceClient,
+            }),
           }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data.message);
-          toast.success("Monto consignado correctamente");
-          setTimeout(() => {
-            // Actualiza localmente el estado del cliente según sea necesario
-            // Puedes utilizar la función setDatauser para actualizar el estado local
-            // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-            // alert('Autorización exitosa')
-            // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-            window.location = "/DashBoardMenu";
-          }, 1500); // 2000 milisegundos = 2 segundos
-        })
-        .catch((error) => {
-          toast.error("Error al consignar");
-          console.error("Error al cambiar el estado del cliente:", error);
-        });
-    } catch (error) {
-      console.error("Error general:", error);
+        );
+        if (!responseClient.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responseEmploye = await fetch(
+          `http://localhost:3000/empleado_balance/${idEmpleado}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceEmploye,
+            }),
+          }
+        );
+
+        if (!responseEmploye.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await responseClient.json();
+        console.log(data.message);
+        toast.success("Saldo consignado correctamente.");
+
+        // Actualizar el estado del empleado en el componente
+        setEmpleadoDetails((prevState) => ({
+          ...prevState,
+          saldo: newBalanceEmploye,
+        }));
+
+        setTimeout(() => {
+          // Actualiza localmente el estado del cliente según sea necesario
+          // Puedes utilizar la función setDatauser para actualizar el estado local
+          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+          // alert('Autorización exitosa')
+          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+          window.location = "/DashBoardMenu";
+        }, 1500); // 2000 milisegundos = 2 segundos
+      } catch (error) {
+        console.error("Error general:", error);
+      }
+    } else {
+      toast.error("Sin saldo suficiente");
     }
-    // Aquí puedes agregar la lógica para enviar los datos, por ejemplo, una llamada a una API
-    console.log(
-      `Enviando consignación: ${amount} a la cuenta ${accountNumber} perteneciente a ${accountOwner}`
-    );
   };
 
   // Modal retirar-----------------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +182,7 @@ export const Movimientos = () => {
         console.log(ownerName);
         setAccountOwner(ownerName);
         setIsFormDisabled(false);
-        setdatauser(data);
+        setDataUser(data);
         console.log(data);
         console.log(accountOwner); // Habilitar el formulario después de obtener los datos
       } else {
@@ -170,58 +198,75 @@ export const Movimientos = () => {
   };
 
   const handleRetirar = () => {
-    const id = datauser.id_cliente;
-    console.log(id);
-    const saldo = datauser.saldo;
+    const id = dataUser.id_cliente;
+    const saldo = dataUser.saldo;
     const nuevoSaldo = parseFloat(saldo) - parseFloat(amount);
 
     // Verificar que el nuevo saldo no sea menor que cero
-    if (nuevoSaldo >= 0) {
-      try {
-        // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-        fetch(`http://localhost:3000/update_balance/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nuevoSaldo: nuevoSaldo,
-          }),
+
+    try {
+      // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
+      fetch(`http://localhost:3000/update_balance/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nuevoSaldo: nuevoSaldo,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data.message);
-            toast.success("Monto retirado correctamente");
-            setTimeout(() => {
-              // Actualiza localmente el estado del cliente según sea necesario
-              // Puedes utilizar la función setDatauser para actualizar el estado local
-              // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-              // alert('Autorización exitosa')
-              // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-              window.location = "/DashBoardMenu";
-            }, 1500); // 2000 milisegundos = 2 segundos
-          })
-          .catch((error) => {
-            console.error("Error al cambiar el estado del cliente:", error);
-          });
-      } catch (error) {
-        toast.error("Error al retirar");
-        console.error("Error general:", error);
-      }
-    } else {
-      toast.error("El nuevo saldo no puede ser menor que cero");
-      console.error("El nuevo saldo no puede ser menor que cero");
+        .then((data) => {
+          console.log(data.message);
+          toast.success("Monto retirado correctamente");
+          setTimeout(() => {
+            // Actualiza localmente el estado del cliente según sea necesario
+            // Puedes utilizar la función setDatauser para actualizar el estado local
+            // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+            // alert('Autorización exitosa')
+            // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+            window.location = "/DashBoardMenu";
+          }, 1500); // 2000 milisegundos = 2 segundos
+        })
+        .catch((error) => {
+          console.error("Error al cambiar el estado del cliente:", error);
+        });
+    } catch (error) {
+      toast.error("Error al retirar");
+      console.error("Error general:", error);
     }
 
     console.log(
       `Retirando: ${amount} de la cuenta ${accountNumber} perteneciente a ${accountOwner}`
     );
   };
+
+  useEffect(() => {
+    const fetchEmpleado = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/get_users/${user.id_empleado}`
+        );
+        if (response.ok) {
+          const userData = await response.json();
+          setEmpleadoDetails(userData);
+        } else {
+          console.error("Error fetching user info:", response.status);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    if (user) {
+      fetchEmpleado();
+    }
+  }, [user]);
 
   return (
     <>
@@ -233,6 +278,11 @@ export const Movimientos = () => {
               style={{ minHeight: "85vh" }}
             >
               <span>Seleccione el movimiento que desee realizar</span>
+              {empleadoDetails && (
+                <div>
+                  <h2>Saldo actual: {empleadoDetails.saldo}</h2>
+                </div>
+              )}
               <div className="flex gap-10">
                 <div>
                   <Button
@@ -375,7 +425,7 @@ export const Movimientos = () => {
                         </div>
                         <div className="w-full">
                           <button
-                            onClick={() => handleConsign(datauser)}
+                            onClick={() => handleConsign(dataUser)}
                             className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
                               isFormDisabled || !isAccountNumberFilled
                                 ? "opacity-50 cursor-not-allowed"
@@ -534,7 +584,7 @@ export const Movimientos = () => {
                         </div>
                         <div className="w-full">
                           <button
-                            onClick={() => handleRetirar(datauser)}
+                            onClick={() => handleRetirar(dataUser)}
                             className={`w-full bg-red-600 hover:bg-red-600 hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
                               isFormDisabled || !isAccountNumberFilled
                                 ? "opacity-50 cursor-not-allowed"
