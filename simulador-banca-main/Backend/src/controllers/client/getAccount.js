@@ -10,16 +10,19 @@ const getAccount = async (req, res) => {
 
     // Consulta SQL modificada para filtrar por el número de cuenta
     const clienteQuery = `
-      SELECT c.ID_Cliente, 
-      fpn.IP_primerNombre AS PrimerNombre, 
-      fpn.IP_primerApellido AS PrimerApellido, 
-      fpn.IP_segundoApellido AS SegundoApellido, 
-      dp.N_Cuenta,
-      c.Saldo
-      FROM cliente c
-      JOIN DetalleProducto dp ON c.ID_Cliente = dp.Cliente
-      JOIN FormPersonNatural fpn ON c.inf_cliente = fpn.ID_FormPN
-      WHERE dp.N_Cuenta = $1;`;
+      SELECT 
+      dc.id_detalle,
+      c.id_cliente, 
+      fpn.ip_primerNombre AS primerNombre, 
+      fpn.ip_primerApellido AS primerApellido, 
+      fpn.ip_segundoApellido AS segundoApellido,
+      dc.num_cuenta,
+      dc.saldo
+      FROM cliente AS c
+      JOIN detalle_cuenta AS dc ON c.id_cliente = dc.id_cliente
+      JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
+      WHERE dc.num_cuenta = $1
+    `;
 
     const clienteValue = [accountNumberInt];
     const clienteInfo = await pool.query(clienteQuery, clienteValue);
