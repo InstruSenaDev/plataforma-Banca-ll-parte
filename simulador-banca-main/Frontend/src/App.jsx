@@ -7,9 +7,10 @@ import Login from "./Pages/Login";
 import { CrearUsuario } from "./Components/DashBoard/Components/Director/CrearUsuario";
 import { AutorizacionCuentas } from "./Components/DashBoard/Components/Director/AutorizacionCuentas";
 import { ContentCuentaAhorroJuridica } from "./Components/DashBoard/Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
-import { LoaderMenu } from "./Components/Loader/LoaderMenu"; // Importa tu componente de loader
+import { LoaderMenu } from "./Components/Loader/LoaderMenu";
 
 import DashboardCajero from './Pages/DashboardCajero';
+import DashboardBoveda from './Pages/DasboardBoveda';
 import CajeroEmleados from "./Pages/CajeroEmleados";
 
 export default function MyPage() {
@@ -43,6 +44,7 @@ export default function MyPage() {
 
           <Route path="/DashboardCajero" element={<DashboardCajero/>} />
           <Route path="/CajeroEmpleados" element={<CajeroEmleados/>} />
+          <Route path="/DashboardBoveda" element={<DashboardBoveda/>} />
         </Routes>
       )}
     </Router>

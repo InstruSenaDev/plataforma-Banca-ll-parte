@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
 import "boxicons";
 
 const Card = () => {
