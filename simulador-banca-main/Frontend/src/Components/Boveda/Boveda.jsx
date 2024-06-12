@@ -6,9 +6,11 @@ const Boveda = () => {
   return (
     <div className="max-w-2x2 px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <div className="flex flex-col sm:flex-row items-center justify-between">
-        <div className="w-full sm:w-1/2 flex justify-center mb-4 sm:mb-0">
-          <img src={inicio2} alt="" className="max-w-1/4 h-auto" />
-        </div>
+      <div className="w-full sm:w-1/2 flex justify-center mb-4 sm:mb-0">
+    <img src={inicio2} alt="" className="max-w-1/8 sm:max-w-1/6 h-auto" />
+</div>
+
+
         <div className="w-full sm:w-1/2">
           {/* card1 */}
           <div className="w-full max-w-full px-3 mb-6 sm:w-full sm:flex-none xl:mb-0 xl:w-full">
@@ -33,8 +35,8 @@ const Boveda = () => {
           </div>
 
          <div className="mb-4 ml-auto mr-0">
-         <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-DarkSlate text-DarkSlate rounded-md focus:outline-none focus:bg-blue-600 mx-6">
-         <box-icon name='wallet' color='#325259'></box-icon>
+         <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-emerald text-emerald rounded-md focus:outline-none focus:bg-blue-600 mx-6">
+         <box-icon name='wallet' color='emerald'className="mr-2"></box-icon>
   <span>Consignar</span>
 </button>
 <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-red text-red rounded-md focus:outline-none focus:bg-blue-600 mx-6">

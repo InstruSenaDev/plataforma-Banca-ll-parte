@@ -25,6 +25,7 @@ module.exports = {
         DarkSlate: '#038C73',
         beige: '#F2F5F8',
         red: '#E02424',
+        emerald: '#1F9254',
       },
       spacing: {
         '128': '32rem',
