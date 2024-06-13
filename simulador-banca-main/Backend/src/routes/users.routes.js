@@ -7,6 +7,7 @@ const getEmpleadoId = require("../controllers/user/getEmpleadoId");
 const addUser = require("../controllers/user/addUser");
 const updateUser = require("../controllers/user/updateUser");
 const updateBalanceEmpleado = require("../controllers/user/updateBalanceEmpleado");
+const balanceRequest = require("../controllers/user/balanceRequest");
 const deleteUser = require("../controllers/user/deleteUser");
 
 router.post("/login", authController.loginUser);
@@ -18,6 +19,7 @@ router.put(
   "/empleado_balance/:id",
   updateBalanceEmpleado.updateBalanceEmpleado
 );
+router.put("/balance_request/:idEmpleado", balanceRequest.balanceRequest);
 router.delete("/delete_user/:userId", deleteUser.deleteUser);
 
 module.exports = router;

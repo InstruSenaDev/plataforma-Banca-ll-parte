@@ -6,6 +6,10 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../../context/AuthContext";
 
 export const Movimientos = () => {
+  //General Status
+  const [dataUser, setDataUser] = useState();
+  const [empleadoDetails, setEmpleadoDetails] = useState("");
+
   //Disable Modales
   const [accountNumber, setAccountNumber] = useState("");
   const [accountOwner, setAccountOwner] = useState("");
@@ -13,12 +17,12 @@ export const Movimientos = () => {
   const [isAccountNumberFilled, setIsAccountNumberFilled] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-  const { user, isLoggedIn } = useAuth();
-  const [empleadoDetails, setEmpleadoDetails] = useState("");
-
   // Abrir Modal
   const [openModal, setOpenModal] = useState(false);
   const [email, setEmail] = useState("");
+
+  //Login, user context
+  const { user, isLoggedIn } = useAuth();
 
   function onCloseModal() {
     setOpenModal(false);
@@ -32,8 +36,6 @@ export const Movimientos = () => {
     setIsAccountNumberFilled(value.trim() !== "");
     setIsFormDisabled(value.trim() === "");
   };
-
-  const [dataUser, setDataUser] = useState();
 
   const handleConsultClick = async () => {
     try {
@@ -143,7 +145,7 @@ export const Movimientos = () => {
     }
   };
 
-  // Modal retirar-----------------------------------------------------------------------------------------------------------------------------------------
+  // Modal retirar -----------------------------------------------------------------------------------------------------------------------------------------
 
   //Abir Modal
   const [openModal1, setOpenModal1] = useState(false);
@@ -197,53 +199,168 @@ export const Movimientos = () => {
     }
   };
 
-  const handleRetirar = () => {
+  const handleRetirar = async () => {
     const id = dataUser.id_cliente;
     const saldo = dataUser.saldo;
-    const nuevoSaldo = parseFloat(saldo) - parseFloat(amount);
+    const idEmpleado = empleadoDetails.id_empleado;
+    const saldoEmpleado = empleadoDetails.saldo;
 
-    // Verificar que el nuevo saldo no sea menor que cero
+    const newBalanceClient = parseFloat(saldo) - parseFloat(amount);
+    const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
+
+    // Verificar que el nuevo saldo del cliente no sea menor que cero
+    if (newBalanceClient > 0) {
+      try {
+        // Realiza una solicitud al servidor para actualizar el saldo del cliente
+        const responseClient = await fetch(
+          `http://localhost:3000/update_balance/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceClient,
+            }),
+          }
+        );
+
+        if (!responseClient.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cliente"
+          );
+        }
+
+        // Realiza una solicitud al servidor para actualizar el saldo del empleado
+        const responseEmploye = await fetch(
+          `http://localhost:3000/empleado_balance/${idEmpleado}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceEmploye,
+            }),
+          }
+        );
+
+        if (!responseEmploye.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del empleado"
+          );
+        }
+
+        toast.success("Saldo retirado y actualizado correctamente.");
+
+        // Actualizar el estado del cliente y del empleado en el componente
+        setDataUser((prevState) => ({
+          ...prevState,
+          saldo: newBalanceClient,
+        }));
+
+        setEmpleadoDetails((prevState) => ({
+          ...prevState,
+          saldo: newBalanceEmploye,
+        }));
+
+        setTimeout(() => {
+          // Actualiza localmente el estado del cliente según sea necesario
+          // Puedes utilizar la función setDatauser para actualizar el estado local
+          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+          // alert('Autorización exitosa')
+          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+          window.location = "/DashBoardMenu";
+        }, 1500);
+      } catch (error) {
+        console.error("Error general:", error);
+        toast.error("Error al realizar la operación.");
+      }
+    } else {
+      toast.error(
+        "El saldo del cliente no puede ser cero (0) o menor que cero (0)."
+      );
+    }
+  };
+
+  // Actualiza estado al momento de solicitar saldo
+  const handleSolicitarSaldo = async () => {
+    const idEmpleado = empleadoDetails.id_empleado;
 
     try {
-      // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-      fetch(`http://localhost:3000/update_balance/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nuevoSaldo: nuevoSaldo,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data.message);
-          toast.success("Monto retirado correctamente");
-          setTimeout(() => {
-            // Actualiza localmente el estado del cliente según sea necesario
-            // Puedes utilizar la función setDatauser para actualizar el estado local
-            // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-            // alert('Autorización exitosa')
-            // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-            window.location = "/DashBoardMenu";
-          }, 1500); // 2000 milisegundos = 2 segundos
-        })
-        .catch((error) => {
-          console.error("Error al cambiar el estado del cliente:", error);
-        });
-    } catch (error) {
-      toast.error("Error al retirar");
-      console.error("Error general:", error);
-    }
+      const response = await fetch(
+        `http://localhost:3000/balance_request/${idEmpleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idEmpleado: idEmpleado,
+            newStatus: "Solicitud",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-    console.log(
-      `Retirando: ${amount} de la cuenta ${accountNumber} perteneciente a ${accountOwner}`
-    );
+      const data = await response.json();
+      toast.success(data.message);
+
+      // Actualizar el estado del empleado en el componente
+      setEmpleadoDetails((prevDetails) => ({
+        ...prevDetails,
+        estado: "Solicitud",
+      }));
+
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error al solicitar el saldo:", error);
+      toast.error("Error al solicitar el saldo.");
+    }
+  };
+
+  // Cancelar la solicitud de saldo.
+  const handleCancelarSolicitud = async () => {
+    const idEmpleado = empleadoDetails.id_empleado;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/balance_request/${idEmpleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idEmpleado: idEmpleado,
+            newStatus: "Activo",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      toast.success(data.message);
+
+      // Actualizar el estado del empleado en el componente
+      setEmpleadoDetails((prevDetails) => ({
+        ...prevDetails,
+        estado: "Activo",
+      }));
+
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error al cancelar la solicitud:", error);
+      toast.error("Error al cancelar la solicitud.");
+    }
   };
 
   useEffect(() => {
@@ -255,6 +372,7 @@ export const Movimientos = () => {
         if (response.ok) {
           const userData = await response.json();
           setEmpleadoDetails(userData);
+          console.log("Detalle empleado: ", userData);
         } else {
           console.error("Error fetching user info:", response.status);
         }
@@ -283,6 +401,23 @@ export const Movimientos = () => {
                   <h2>Saldo actual: {empleadoDetails.saldo}</h2>
                 </div>
               )}
+              {empleadoDetails.estado === "Solicitud" && (
+                <button
+                  className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                  onClick={handleSolicitarSaldo}
+                >
+                  Cancelar Solicitud
+                </button>
+              )}
+              {empleadoDetails.estado === "Activo" && (
+                <button
+                  className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                  onClick={handleCancelarSolicitud}
+                >
+                  Solicitar Saldo
+                </button>
+              )}
+
               <div className="flex gap-10">
                 <div>
                   <Button

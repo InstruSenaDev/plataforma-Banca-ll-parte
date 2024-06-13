@@ -25,6 +25,7 @@ export default function Login() {
         },
         body: JSON.stringify(data),
       });
+
       const responseData = await response.json();
 
       if (response.status === 200) {
