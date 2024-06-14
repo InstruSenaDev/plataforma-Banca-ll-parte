@@ -36,11 +36,11 @@ const Boveda = () => {
           </div>
 
           <div className="mb-4 ml-auto mr-0">
-            <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-emerald text-emerald rounded-md focus:outline-none focus:bg-blue-600 mx-6">
+            <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-emerald text-emerald rounded-md focus:outline-none focus:bg-white mx-6">
               <box-icon name='wallet' color='emerald' className="mr-2"></box-icon>
               <span>Consignar</span>
             </button>
-            <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-red text-red rounded-md focus:outline-none focus:bg-blue-600 mx-6">
+            <button className="w-11/12 mt-4 flex items-center justify-center px-3 py-1.5 bg-transparent border border-red text-red rounded-md focus:outline-none focus:bg-white mx-6">
               <box-icon name='wallet' color='red' className="mr-2"></box-icon>
               <span>Retirar</span>
             </button>
