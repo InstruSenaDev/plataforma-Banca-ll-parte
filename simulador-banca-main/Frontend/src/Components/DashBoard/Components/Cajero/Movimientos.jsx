@@ -301,6 +301,7 @@ export const Movimientos = () => {
           }),
         }
       );
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -308,7 +309,7 @@ export const Movimientos = () => {
       const data = await response.json();
       toast.success(data.message);
 
-      // Actualizar el estado del empleado en el componente
+      // Modificar el estado del empleado localmente en el frontend si es necesario
       setEmpleadoDetails((prevDetails) => ({
         ...prevDetails,
         estado: "Solicitud",
@@ -404,7 +405,7 @@ export const Movimientos = () => {
               {empleadoDetails.estado === "Solicitud" && (
                 <button
                   className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
-                  onClick={handleSolicitarSaldo}
+                  onClick={handleCancelarSolicitud}
                 >
                   Cancelar Solicitud
                 </button>
@@ -412,7 +413,7 @@ export const Movimientos = () => {
               {empleadoDetails.estado === "Activo" && (
                 <button
                   className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
-                  onClick={handleCancelarSolicitud}
+                  onClick={handleSolicitarSaldo}
                 >
                   Solicitar Saldo
                 </button>
