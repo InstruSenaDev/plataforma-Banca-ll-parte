@@ -1,5 +1,7 @@
 import "react-toastify/dist/ReactToastify.css";
 import React from "react";
+import bank from "../../../../assets/Img/UsoVario/bank-cajero.png";
+
 import { Button, Modal } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -396,344 +398,441 @@ export const Movimientos = () => {
               className="flex justify-center items-center flex-col gap-10"
               style={{ minHeight: "85vh" }}
             >
-              <span>Seleccione el movimiento que desee realizar</span>
-              {empleadoDetails && (
-                <div>
-                  <h2>Saldo actual: {empleadoDetails.saldo}</h2>
-                </div>
-              )}
-              {empleadoDetails.estado === "Solicitud" && (
-                <button
-                  className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
-                  onClick={handleCancelarSolicitud}
-                >
-                  Cancelar Solicitud
-                </button>
-              )}
-              {empleadoDetails.estado === "Activo" && (
-                <button
-                  className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
-                  onClick={handleSolicitarSaldo}
-                >
-                  Solicitar Saldo
-                </button>
-              )}
+              <h1 className="font-semibold text-3xl">
+                Seleccione el movimiento que desee realizar
+              </h1>
 
-              <div className="flex gap-10">
-                <div>
-                  <Button
-                    className="border-green hover:scale-110 duration-100"
-                    onClick={() => setOpenModal(true)}
-                  >
-                    <div className="flex flex-col items-center justify-center w-32 h-32">
-                      <svg
-                        className="w-14 text-darkGreen dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 6v13m0-13 4 4m-4-4-4 4"
-                        />
-                      </svg>
-                      <svg
-                        className="w-24 text-green dark:text-white group-hover:text-green"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
-                          clipRule="evenodd"
-                        />
-                        <path
-                          fillRule="evenodd"
-                          d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
-                      </svg>
-                      <span className="font-bold text-xl text-darkGreen">
-                        Consignar
-                      </span>
-                    </div>
-                  </Button>
-                  <Modal
-                    className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                    show={openModal}
-                    size="md"
-                    onClose={onCloseModal}
-                    popup
-                  >
-                    <Modal.Header>
-                      <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                        Consignar
-                      </span>
-                    </Modal.Header>
-                    <Modal.Body className="px-5 pt-2 pb-5">
-                      <div className="space-y-6">
-                        <div>
-                          <div className="mb-2 block">
-                            <label
-                              htmlFor="accountNumber"
-                              className="font-medium text-gray-700 dark:text-white"
-                            >
-                              Número de cuenta de ahorro:
-                            </label>
-                          </div>
-                          <input
-                            id="accountNumber"
-                            type="number"
-                            placeholder="Número de cuenta"
-                            value={accountNumber}
-                            onChange={handleAccountNumberChange}
-                            required
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                              !isAccountNumberFilled
-                                ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                : ""
-                            }`}
-                          />
-                          {isAccountNumberFilled && (
-                            <button
-                              onClick={() => handleConsultClick()}
-                              className={`mt-2 bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
-                                isFormDisabled
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : ""
-                              }`}
-                              disabled={isFormDisabled}
-                            >
-                              Consultar
-                            </button>
-                          )}
+              <div class="w-full flex overflow-hidden bg-white border-gray-200 dark:bg-gray-800">
+                <div class="w-full p-6">
+                  <div class="mt-4">
+                    <div className="flex flex-row items-start justify-between bg-DarkSlate px-4 py-8 rounded">
+                      <div class="flex flex-col justify-center gap-y-2 h-24">
+                        <div class="flex items-center">
+                          <p class="font-regular text-2xl text-white dark:text-gray-200">
+                            Saldo total
+                          </p>
                         </div>
-                        <div>
-                          <label
-                            htmlFor="accountOwner"
-                            className="font-medium text-gray-700 dark:text-white"
-                          >
-                            Nombre del dueño de la cuenta:
-                          </label>
-                          <input
-                            id="accountOwner"
-                            type="text"
-                            placeholder="Nombre del dueño"
-                            value={accountOwner}
-                            onChange={(event) =>
-                              setAccountOwner(event.target.value)
-                            }
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                              isFormDisabled || !isAccountNumberFilled
-                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                                : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                            }`}
-                            readOnly
-                            disabled={!isAccountNumberFilled}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="amount"
-                            className="font-medium text-gray-700 dark:text-white"
-                          >
-                            Monto a consignar:
-                          </label>
-                          <input
-                            id="amount"
-                            type="number"
-                            placeholder="Monto a consignar"
-                            value={amount}
-                            onChange={(event) => setAmount(event.target.value)}
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                              isFormDisabled || !isAccountNumberFilled
-                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                                : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                            }`}
-                            disabled={!isAccountNumberFilled}
-                          />
-                        </div>
-                        <div className="w-full">
-                          <button
-                            onClick={() => handleConsign(dataUser)}
-                            className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
-                              isFormDisabled || !isAccountNumberFilled
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
-                            }`}
-                            disabled={isFormDisabled || !isAccountNumberFilled}
-                          >
-                            Enviar
-                          </button>
-                        </div>
+                        <span class="font-semibold text-4xl text-white dark:text-gray-300">
+                          100.000,00
+                        </span>
                       </div>
-                    </Modal.Body>
-                  </Modal>
-                </div>
 
-                <div>
-                  <Button
-                    className="border-green hover:scale-110 duration-100"
-                    onClick={() => setOpenModal1(true)}
-                  >
-                    <div className="flex flex-col items-center justify-center w-32 h-32">
-                      <svg
-                        className="w-24 text-red-600 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
-                          clipRule="evenodd"
-                        />
-                        <path
-                          fillRule="evenodd"
-                          d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
-                      </svg>
-                      <svg
-                        className="w-14 text-red-600 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 19V5m0 14-4-4m4 4 4-4"
-                        />
-                      </svg>
-                      <span className="font-bold text-xl text-darkGreen ">
-                        Retirar
-                      </span>
-                    </div>
-                  </Button>
-                  <Modal
-                    className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                    show={openModal1}
-                    size="md"
-                    onClose={onCloseModal1}
-                    popup
-                  >
-                    <Modal.Header>
-                      <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                        Retirar
-                      </span>
-                    </Modal.Header>
-                    {/* retirar-------------------------------------------------------------------------------------------------- */}
-                    <Modal.Body className="px-5 pt-2 pb-5">
-                      <div className="space-y-6">
-                        <div>
-                          <div className="mb-2 block">
-                            <label
-                              htmlFor="accountNumberRetirar"
-                              className="font-medium text-gray-700 dark:text-white"
-                            >
-                              Número de cuenta de ahorro:
-                            </label>
-                          </div>
-                          <input
-                            id="accountNumberRetirar"
-                            type="number"
-                            placeholder="Número de cuenta"
-                            value={accountNumber}
-                            onChange={handleAccountNumberChangeRetirar}
-                            required
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                              !isAccountNumberFilled
-                                ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                : ""
-                            }`}
-                          />
-                          {isAccountNumberFilled && (
-                            <button
-                              onClick={handleConsultClickRetirar}
-                              className={`mt-2 bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
-                                isFormDisabled
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : ""
-                              }`}
-                              disabled={isFormDisabled}
-                            >
-                              Consultar
-                            </button>
-                          )}
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="accountOwnerRetirar"
-                            className="font-medium text-gray-700 dark:text-white"
+                      <div className="flex flex-row gap-x-4">
+                        <button
+                          className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
+                          onClick=""
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.4}
+                            stroke="currentColor"
+                            className="size-5"
                           >
-                            Nombre del dueño de la cuenta:
-                          </label>
-                          <input
-                            id="accountOwnerRetirar"
-                            type="text"
-                            placeholder="Nombre del dueño"
-                            value={accountOwner}
-                            onChange={(event) =>
-                              setAccountOwner(event.target.value)
-                            }
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                              isFormDisabled || !isAccountNumberFilled
-                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                                : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                            }`}
-                            readOnly
-                            disabled={!isAccountNumberFilled}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="amountRetirar"
-                            className="font-medium text-gray-700 dark:text-white"
-                          >
-                            Monto a retirar:
-                          </label>
-                          <input
-                            id="amountRetirar"
-                            type="number"
-                            placeholder="Monto a retirar"
-                            value={amount}
-                            onChange={(event) => setAmount(event.target.value)}
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                              isFormDisabled || !isAccountNumberFilled
-                                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                                : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                            }`}
-                            disabled={!isAccountNumberFilled}
-                          />
-                        </div>
-                        <div className="w-full">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+                            />
+                          </svg>
+
+                          <p>Devolver saldo</p>
+                        </button>
+                        {empleadoDetails.estado === "Solicitud" && (
                           <button
-                            onClick={() => handleRetirar(dataUser)}
-                            className={`w-full bg-red-600 hover:bg-red-600 hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
-                              isFormDisabled || !isAccountNumberFilled
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
-                            }`}
-                            disabled={isFormDisabled || !isAccountNumberFilled}
+                            className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
+                            onClick={handleCancelarSolicitud}
                           >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                              />
+                            </svg>
+
+                            <p>Cancelar solicitud</p>
+                          </button>
+                        )}
+                        {empleadoDetails.estado === "Activo" && (
+                          <button
+                            className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
+                            onClick={handleSolicitarSaldo}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.4}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                              />
+                            </svg>
+                            <p>Solicitar saldo</p>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-10 mt-4">
+                    <div className="flex-1">
+                      <Button
+                        className="border-green w-full"
+                        onClick={() => setOpenModal(true)}
+                      >
+                        <div className="flex flex-col items-center justify-center w-32 h-32">
+                          <svg
+                            className="w-14 text-darkGreen dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 6v13m0-13 4 4m-4-4-4 4"
+                            />
+                          </svg>
+                          <svg
+                            className="w-24 text-green dark:text-white group-hover:text-green"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
+                              clipRule="evenodd"
+                            />
+                            <path
+                              fillRule="evenodd"
+                              d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
+                              clipRule="evenodd"
+                            />
+                            <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+                          </svg>
+                          <span className="font-bold text-xl text-darkGreen">
+                            Consignar
+                          </span>
+                        </div>
+                      </Button>
+                      <Modal
+                        className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                        show={openModal}
+                        size="md"
+                        onClose={onCloseModal}
+                        popup
+                      >
+                        <Modal.Header>
+                          <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                            Consignar
+                          </span>
+                        </Modal.Header>
+                        <Modal.Body className="px-5 pt-2 pb-5">
+                          <div className="space-y-6">
+                            <div>
+                              <div className="mb-2 block">
+                                <label
+                                  htmlFor="accountNumber"
+                                  className="font-medium text-gray-700 dark:text-white"
+                                >
+                                  Número de cuenta de ahorro:
+                                </label>
+                              </div>
+                              <input
+                                id="accountNumber"
+                                type="number"
+                                placeholder="Número de cuenta"
+                                value={accountNumber}
+                                onChange={handleAccountNumberChange}
+                                required
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                                  !isAccountNumberFilled
+                                    ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                    : ""
+                                }`}
+                              />
+                              {isAccountNumberFilled && (
+                                <button
+                                  onClick={() => handleConsultClick()}
+                                  className={`mt-2 bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
+                                    isFormDisabled
+                                      ? "opacity-50 cursor-not-allowed"
+                                      : ""
+                                  }`}
+                                  disabled={isFormDisabled}
+                                >
+                                  Consultar
+                                </button>
+                              )}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="accountOwner"
+                                className="font-medium text-gray-700 dark:text-white"
+                              >
+                                Nombre del dueño de la cuenta:
+                              </label>
+                              <input
+                                id="accountOwner"
+                                type="text"
+                                placeholder="Nombre del dueño"
+                                value={accountOwner}
+                                onChange={(event) =>
+                                  setAccountOwner(event.target.value)
+                                }
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                                  isFormDisabled || !isAccountNumberFilled
+                                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                    : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                }`}
+                                readOnly
+                                disabled={!isAccountNumberFilled}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="amount"
+                                className="font-medium text-gray-700 dark:text-white"
+                              >
+                                Monto a consignar:
+                              </label>
+                              <input
+                                id="amount"
+                                type="number"
+                                placeholder="Monto a consignar"
+                                value={amount}
+                                onChange={(event) =>
+                                  setAmount(event.target.value)
+                                }
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                                  isFormDisabled || !isAccountNumberFilled
+                                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                    : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                }`}
+                                disabled={!isAccountNumberFilled}
+                              />
+                            </div>
+                            <div className="w-full">
+                              <button
+                                onClick={() => handleConsign(dataUser)}
+                                className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
+                                  isFormDisabled || !isAccountNumberFilled
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : ""
+                                }`}
+                                disabled={
+                                  isFormDisabled || !isAccountNumberFilled
+                                }
+                              >
+                                Enviar
+                              </button>
+                            </div>
+                          </div>
+                        </Modal.Body>
+                      </Modal>
+                    </div>
+
+                    <div className="flex-1">
+                      <Button
+                        className="border-green w-full"
+                        onClick={() => setOpenModal1(true)}
+                      >
+                        <div className="flex flex-col items-center justify-center w-32 h-32">
+                          <svg
+                            className="w-24 text-red-600 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
+                              clipRule="evenodd"
+                            />
+                            <path
+                              fillRule="evenodd"
+                              d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
+                              clipRule="evenodd"
+                            />
+                            <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+                          </svg>
+                          <svg
+                            className="w-14 text-red-600 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 19V5m0 14-4-4m4 4 4-4"
+                            />
+                          </svg>
+                          <span className="font-bold text-xl text-darkGreen ">
                             Retirar
-                          </button>
+                          </span>
                         </div>
-                      </div>
-                    </Modal.Body>
-                  </Modal>
+                      </Button>
+                      <Modal
+                        className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                        show={openModal1}
+                        size="md"
+                        onClose={onCloseModal1}
+                        popup
+                      >
+                        <Modal.Header>
+                          <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                            Retirar
+                          </span>
+                        </Modal.Header>
+                        {/* retirar-------------------------------------------------------------------------------------------------- */}
+                        <Modal.Body className="px-5 pt-2 pb-5">
+                          <div className="space-y-6">
+                            <div>
+                              <div className="mb-2 block">
+                                <label
+                                  htmlFor="accountNumberRetirar"
+                                  className="font-medium text-gray-700 dark:text-white"
+                                >
+                                  Número de cuenta de ahorro:
+                                </label>
+                              </div>
+                              <input
+                                id="accountNumberRetirar"
+                                type="number"
+                                placeholder="Número de cuenta"
+                                value={accountNumber}
+                                onChange={handleAccountNumberChangeRetirar}
+                                required
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                                  !isAccountNumberFilled
+                                    ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                    : ""
+                                }`}
+                              />
+                              {isAccountNumberFilled && (
+                                <button
+                                  onClick={handleConsultClickRetirar}
+                                  className={`mt-2 bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
+                                    isFormDisabled
+                                      ? "opacity-50 cursor-not-allowed"
+                                      : ""
+                                  }`}
+                                  disabled={isFormDisabled}
+                                >
+                                  Consultar
+                                </button>
+                              )}
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="accountOwnerRetirar"
+                                className="font-medium text-gray-700 dark:text-white"
+                              >
+                                Nombre del dueño de la cuenta:
+                              </label>
+                              <input
+                                id="accountOwnerRetirar"
+                                type="text"
+                                placeholder="Nombre del dueño"
+                                value={accountOwner}
+                                onChange={(event) =>
+                                  setAccountOwner(event.target.value)
+                                }
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                                  isFormDisabled || !isAccountNumberFilled
+                                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                    : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                }`}
+                                readOnly
+                                disabled={!isAccountNumberFilled}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="amountRetirar"
+                                className="font-medium text-gray-700 dark:text-white"
+                              >
+                                Monto a retirar:
+                              </label>
+                              <input
+                                id="amountRetirar"
+                                type="number"
+                                placeholder="Monto a retirar"
+                                value={amount}
+                                onChange={(event) =>
+                                  setAmount(event.target.value)
+                                }
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                                  isFormDisabled || !isAccountNumberFilled
+                                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                    : "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                }`}
+                                disabled={!isAccountNumberFilled}
+                              />
+                            </div>
+                            <div className="w-full">
+                              <button
+                                onClick={() => handleRetirar(dataUser)}
+                                className={`w-full bg-red-600 hover:bg-red-600 hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
+                                  isFormDisabled || !isAccountNumberFilled
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : ""
+                                }`}
+                                disabled={
+                                  isFormDisabled || !isAccountNumberFilled
+                                }
+                              >
+                                Retirar
+                              </button>
+                            </div>
+                          </div>
+                        </Modal.Body>
+                      </Modal>
+                    </div>
+                  </div>
+
+                  {/* <div>
+                    <span class="text-xs font-medium text-blue-600 uppercase dark:text-blue-400">
+                      Product
+                    </span>
+                    <a
+                      href="#"
+                      class="block mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
+                      tabindex="0"
+                      role="link"
+                    >
+                      I Built A Successful Blog In One Year
+                    </a>
+                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Molestie parturient et sem ipsum volutpat vel. Natoque sem
+                      et aliquam mauris egestas quam volutpat viverra. In
+                      pretium nec senectus erat. Et malesuada lobortis.
+                    </p>
+                  </div> */}
                 </div>
               </div>
             </div>
