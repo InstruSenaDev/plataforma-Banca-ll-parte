@@ -402,19 +402,24 @@ export const Movimientos = () => {
                 Seleccione el movimiento que desee realizar
               </h1>
 
-              <div class="w-full flex overflow-hidden bg-white border-gray-200 dark:bg-gray-800">
-                <div class="w-full p-6">
-                  <div class="mt-4">
+              <div className="w-full flex overflow-hidden bg-white border-gray-200 dark:bg-gray-800">
+                <div className="w-full p-6">
+                  <div className="mt-4">
                     <div className="flex flex-row items-start justify-between bg-DarkSlate px-4 py-8 rounded">
-                      <div class="flex flex-col justify-center gap-y-2 h-24">
-                        <div class="flex items-center">
-                          <p class="font-regular text-2xl text-white dark:text-gray-200">
+                      <div className="flex flex-col justify-center gap-y-2 h-24">
+                        <div className="flex items-center">
+                          <p className="font-regular text-2xl text-white dark:text-gray-200">
                             Saldo total
                           </p>
                         </div>
-                        <span class="font-semibold text-4xl text-white dark:text-gray-300">
-                          100.000,00
-                        </span>
+                        <div className="flex jutify-center items-end gap-x-2">
+                          <p className="font-regular text-2xl text-white dark:text-gray-200">
+                            $
+                          </p>{" "}
+                          <p className="font-semibold text-4xl text-white dark:text-gray-300">
+                            {empleadoDetails.saldo}
+                          </p>
+                        </div>
                       </div>
 
                       <div className="flex flex-row gap-x-4">
@@ -491,12 +496,12 @@ export const Movimientos = () => {
                   <div className="flex gap-10 mt-4">
                     <div className="flex-1">
                       <Button
-                        className="border-green w-full"
+                        className="border-emerald w-full hover:bg-emerald transition duration-300"
                         onClick={() => setOpenModal(true)}
                       >
                         <div className="flex flex-col items-center justify-center w-32 h-32">
                           <svg
-                            className="w-14 text-darkGreen dark:text-white"
+                            className="w-14 text-emerald dark:text-white group-hover:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -510,7 +515,7 @@ export const Movimientos = () => {
                             />
                           </svg>
                           <svg
-                            className="w-24 text-green dark:text-white group-hover:text-green"
+                            className="w-24 text-emerald dark:text-white group-hover:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor"
@@ -528,7 +533,7 @@ export const Movimientos = () => {
                             />
                             <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
                           </svg>
-                          <span className="font-bold text-xl text-darkGreen">
+                          <span className="font-bold text-xl text-darkGreen group-hover:text-white">
                             Consignar
                           </span>
                         </div>
@@ -652,12 +657,12 @@ export const Movimientos = () => {
 
                     <div className="flex-1">
                       <Button
-                        className="border-green w-full"
+                        className="border-red w-full hover:bg-red transition duration-300"
                         onClick={() => setOpenModal1(true)}
                       >
                         <div className="flex flex-col items-center justify-center w-32 h-32">
                           <svg
-                            className="w-24 text-red-600 dark:text-white"
+                            className="w-24 text-red dark:text-white group-hover:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor"
@@ -676,7 +681,7 @@ export const Movimientos = () => {
                             <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
                           </svg>
                           <svg
-                            className="w-14 text-red-600 dark:text-white"
+                            className="w-14 text-red-600 dark:text-white group-hover:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -690,7 +695,7 @@ export const Movimientos = () => {
                               d="M12 19V5m0 14-4-4m4 4 4-4"
                             />
                           </svg>
-                          <span className="font-bold text-xl text-darkGreen ">
+                          <span className="font-bold text-xl text-darkGreen group-hover:text-white">
                             Retirar
                           </span>
                         </div>
@@ -815,18 +820,18 @@ export const Movimientos = () => {
                   </div>
 
                   {/* <div>
-                    <span class="text-xs font-medium text-blue-600 uppercase dark:text-blue-400">
+                    <span className="text-xs font-medium text-blue-600 uppercase dark:text-blue-400">
                       Product
                     </span>
                     <a
                       href="#"
-                      class="block mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
+                      className="block mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
                       tabindex="0"
                       role="link"
                     >
                       I Built A Successful Blog In One Year
                     </a>
-                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                       Molestie parturient et sem ipsum volutpat vel. Natoque sem
                       et aliquam mauris egestas quam volutpat viverra. In
