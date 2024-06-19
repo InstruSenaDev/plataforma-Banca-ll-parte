@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
 import "boxicons";
 
 const Card = () => {
@@ -8,7 +7,7 @@ const Card = () => {
     <div className="flex flex-wrap -mx-3">
       {/* row 1 */}
       {/* card1 */}
-      <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+      <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/3">
         <div className="relative flex flex-col min-w-0 break-words bg-DarkSlate shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
           <div className="flex-auto p-4">
             <div className="flex flex-row -mx-3 items-center">
@@ -31,7 +30,7 @@ const Card = () => {
       </div>
 
       {/* card2 */}
-      <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+      <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/3">
         <div className="relative flex flex-col min-w-0 break-words bg-darkGray shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
           <div className="flex-auto p-4">
             <div className="flex flex-row -mx-3 items-center">
@@ -54,7 +53,7 @@ const Card = () => {
       </div>
 
       {/* card3 */}
-      <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+      <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/3">
   <div className="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border h-full"> {/* Añadí la clase h-full aquí */}
   <div className="flex-auto p-4 flex flex-col justify-center items-center"> 
       <div className="flex flex-row -mx-3 items-center">

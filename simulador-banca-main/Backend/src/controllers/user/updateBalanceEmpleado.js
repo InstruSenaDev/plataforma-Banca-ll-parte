@@ -3,8 +3,8 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const updateClient = async (req, res) => {
-  const Id = req.params.id;
+const updateBalanceEmpleado = async (req, res) => {
+  const idEmpleado = req.params.id;
   const saldo = req.body.nuevoSaldo;
 
   try {
@@ -12,8 +12,8 @@ const updateClient = async (req, res) => {
     if (typeof saldo !== "undefined") {
       // Realiza la actualización en la base de datos utilizando el ID
       const updateQueryA =
-        "UPDATE detalle_cuenta SET saldo = $1 WHERE id_cliente = $2";
-      const updateValuesA = [saldo, Id];
+        "UPDATE empleado SET saldo = $1 WHERE id_empleado = $2";
+      const updateValuesA = [saldo, idEmpleado];
       await pool.query(updateQueryA, updateValuesA);
 
       res
@@ -35,5 +35,5 @@ const updateClient = async (req, res) => {
   }
 };
 module.exports = {
-  updateClient,
+  updateBalanceEmpleado,
 };
