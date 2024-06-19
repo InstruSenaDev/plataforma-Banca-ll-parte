@@ -1,25 +1,57 @@
-import React from 'react'
+import React from "react";
 
 const Empleados = () => {
-    const empleados = [
-        { id: '#00001', nombre: 'Eduardo Dutra', rol: 'Cajero', estado: 'Activo', saldo: '$100.000', accion: 'Transferir', fechaYHora: '1/06/2024 8:44 am' },
-        { id: '#00002', nombre: 'Eduardo Dutra', rol: 'Cajero', estado: 'Activo', saldo: '$100.000', accion: 'Transferir', fechaYHora: '1/06/2024 8:44 am' },
-      ];
-    
-      return (
+  const empleados = [
+    {
+      id: "#00001",
+      nombre: "Eduardo Dutra",
+      rol: "Cajero",
+      estado: "Activo",
+      saldo: "$100.000",
+      accion: "Transferir",
+      fechaYHora: "1/06/2024 8:44 am",
+    },
+    {
+      id: "#00002",
+      nombre: "Eduardo Dutra",
+      rol: "Cajero",
+      estado: "Activo",
+      saldo: "$100.000",
+      accion: "Transferir",
+      fechaYHora: "1/06/2024 8:44 am",
+    },
+  ];
+
+  return (
+    <>
+      <div className="p-4 sm:ml-64">
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold mb-4">Informes de Cajeros</h1>
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <table className="w-full table-auto sm:w-full md:w-full lg:w-full xl:w-full">
               <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">ID</th>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">Nombre</th>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">Rol</th>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">Estado</th>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">Saldo</th>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">Acción</th>
-                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">Fecha y Hora</th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    Nombre
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    Rol
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    Estado
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    Saldo
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    Acción
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-500 uppercase tracking-wider">
+                    Fecha y Hora
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -38,8 +70,9 @@ const Empleados = () => {
             </table>
           </div>
         </div>
-      );
-    };
-    
+      </div>
+    </>
+  );
+};
 
-export default Empleados
+export default Empleados;
