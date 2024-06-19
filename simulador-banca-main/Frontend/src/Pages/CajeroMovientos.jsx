@@ -1,9 +1,9 @@
 import React from 'react'
-import Empleados from '../Components/CajeroPrincipal/Empleados'
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Navbar from "../Components/Navbar/Navbar";
+import Movimientos from '../Components/CajeroPrincipal/MovimientosCajero';
 
-const CajeroEmleados = () => {
+const CajeroMovimientos = () => {
   return (
     <div className="flex flex-col xl:flex-row bg-beige h-screen">
       {/* El Sidebar solo se mostrará en dispositivos grandes */}
@@ -15,7 +15,7 @@ const CajeroEmleados = () => {
         <main className="relative flex-grow overflow-auto rounded-xl">
           <div className="w-full px-4 sm:px-6 lg:px-8 py-6 mx-auto">
            
-            <Empleados />
+            <Movimientos />
           </div>
         </main>
       </div>
@@ -23,4 +23,4 @@ const CajeroEmleados = () => {
   )
 }
 
-export default CajeroEmleados
+export default CajeroMovimientos
