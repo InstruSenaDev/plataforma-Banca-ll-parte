@@ -389,40 +389,43 @@ export const Movimientos = () => {
     }
   }, [user]);
 
+  //Formatea el saldo para separarlo por miles //
+  const formatter = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+  });
+
   return (
     <>
       {
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
             <div
-              className="flex justify-center items-center flex-col gap-10"
+              className="flex justify-center items-center flex-col gap-x-14 text-center"
               style={{ minHeight: "85vh" }}
             >
-              <h1 className="font-semibold text-3xl">
+              <h1 className="font-semibold text-2xl">
                 Seleccione el movimiento que desee realizar
               </h1>
 
-              <div className="w-full flex overflow-hidden bg-white border-gray-200 dark:bg-gray-800">
-                <div className="w-full p-6">
-                  <div className="mt-4">
-                    <div className="flex flex-row items-start justify-between bg-DarkSlate px-4 py-8 rounded">
-                      <div className="flex flex-col justify-center gap-y-2 h-24">
-                        <div className="flex items-center">
-                          <p className="font-regular text-2xl text-white dark:text-gray-200">
+              <div className="w-full flex overflow-hidden bg-white border-gray-200 dark:bg-gray-800 flex-col sm:flex sm:items-center sm:justify-between">
+                <div className="w-full p-4 max-w-5xl mx-auto">
+                  <div className="mt-4 ">
+                    <div className="flex flex-col-reverse sm:flex-row sm:items-start sm:justify-between  bg-DarkSlate px-4 py-8 rounded">
+                      <div className="flex flex-col justify-center gap-y-2 h-24 ">
+                        <div className="flex items-center ">
+                          <p className="font-regular text-2xl text-white dark:text-gray-200 ">
                             Saldo total
                           </p>
                         </div>
                         <div className="flex jutify-center items-end gap-x-2">
-                          <p className="font-regular text-2xl text-white dark:text-gray-200">
-                            $
-                          </p>{" "}
-                          <p className="font-semibold text-4xl text-white dark:text-gray-300">
-                            {empleadoDetails.saldo}
+                          <p className="font-semibold text-3xl text-white dark:text-gray-300">
+                            {formatter.format(empleadoDetails.saldo)}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex flex-row gap-x-4">
+                      <div className="   grid gap-x-4 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between ">
                         <button
                           className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
                           onClick=""
@@ -493,8 +496,8 @@ export const Movimientos = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-10 mt-4">
-                    <div className="flex-1">
+                  <div className=" grid gap-x-8 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between  ">
+                    <div className="flex-1 ">
                       <Button
                         className="border-emerald w-full hover:bg-emerald transition duration-300"
                         onClick={() => setOpenModal(true)}
