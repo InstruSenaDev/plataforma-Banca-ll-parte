@@ -461,6 +461,71 @@ export const DashboardComponent = () => {
                     </li>
                   </>
                 )}
+
+                {user?.id_rol == 2 && (
+                  <>
+                    <Sidebar.Collapse
+                      className="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group hover:bg-white hover:text-black dark:text-white dark:hover:bg-gray-700"
+                      label={
+                        <label className="flex  flex-row  relative right-4 items-center ">
+                          {" "}
+                          <HiShoppingCart
+                            color="white || black"
+                            className="flex relative right-1 items-center justify-center w-12"
+                          />{" "}
+                          Apertura de cuentas{" "}
+                        </label>
+                      }
+                    >
+                      <Sidebar.Collapse
+                        label={
+                          <label className="flex  flex-row  relative right-4 items-center">
+                            {" "}
+                            <HiClipboard
+                              color="white || black"
+                              className="flex relative right-1 items-center justify-center w-12"
+                            />{" "}
+                            Cuenta de Ahorro{" "}
+                          </label>
+                        }
+                        className="flex items-center w-full p-2 text-base text-white  transition duration-75 rounded-lg group hover:bg-gray-100  hover:text-black dark:text-white dark:hover:bg-gray-700"
+                      >
+                        <Sidebar.Item
+                          onClick={() =>
+                            handleBotonClick("FormularioPersonaNatural")
+                          }
+                          className="flex items-center  relative left-4 w-full p-2 text-base text-white transition duration-75 rounded-lg group hover:text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >
+                          {
+                            <p className="flex  flex-row  relative right-5 items-center">
+                              <HiUser
+                                color="white || black"
+                                className="flex relative right-1 items-center justify-center w-12"
+                              />{" "}
+                              Persona Natural
+                            </p>
+                          }
+                        </Sidebar.Item>
+                        {/* <Sidebar.Item onClick={() => handleBotonClick('FormularioPersonaJuridica')} className="flex items-center relative left-4  w-full p-2 text-base text-white transition duration-75 rounded-lg group  hover:bg-gray-100 hover:text-black dark:text-white dark:hover:bg-gray-700">{<p className='flex  flex-row  relative right-5 items-center'><HiUserGroup color='white || black' className='flex relative right-1 items-center justify-center w-12' /> Persona Juridica</p>}</Sidebar.Item> */}
+                      </Sidebar.Collapse>
+                    </Sidebar.Collapse>
+                    <Sidebar.Item
+                      onClick={() => handleBotonClick("Busqueda")}
+                      className=" flex items-center justify-start p-2 text-white w-full rounded-lg hover:text-black hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    >
+                      {
+                        <p className="flex justify-start items-center relative right-5">
+                          <HiUser
+                            color="white || black"
+                            className="flex   items-center justify-start h-5 w-12"
+                          />
+                          Busqueda de Cuentas
+                        </p>
+                      }
+                    </Sidebar.Item>
+                  </>
+                )}
+
                 {user?.id_rol == 3 && (
                   <>
                     <li>
@@ -497,6 +562,8 @@ export const DashboardComponent = () => {
                     </li>
                   </>
                 )}
+
+                {/* Cajero principal */}
               </Sidebar.ItemGroup>
             </div>
           </Sidebar>

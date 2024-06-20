@@ -46,6 +46,7 @@ export default function MyPage() {
 
           <Route path="/DashboardCajero" element={<DashboardCajero/>} />
           <Route path="/CajeroEmpleados" element={<CajeroEmleados/>} />
+          <Route path="/CajeroMovimientos" element={<CajeroMovimientos/>} />
           <Route path="/DashboardBoveda" element={<DashboardBoveda/>} />
           <Route path="/DashboardDirector" element={<DashboardDirector/>} />
         </Routes>
