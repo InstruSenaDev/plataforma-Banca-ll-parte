@@ -13,7 +13,8 @@ import DashboardCajero from './Pages/DashboardCajero';
 import DashboardBoveda from './Pages/DasboardBoveda';
 import CajeroEmleados from "./Pages/CajeroEmleados";
 import DashboardDirector from "./Pages/DasboardDirector";
-
+import DirectorAutorizaciones from "./Pages/AutorizacionCuentas";
+import CajeroMovimientos from "./Pages/CajeroMovientos";
 
 export default function MyPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +50,8 @@ export default function MyPage() {
           <Route path="/CajeroMovimientos" element={<CajeroMovimientos/>} />
           <Route path="/DashboardBoveda" element={<DashboardBoveda/>} />
           <Route path="/DashboardDirector" element={<DashboardDirector/>} />
+          <Route path="/DirectorAutorizaciones" element={<DirectorAutorizaciones/>} />
+
         </Routes>
       )}
     </Router>

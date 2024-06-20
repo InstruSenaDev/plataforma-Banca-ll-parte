@@ -34,6 +34,7 @@ module.exports = {
         beige: "#F2F5F8",
         red: "#ef4444",
         emerald: "#10b981",
+        DarkSlateGray: '#325259',
       },
       spacing: {
         128: "32rem",
