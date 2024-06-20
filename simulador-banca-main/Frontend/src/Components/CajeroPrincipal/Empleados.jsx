@@ -41,10 +41,10 @@ const Empleados = () => {
           <div className="flex flex-col mt-6">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg max-w-3/6">
-                  <table className="w-full divide-y divide-gray-200 dark:divide-gray-700 rounded-3xl  ">
-                    <tbody>
-                      <tr className="shadow hover:shadow-md transition duration-200 overflow-x-auto bg-DarkSlate  rounded-3xl py-2 bg-clip-border mb-2 border-spacing-3">
+                <div className="overflow-hidden">
+                  <table className="w-full">
+                    <tbody className="overflow-x-auto bg-DarkSlate py-2 bg-clip-border mb-2 border-spacing-3">
+                      <tr>
                         <th
                           scope="col"
                           class="px-6 py-2 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
@@ -129,11 +129,11 @@ const Empleados = () => {
                         </th>
                       </tr>
                     </tbody>
-                    <tbody className="bg-lightgreen">
+                    <tbody>
                       {empleados.map((cajero) => (
                         <tr
                           key={cajero.id}
-                          className="shadow hover:shadow-md transition duration-200 rounded-3xl py-3 bg-clip-border mb-1"
+                          className="shadow rounded-3xl py-3 bg-clip-border mb-1"
                         >
                           <td className="w-1/6 px-5 py-3 text-sm font-medium text-gray-700 whitespace-nowrap">
                             <div className="inline-flex items-center gap-x-3">

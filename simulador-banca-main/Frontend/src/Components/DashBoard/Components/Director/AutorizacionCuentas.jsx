@@ -117,110 +117,106 @@ export const AutorizacionCuentas = () => {
 
   return (
     <>
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-          <div
-            className="flex justify-center items-center flex-col gap-10"
-            style={{ minHeight: "85vh" }}
-          >
-            <div className="w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center">
-              <p>Autorización de Cuentas</p>
-            </div>
-            <div className="w-8/12 relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Nombre de Cliente
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Producto bancario
-                    </th>
-
-                    <th scope="col" className="px-6 py-3">
-                      N° Cuenta
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Estado
-                    </th>
-                    <th scope="col" className="w-48 px-6 py-3">
-                      Acción
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {datauser?.map((data) => (
-                    <tr
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      key={data.id_detalle}
-                    >
-                      <th
-                        scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        {data.nombre}
-                      </th>
-
-                      <td className="px-6 py-4">{data.descripcion}</td>
-                      <td className="px-6 py-4">{data.num_cuenta}</td>
-                      <td className="px-6 py-4">{data.estado_cliente}</td>
-                      <td class="px-6 py-4 flex gap-5 justify-center">
-                        <button
-                          onClick={() => openModal(data)}
-                          href="#"
-                          class="hover:bg-gray-200 p-1 rounded-sm"
-                        >
-                          <svg
-                            class="w-6 h-6 text-red-600 dark:text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M6 18 18 6m0 12L6 6"
-                            />
-                          </svg>
-                        </button>
-
-                        <button
-                          onClick={() => autorizar(data.id_detalle)}
-                          href="#"
-                          class="hover:bg-gray-200 p-1 rounded-sm"
-                        >
-                          <svg
-                            class="w-6 h-6 text-neutralGreen dark:text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="m5 12 4.7 4.5 9.3-9"
-                            />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <ModalAutorizaciones
-              data={modalData}
-              closeModal={closeModal}
-              showModal={showModal}
-            />
-          </div>
+      <div
+        className="flex justify-center items-center flex-col gap-10"
+        style={{ minHeight: "75vh" }}
+      >
+        <div className="w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center">
+          <p>Autorización de Cuentas</p>
         </div>
+        <div className="w-8/12 relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Nombre de Cliente
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Producto bancario
+                </th>
+
+                <th scope="col" className="px-6 py-3">
+                  N° Cuenta
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Estado
+                </th>
+                <th scope="col" className="w-48 px-6 py-3">
+                  Acción
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {datauser?.map((data) => (
+                <tr
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  key={data.id_detalle}
+                >
+                  <th
+                    scope="row"
+                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {data.nombre}
+                  </th>
+
+                  <td className="px-6 py-4">{data.descripcion}</td>
+                  <td className="px-6 py-4">{data.num_cuenta}</td>
+                  <td className="px-6 py-4">{data.estado_cliente}</td>
+                  <td class="px-6 py-4 flex gap-5 justify-center">
+                    <button
+                      onClick={() => openModal(data)}
+                      href="#"
+                      class="hover:bg-gray-200 p-1 rounded-sm"
+                    >
+                      <svg
+                        class="w-6 h-6 text-red-600 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18 18 6m0 12L6 6"
+                        />
+                      </svg>
+                    </button>
+
+                    <button
+                      onClick={() => autorizar(data.id_detalle)}
+                      href="#"
+                      class="hover:bg-gray-200 p-1 rounded-sm"
+                    >
+                      <svg
+                        class="w-6 h-6 text-neutralGreen dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m5 12 4.7 4.5 9.3-9"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ModalAutorizaciones
+          data={modalData}
+          closeModal={closeModal}
+          showModal={showModal}
+        />
       </div>
     </>
   );
