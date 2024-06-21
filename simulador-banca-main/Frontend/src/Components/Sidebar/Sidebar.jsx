@@ -27,7 +27,7 @@ const Sidebar = () => {
               </a>
             </div>
 
-            <div className="items-center block w-full max-h-screen overflow-auto h-sidenav grow basis-full xl:px-3 2xl:px-6">
+            <div className="items-center block w-full max-h-screen overflow-auto h-sidenav grow basis-full px-6">
               <hr class="border-gray-200 dark:border-gray-700 mb-6" />
               <ul className="flex flex-col space-y-1 pl-0 mb-0">
                 <button className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base">
