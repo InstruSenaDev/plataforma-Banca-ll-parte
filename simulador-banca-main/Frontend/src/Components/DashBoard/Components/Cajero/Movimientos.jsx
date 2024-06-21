@@ -103,7 +103,82 @@ export const Movimientos = () => {
         if (!responseClient.ok) {
           throw new Error("Network response was not ok");
         }
-
+        const handleConsign = async () => {
+          const id = dataUser.id_cliente;
+          const saldo = dataUser.saldo;
+          const idEmpleado = empleadoDetails.id_empleado;
+          const saldoEmpleado = empleadoDetails.saldo;
+        
+          const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
+          const newBalanceEmploye = saldoEmpleado - parseFloat(amount);
+        
+          if (saldoEmpleado > 0) {
+            try {
+              // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
+              const responseClient = await fetch(
+                `http://localhost:3000/update_balance/${id}`,
+                {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    nuevoSaldo: newBalanceClient,
+                  }),
+                }
+              );
+        
+              if (!responseClient.ok) {
+                throw new Error("Network response was not ok");
+              }
+        
+              // Si la actualización del saldo del cliente fue exitosa, procede a agregar el movimiento
+              const newMovement = {
+                id_detalle: 1, // Aquí debes usar la lógica adecuada para generar el ID de detalle
+                id_empleado: empleadoDetails.id_empleado,
+                id_tipomov: tipoMovimiento === "deposito" ? 1 : 2, // Ajusta según tus tipos de movimiento
+                id_boveda: 1, // Reemplaza con el ID real de la bóveda si es necesario
+                saldo: parseFloat(amount),
+                fecha: new Date().toISOString(),
+                tipo_movimiento: tipoMovimiento, // Corregido el nombre de la propiedad según tu estructura en la base de datos
+              };
+        
+              const response = await fetch("http://localhost:3000/add_movimiento", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newMovement),
+              });
+        
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+        
+              const responseData = await response.json();
+        
+              if (responseData.message === "No se pudo insertar el movimiento") {
+                toast.error("No se pudo realizar la transacción");
+              } else {
+                toast.success("Transacción exitosa");
+                setOpenModal(false);
+                setAccountNumber("");
+                setAccountOwner("");
+                setAmount("");
+                setTipoMovimiento("deposito");
+                setIsAccountNumberFilled(false);
+                setIsFormDisabled(true);
+              }
+            } catch (error) {
+              console.error("Error al insertar movimiento:", error);
+              toast.error("Error interno del servidor");
+            }
+          } else {
+            toast.error("Sin saldo suficiente");
+          }
+        };
+        
+        
         const responseEmploye = await fetch(
           `http://localhost:3000/empleado_balance/${idEmpleado}`,
           {
@@ -146,6 +221,7 @@ export const Movimientos = () => {
       toast.error("Sin saldo suficiente");
     }
   };
+
 
   // Modal retirar -----------------------------------------------------------------------------------------------------------------------------------------
 

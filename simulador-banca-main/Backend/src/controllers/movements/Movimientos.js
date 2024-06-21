@@ -12,10 +12,9 @@ const addMovimientos = async (req, res) => {
       id_empleado,
       id_tipomov,
       id_boveda,
-      saldo_anterior,
-      monto_movimiento,
-      nuevo_saldo,
+      saldo,
       fecha,
+      tipo_movimiento, // Asegúrate de que el nombre de la propiedad sea correcto según tu estructura
     } = newMovement;
 
     // Consulta SQL para insertar un nuevo movimiento
@@ -25,11 +24,10 @@ const addMovimientos = async (req, res) => {
         id_empleado,
         id_tipomov,
         id_boveda,
-        saldo_anterior,
-        monto_movimiento,
-        nuevo_saldo,
-        fecha
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        saldo,
+        fecha,
+        tipo_movimiento
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id_movimiento;`;
 
     // Ejecutar la consulta de inserción
@@ -38,11 +36,11 @@ const addMovimientos = async (req, res) => {
       id_empleado,
       id_tipomov,
       id_boveda,
-      saldo_anterior,
-      monto_movimiento,
-      nuevo_saldo,
+      saldo,
       fecha,
+      tipo_movimiento,
     ];
+
     const insertResult = await pool.query(insertMovementQuery, insertValues);
 
     // Verificar si se insertó el movimiento
