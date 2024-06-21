@@ -6,7 +6,7 @@ export const PrincipalPage = () => {
   return (
     <div
       className="flex justify-center items-center flex-col gap-24"
-      style={{ minHeight: "75vh" }}
+      style={{ minHeight: "87vh" }}
     >
       <p className="font-bold text-4xl">Bienvenido, {user?.username}</p>
       <img className="w-1/3" src={PrincipalImage} alt="" />

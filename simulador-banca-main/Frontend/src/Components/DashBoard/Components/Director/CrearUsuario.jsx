@@ -3,12 +3,16 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalCreacionU } from "./ModalCreacionU";
+import { data } from "autoprefixer";
+import { useAuth } from "../../../../context/AuthContext";
 
 export const CrearUsuario = () => {
-  const [datauser, setdatauser] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
   const [forceUpdate, setForceUpdate] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,22 +22,14 @@ export const CrearUsuario = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setdatauser(data.result.rows);
+        setDataUser(data.result.rows);
+        console.log(dataUser);
       } catch (error) {
         console.error("Error al encontrar información");
       }
     };
     fetchData();
   }, [forceUpdate]);
-
-  const abrir = () => {
-    setactiveModal((prev) =>
-      prev ===
-      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
-        ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
-        : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
-    );
-  };
 
   const AddUser = async (data) => {
     try {
@@ -52,16 +48,6 @@ export const CrearUsuario = () => {
     } catch (error) {
       console.error("Error al añadir usuario:", error);
     }
-  };
-
-  const openModal = (datauser) => {
-    setModalData(datauser);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setModalData(null);
-    setShowModal(false);
   };
 
   const eliminarUsuario = async (userId) => {
@@ -87,133 +73,379 @@ export const CrearUsuario = () => {
     }
   };
 
+  const countUsers = () => {
+    return dataUser.length;
+  };
+
+  const abrir = () => {
+    setactiveModal((prev) =>
+      prev ===
+      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
+        ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
+        : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
+    );
+  };
+
+  const openModal = (dataUser) => {
+    setModalData(dataUser);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setModalData(null);
+    setShowModal(false);
+  };
+
   return (
     <>
-      <div
-        className="flex justify-center items-center flex-col gap-10"
-        style={{ minHeight: "75vh" }}
-      >
-        <div className="w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center">
-          <p>Creacion de Usuarios</p>
+      <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
+        <div className="flex justify-between items-center gap-x-3">
+          <div className="flex flex-col justify-center items-start">
+            <div className="flex flex-row items-center gap-x-3">
+              <h2 className="text-lg font-medium text-gray-800 dark:text-white">
+                Miembros del equipo
+              </h2>
+              <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
+                {countUsers()} users
+              </span>
+            </div>
+            {user?.id_rol === 1 && (
+              <>
+                <p className="text-sm text-gray-500 m-0 p-0">
+                  Información de todos los empleados
+                </p>
+              </>
+            )}
+
+            {user?.id_rol === 4 && (
+              <>
+                <p className="text-sm text-gray-500 m-0 p-0">
+                  Información de todos los cajeros
+                </p>
+              </>
+            )}
+          </div>
+
+          {user?.id_rol === 1 && (
+            <button
+              class="flex gap-x-1 items-center px-4 py-2 font-normal text-white transition-colors duration-300 transform bg-green-500 rounded-lg hover:bg-green"
+              onClick={() => openModal(dataUser)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                />
+              </svg>
+
+              <span class="mx-1">Crear usuario</span>
+            </button>
+          )}
         </div>
-        <div className="w-11/12 md:w-8/12 relative overflow-x-auto overflow-y-auto  shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-center">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Nombre
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Rol
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Estado
-                </th>
-                <th scope="col" className="w-48 px-6 py-3">
-                  Acción
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {datauser?.map((date) => (
-                <React.Fragment key={date.id_empleado}>
-                  {date.rol !== 1 && date.rol !== 5 && (
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th
-                        scope="row"
-                        className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        <svg
-                          className="w-6 h-6 text-gray-800 dark:text-white"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a9 9 0 0 0 5-1.5 4 4 0 0 0-4-3.5h-2a4 4 0 0 0-4 3.5 9 9 0 0 0 5 1.5Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                          />
-                        </svg>
-                        <div className="ps-3">
-                          <div className="text-base font-semibold">
-                            {date.username}
-                          </div>
-                        </div>
-                      </th>
-                      <td className="px-6 py-4">
-                        {date.id_rol === 1 && <>Director</>}
-                        {date.id_rol === 2 && <>Asesor</>}
-                        {date.id_rol === 3 && <>Cajero</>}
-                        {date.id_rol === 4 && <>Cajero Principal</>}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center">
-                          <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                          Activo
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 flex gap-5 justify-center">
-                        <button
-                          type="button"
-                          onClick={() => openModal(date)}
-                          className="hover:bg-gray-200 p-1 rounded-sm"
-                        >
-                          <svg
-                            className="w-6 h-6 text-black dark:text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
+
+        <div className="flex flex-col mt-6">
+          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              {/* Tabla solo para administradores/director */}
+              {user?.id_rol === 1 && (
+                <>
+                  <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                      <thead className="bg-DarkSlate dark:bg-gray-800">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                            />
-                          </svg>
-                        </button>
-                        <button
-                          href="#"
-                          onClick={() => eliminarUsuario(date.id_empleado)}
-                          className="hover:bg-gray-200 p-1 rounded-sm"
-                        >
-                          <svg
-                            className="w-6 h-6 text-red-600 dark:text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
+                            <div className="flex items-center gap-x-3">
+                              <button className="flex items-center gap-x-2">
+                                <span>ID</span>
+                              </button>
+                            </div>
+                          </th>
+                          <th
+                            scope="col"
+                            className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M6 18 18 6m0 12L6 6"
-                            />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                            <div className="flex items-center gap-x-3">
+                              <span>Nombre</span>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Estado</span>
+                            </button>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Rol</span>
+                            </button>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Acción</span>
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                        {dataUser?.map((date) => (
+                          <React.Fragment key={date.id_empleado}>
+                            <tr>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                <div className="inline-flex items-center gap-x-3">
+                                  <span># {date.id_empleado}</span>
+                                </div>
+                              </td>
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                <div className="inline-flex items-center gap-x-3">
+                                  <div className="flex items-center gap-x-2">
+                                    <img
+                                      className="object-cover w-10 h-10 rounded-full"
+                                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                      alt=""
+                                    />
+                                    <div>
+                                      <h2 className="font-medium text-gray-800 dark:text-white ">
+                                        {date.username}
+                                      </h2>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+
+                                  <h2 className="text-sm font-normal text-emerald-500">
+                                    Activo
+                                  </h2>
+                                </div>
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                {date.id_rol === 1 && <>Director</>}
+                                {date.id_rol === 2 && <>Asesor</>}
+                                {date.id_rol === 3 && <>Cajero</>}
+                                {date.id_rol === 4 && <>Cajero Principal</>}
+                              </td>
+
+                              <td className="px-4 py-4 text-sm whitespace-nowrap">
+                                <div className="flex items-center gap-x-6">
+                                  <button
+                                    className="text-gray-500 transition-colors duration-200 dark:hover:text-red dark:text-gray-300 hover:text-red focus:outline-none"
+                                    onClick={() =>
+                                      eliminarUsuario(date.id_empleado)
+                                    }
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="w-5 h-5"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                      />
+                                    </svg>
+                                  </button>
+
+                                  <button className="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="w-5 h-5"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                      />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+
+              {/* Tabla solo para cajero principal */}
+              {user?.id_rol === 4 && (
+                <>
+                  <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                      <thead className="bg-DarkSlate dark:bg-gray-800">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex items-center gap-x-3">
+                              <button className="flex items-center gap-x-2">
+                                <span>ID</span>
+                              </button>
+                            </div>
+                          </th>
+                          <th
+                            scope="col"
+                            className="py-3.5 px-10 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex items-center gap-x-3">
+                              <span>Nombre</span>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Estado</span>
+                            </button>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Rol</span>
+                            </button>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Saldo</span>
+                            </button>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <button className="flex items-center gap-x-2">
+                              <span>Acción</span>
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                        {dataUser
+                          ?.filter((user) => user.id_rol === 3)
+                          .map((date) => (
+                            <React.Fragment key={date.id_empleado}>
+                              <tr>
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="inline-flex items-center gap-x-3">
+                                    <span># {date.id_empleado}</span>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                  <div className="inline-flex items-center gap-x-3">
+                                    <div className="flex items-center gap-x-2">
+                                      <img
+                                        className="object-cover w-10 h-10 rounded-full"
+                                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                        alt=""
+                                      />
+                                      <div>
+                                        <h2 className="font-medium text-gray-800 dark:text-white ">
+                                          {date.username}
+                                        </h2>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                  <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+
+                                    <h2 className="text-sm font-normal text-emerald-500">
+                                      Activo
+                                    </h2>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                  Cajero
+                                </td>
+
+                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                  {date.saldo}
+                                </td>
+
+                                <td className="px-4 py-4 text-sm whitespace-nowrap">
+                                  <div className="flex items-center gap-x-6">
+                                    <button className="text-gray-500 transition-colors duration-200 dark:hover:text-emerald-500 dark:text-gray-300 hover:text-emerald-500 focus:outline-none">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="w-5 h-5"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            </React.Fragment>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
+
         <ModalCreacionU
           setShowModal={setShowModal}
           data={modalData}
           showModal={showModal}
           closeModal={closeModal}
         />
-      </div>
+      </section>
     </>
   );
 };

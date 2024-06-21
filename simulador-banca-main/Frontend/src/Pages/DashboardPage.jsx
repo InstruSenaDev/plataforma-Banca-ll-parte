@@ -17,12 +17,12 @@ export const DashboardPage = () => {
         <div
           className={`${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:flex lg:flex-col absolute lg:static z-40 left-0 top-0 lg:translate-x-0 bg-beige h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-80 shrink-0 p-4 transition-all duration-200 ease-in-out transform`}
+          } lg:flex lg:flex-col absolute lg:static z-40 left-0 top-0 lg:translate-x-0 bg-beige h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
           aria-label="Sidebar"
         >
-          <div className="bg-white h-full shadow-lg rounded-xl">
+          <div className="h-full bg-white xl:border-r-2 border-beige">
             {/* Sidebar header */}
-            <div className="flex flex-col justify-between h-full py-4">
+            <div className="flex flex-col justify-between h-full">
               {/* Close sidebar (only movil) */}
               <button
                 className="lg:hidden text-slate-500 hover:text-slate-400 px-2"
@@ -50,7 +50,7 @@ export const DashboardPage = () => {
                 {/* Logo */}
                 <NavLink
                   to="/Dashboard"
-                  className="flex justify-center items-center h-20"
+                  className="flex justify-center items-center h-20 my-6"
                 >
                   <img
                     src={Logo}
@@ -168,7 +168,7 @@ export const DashboardPage = () => {
         {/* Content area */}
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           {/*  Site header */}
-          <header className="sticky top-0 border-b border-gray lg:mt-12 lg:mr-4">
+          <header className="bg-white sticky top-0 border-b border-gray">
             <div className="px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-16 -mb-px">
                 {/* Header: Left side */}
@@ -203,22 +203,22 @@ export const DashboardPage = () => {
                   inline
                   label={
                     <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
-                      <div className="flex flex-col justify-end ps-8 my-0">
-                        <p className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-200">
+                      <div className="flex flex-col my-0">
+                        <span className="flex items-center justify-end text-sm font-semibold text-gray-700 dark:text-gray-200">
                           Angelica Cuero
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        </span>
+                        <span className="flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
                           Director
-                        </p>
+                        </span>
                       </div>
                       <div className="flex items-center gap-x-6">
-                        <div className="relative">
+                        <div class="relative">
                           <img
-                            className="object-cover w-10 h-10 rounded-full ring ring-gray-300 dark:ring-gray-600"
+                            class="object-cover w-10 h-10 rounded-full ring ring-gray-300 dark:ring-gray-600"
                             src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
                             alt=""
                           />
-                          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 absolute right-0 ring-1 ring-white bottom-0"></span>
+                          <span class="h-2.5 w-2.5 rounded-full bg-emerald absolute right-0 ring-1 ring-white bottom-0"></span>
                         </div>
                       </div>
                     </div>
