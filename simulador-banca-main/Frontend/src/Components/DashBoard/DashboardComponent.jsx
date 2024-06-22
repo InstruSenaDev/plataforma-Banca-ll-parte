@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
-import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
-import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
-import { PrincipalPage } from "./Components/PrincipalPage";
-import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
-import { No_Disponible } from "./Components/NoDisponible";
-import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
-import { CrearUsuario } from "./Components/Director/CrearUsuario";
-import Empleados from "../CajeroPrincipal/Empleados";
-import { useAuth } from "../../context/AuthContext";
-import { Reportes } from "./Components/Director/Reportes";
-import { Sidebar } from "flowbite-react";
+import { NavLink } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import {
   HiShoppingCart,
@@ -20,13 +9,23 @@ import {
   HiUserCircle,
   HiUserGroup,
 } from "react-icons/hi";
+import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
+import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
+import nfcLogo from "../../assets/Img/Client/nfcLogo.svg";
+import ChipCard from "../../assets/Img/Client/ChipCard.svg";
+import { useAuth } from "../../context/AuthContext";
+import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
+import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
+import { PrincipalPage } from "./Components/PrincipalPage";
+import { No_Disponible } from "./Components/NoDisponible";
+import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
+import { CrearUsuario } from "./Components/Director/CrearUsuario";
+import { Reportes } from "./Components/Director/Reportes";
 import { Historial } from "./Components/Director/Historial";
 import { HistorialD } from "./Components/Director/HistorialD";
 import { BusquedaC } from "./Components/BusquedaC";
-import nfcLogo from "../../assets/Img/Client/nfcLogo.svg";
-import ChipCard from "../../assets/Img/Client/ChipCard.svg";
 import { Movimientos } from "./Components/Cajero/Movimientos";
-import { NavLink } from "react-router-dom";
+import { ReportesMovimientos } from "./Components/CajeroPrincipal/ReportesMovimientos";
 
 export const DashboardComponent = () => {
   const [flipped, setFlipped] = useState(false);
@@ -231,7 +230,12 @@ export const DashboardComponent = () => {
                               <span className="mx-1">Empleados</span>
                             </button>
 
-                            <button className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base">
+                            <button
+                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                              onClick={() =>
+                                handleBotonClick("ReportesMovimientos")
+                              }
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -370,7 +374,9 @@ export const DashboardComponent = () => {
 
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                              onClick={() => handleBotonClick("")}
+                              onClick={() =>
+                                handleBotonClick("ReportesMovimientos")
+                              }
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -565,6 +571,9 @@ export const DashboardComponent = () => {
                   {contenidoSeleccionado === "Busqueda" && <BusquedaC />}
                   {contenidoSeleccionado === "Movimientos" && <Movimientos />}
                   {contenidoSeleccionado === "Empleados" && <Empleados />}
+                  {contenidoSeleccionado === "ReportesMovimientos" && (
+                    <ReportesMovimientos />
+                  )}
                   {/* Renderiza otros contenidos según sea necesario */}
                 </div>
               </main>
