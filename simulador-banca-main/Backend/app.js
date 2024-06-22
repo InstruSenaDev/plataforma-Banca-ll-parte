@@ -25,7 +25,8 @@ const userRoutes = require("./src/routes/users.routes");
 const detailsRoutes = require("./src/routes/details.routes");
 const formsRoutes = require("./src/routes/form.routes");
 const clientRoutes = require("./src/routes/client.routes");
-app.use("/", userRoutes, detailsRoutes, formsRoutes, clientRoutes);
+const movimientos = require("./src/routes/movimientos.routes");
+app.use("/", userRoutes, detailsRoutes, formsRoutes, clientRoutes, movimientos);
 
 // Puerto en el que el servidor escuchará las peticiones
 const puerto = 3000;
