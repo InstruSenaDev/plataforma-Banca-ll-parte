@@ -1,5 +1,4 @@
 import React from 'react'
-import Empleados from '../Components/CajeroPrincipal/Empleados'
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Navbar from "../Components/Navbar/Navbar";
 

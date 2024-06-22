@@ -14,6 +14,10 @@ export const CrearUsuario = () => {
 
   const { user } = useAuth();
 
+  // Abrir Modal
+  const [openModal1, setOpenModal] = useState(false);
+  const [email, setEmail] = useState("");
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -417,7 +421,7 @@ export const CrearUsuario = () => {
                                         strokeWidth={1.5}
                                         stroke="currentColor"
                                         className="w-5 h-5"
-                                      >
+                                        onClick={() => setOpenModal(true)}>
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
