@@ -13,20 +13,24 @@ export const CrearUsuario = () => {
   const [modalData, setModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const { user, isLoggedIn } = useAuth();
+  const { user  } = useAuth();
 
-  const [empleadoDetails, setEmpleadoDetails] = useState("");
-
+  const [date, setDate] = useState({
+    id_empleado: '11',
+    username: 'Luna',
+    saldo: 40000
+    
+  });
   //Disable Modales
   const [accountNumber, setAccountNumber] = useState("");
   const [accountOwner, setAccountOwner] = useState("");
-  const [amount, setAmount] = useState("");
   const [isAccountNumberFilled, setIsAccountNumberFilled] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
   // Abrir Modal
 const [openModal1, setOpenModal] = useState(false);
-const [email, setEmail] = useState("");
+const [amount, setAmount] = useState('');
+
 
 function onCloseModal() {
   setOpenModal(false);
@@ -75,28 +79,34 @@ const handleConsultClick = async () => {
 
   // Función para realizar la consignación
   const handleConsign = async () => {
-    if (!empleadoDetails || !empleadoDetails.id_empleado || !amount) {
+    console.log("Datos de date:", date);
+    console.log("Monto a consignar:", amount);
+  
+    // Verificación inicial de datos
+    if (!date || !date.id_empleado || !date.username || !amount) {
       console.error("Datos del usuario o monto inválidos.");
       toast.error("Datos del usuario o monto inválidos.");
       return;
     }
-
-    const idEmpleado = empleadoDetails.id_empleado;
-    const saldoEmpleado = parseFloat(empleadoDetails.saldo);
+  
+    const idEmpleado = date.id_empleado;
+    const nombreEmpleado = date.username;
+    const saldoEmpleado = parseFloat(date.saldo); // Convierte el saldo a número
+  
     const amountToConsign = parseFloat(amount);
-
-    // Validar que amountToConsign sea un número válido y mayor que 0
+  
+    // Validación del monto a consignar
     if (isNaN(amountToConsign) || amountToConsign <= 0) {
       console.error("Monto a consignar inválido.");
       toast.error("Monto a consignar inválido.");
       return;
     }
-
+  
     const newBalanceEmpleado = saldoEmpleado + amountToConsign;
-
+  
     try {
-      console.log("Datos a enviar:", { idEmpleado, saldoEmpleado, amountToConsign, newBalanceEmpleado });
-      
+      console.log("Datos a enviar:", { idEmpleado, nombreEmpleado, saldoEmpleado, amountToConsign, newBalanceEmpleado });
+  
       const responseEmpleado = await fetch(
         `http://localhost:3000/empleado_balance/${idEmpleado}`,
         {
@@ -106,37 +116,36 @@ const handleConsultClick = async () => {
           },
           body: JSON.stringify({
             nuevoSaldo: newBalanceEmpleado,
+            nombreEmpleado: nombreEmpleado,
           }),
         }
       );
-
+  
       if (!responseEmpleado.ok) {
         const errorText = await responseEmpleado.text();
         console.error("Error en la respuesta de la red:", errorText);
         throw new Error("Network response was not ok: " + errorText);
       }
-
-      // Actualizar localmente el saldo del empleado en el componente
-      setEmpleadoDetails((prevState) => ({
-        ...prevState,
-        saldo: newBalanceEmpleado,
-      }));
-
-      // Mostrar mensaje de éxito
+  
+      const updatedEmpleadoDetails = await responseEmpleado.json();
+      // Actualizar el estado de empleadoDetails si es necesario
+      // setEmpleadoDetails((prevState) => ({
+      //   ...prevState,
+      //   saldo: updatedEmpleadoDetails.nuevoSaldo,
+      // }));
+  
       toast.success("Consignación realizada correctamente.");
-
-      // Redirigir a la página deseada después de procesar la consignación
       setTimeout(() => {
         window.location = "/DashBoardMenu";
-      }, 1500); // 1.5 segundos
-
+      }, 1500);
+  
     } catch (error) {
       console.error("Error general:", error);
       toast.error("Error al realizar la consignación.");
     }
   };
-
-
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -576,14 +585,10 @@ const handleConsultClick = async () => {
           id="accountNumber"
           type="number"
           placeholder="Número de cuenta"
+          onChange={(event) => setDate(event.target.value)}
           value={date.id_empleado}
-          onChange={handleAccountNumberChange}
           readOnly // Campo de solo lectura para evitar que se modifique
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-            !isAccountNumberFilled
-              ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-              : ""
-          }`}
+          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
         />
       </div>
       <div>
@@ -597,11 +602,10 @@ const handleConsultClick = async () => {
           id="accountOwner"
           type="text"
           placeholder="Nombre del dueño"
+          onChange={(event) => setDate(event.target.value)}
           value={date.username}
-          onChange={(event) => setAccountOwner(event.target.value)}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300`}
-          readOnly={!isAccountNumberFilled} // Hacer el campo de solo lectura si no hay número de cuenta
-          disabled={!isAccountNumberFilled}
+          readOnly
+          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
         />
       </div>
       <div>
@@ -617,13 +621,13 @@ const handleConsultClick = async () => {
           placeholder="Monto a consignar"
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300`}
+          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
         />
       </div>
       <div className="w-full">
         <button
-          onClick={() => handleConsign(dataUser)} // Llama a handleConsign con dataUser como argumento
-          className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
+          onClick={handleConsign} // Llama a handleConsign sin argumentos
+          className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
         >
           Enviar
         </button>
@@ -631,9 +635,6 @@ const handleConsultClick = async () => {
     </div>
   </Modal.Body>
 </Modal>
-
-
-
 
                                   </div>
                                 </td>
