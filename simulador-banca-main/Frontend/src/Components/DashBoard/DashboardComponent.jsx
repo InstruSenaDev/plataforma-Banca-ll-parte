@@ -7,7 +7,6 @@ import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
 import { No_Disponible } from "./Components/NoDisponible";
 import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
 import { CrearUsuario } from "./Components/Director/CrearUsuario";
-import Empleados from "../CajeroPrincipal/Empleados";
 import { useAuth } from "../../context/AuthContext";
 import { Reportes } from "./Components/Director/Reportes";
 import { Sidebar } from "flowbite-react";
