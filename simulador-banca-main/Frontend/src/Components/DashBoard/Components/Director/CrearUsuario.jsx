@@ -78,7 +78,6 @@ export const CrearUsuario = () => {
 
   // Función para realizar la consignación
   const handleConsign = async (obj) => {
- 
     console.log(obj);
     console.log(obj.id_empleado);
     console.log(obj.username);
@@ -100,7 +99,7 @@ export const CrearUsuario = () => {
 
     const idEmpleado = obj.id_empleado;
     const nombreEmpleado = obj.username;
-    const saldoEmpleado = parseFloat(obj.saldo); // Convierte el saldo a número
+    const saldoEmpleado = parseFloat(obj.saldo); 
 
     const amountToConsign = parseFloat(amount);
 
