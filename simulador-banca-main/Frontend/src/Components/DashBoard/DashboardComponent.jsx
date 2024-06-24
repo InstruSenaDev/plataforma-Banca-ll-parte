@@ -35,8 +35,7 @@ export const DashboardComponent = () => {
   const [userData, setUserData] = useState(null); // Variable de estado para almacenar el nombre de usuario
   const [data, setData] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [contenidoSeleccionado, setContenidoSeleccionado] =
-    useState("PrincipalPage");
+  const [contenidoSeleccionado, setContenidoSeleccionado] = useState("PrincipalPage");
 
   const { user, isLoggedIn, logout } = useAuth();
 
