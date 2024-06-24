@@ -7,6 +7,7 @@ import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
 import { No_Disponible } from "./Components/NoDisponible";
 import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
 import { CrearUsuario } from "./Components/Director/CrearUsuario";
+
 import { useAuth } from "../../context/AuthContext";
 import { Reportes } from "./Components/Director/Reportes";
 import { Sidebar } from "flowbite-react";
@@ -34,8 +35,7 @@ export const DashboardComponent = () => {
   const [userData, setUserData] = useState(null); // Variable de estado para almacenar el nombre de usuario
   const [data, setData] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [contenidoSeleccionado, setContenidoSeleccionado] =
-    useState("PrincipalPage");
+  const [contenidoSeleccionado, setContenidoSeleccionado] = useState("PrincipalPage");
 
   const { user, isLoggedIn, logout } = useAuth();
 
@@ -112,9 +112,8 @@ export const DashboardComponent = () => {
           <div className="flex h-screen overflow-hidden bg-beige">
             {/* Sidebar */}
             <div
-              className={`${
-                sidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } lg:flex lg:flex-col absolute lg:static z-40 left-0 top-0 lg:translate-x-0 bg-beige h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
+              className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                } lg:flex lg:flex-col absolute lg:static z-40 left-0 top-0 lg:translate-x-0 bg-beige h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
               aria-label="Sidebar"
             >
               <div className="h-full bg-white xl:border-r-2 border-beige">
@@ -355,7 +354,8 @@ export const DashboardComponent = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.4}
                                 stroke="currentColor"
-                                className="xl:size-5 2xl:size-6"
+                                className="xl:size-5 2xl:size-6 cursor-pointer"
+                                onClick={() => handleBotonClick("Movimientos")}
                               >
                                 <path
                                   strokeLinecap="round"
@@ -363,7 +363,6 @@ export const DashboardComponent = () => {
                                   d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
                                 />
                               </svg>
-
                               <span className="mx-1">Empleados</span>
                             </button>
 
@@ -537,9 +536,8 @@ export const DashboardComponent = () => {
 
               {/* Main content */}
               <main
-                className={`p-4 sm:p-2 lg:p-4 transition-opacity duration-200 ${
-                  sidebarOpen ? "opacity-50" : "opacity-100"
-                }`}
+                className={`p-4 sm:p-2 lg:p-4 transition-opacity duration-200 ${sidebarOpen ? "opacity-50" : "opacity-100"
+                  }`}
               >
                 <div className="border-2 border-gray border-dashed rounded-lg p-2">
                   {contenidoSeleccionado === "FormularioPersonaNatural" && (
@@ -580,9 +578,8 @@ export const DashboardComponent = () => {
             <main className="h-3/4 w-full bg-white flex justify-center items-center">
               {/* Lado principal */}
               <div
-                className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${
-                  flipped ? "flip" : ""
-                }`}
+                className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${flipped ? "flip" : ""
+                  }`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
@@ -593,17 +590,15 @@ export const DashboardComponent = () => {
                   <img className="text-stone-300" src={""} alt="" />
                 </div>
                 <div
-                  className={`h-2/3 flex justify-end items-end ${
-                    flipped ? "hidden" : ""
-                  }`}
+                  className={`h-2/3 flex justify-end items-end ${flipped ? "hidden" : ""
+                    }`}
                 >
                   <img className="w-36 py-5" src={Namelogo} alt="" />
                   <img className="h-32" src={Logo} alt="" />
                 </div>
                 <div
-                  className={`h-12 mt-8 bg-emerald-700 ${
-                    flipped ? "" : "hidden"
-                  }`}
+                  className={`h-12 mt-8 bg-emerald-700 ${flipped ? "" : "hidden"
+                    }`}
                 >
                   {/* Contenido en el reverso de la tarjeta */}
                   <div className="flip-content">
