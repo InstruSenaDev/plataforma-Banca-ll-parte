@@ -10,6 +10,7 @@ import { useAuth } from "../../../../context/AuthContext";
 export const Movimientos = () => {
   //General Status
   const [dataUser, setDataUser] = useState();
+  const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [empleadoDetails, setEmpleadoDetails] = useState("");
 
   //Disable Modales
@@ -27,29 +28,43 @@ export const Movimientos = () => {
   const [email1, setEmail1] = useState("");
 
   //Login, user context
-  const { user, isLoggedIn } = useAuth();
+  const { user } = useAuth();
+
+  // Funcion para traer un empleado po id.
+  const fetchEmpleadoId = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_users/${user.id_empleado}`
+      );
+      if (response.ok) {
+        const userData = await response.json();
+        setIdEmpleadoDetails(userData);
+      } else {
+        console.error("Error fetching user info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  // funcion para traer todos los empleados.
+  const fetchEmpleados = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/get_users");
+      if (response.ok) {
+        const userData = await response.json();
+        setEmpleadoDetails(userData.result.rows);
+      } else {
+        console.error("Error fetching user info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchEmpleado = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/get_users/${user.id_empleado}`
-        );
-        if (response.ok) {
-          const userData = await response.json();
-          setEmpleadoDetails(userData);
-          console.log("Detalle empleado: ", userData);
-        } else {
-          console.error("Error fetching user info:", response.status);
-        }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    };
-
-    if (user) {
-      fetchEmpleado();
-    }
+    fetchEmpleadoId();
+    fetchEmpleados();
   }, [user]);
 
   // Funciones Consignar -----------------------------------------------------------------------------------------------------------------------------
@@ -95,13 +110,11 @@ export const Movimientos = () => {
     }
   };
 
-  console.log(dataUser);
-
   const handleConsign = async () => {
     const id = dataUser.id_cliente;
     const saldo = dataUser.saldo;
-    const idEmpleado = empleadoDetails.id_empleado;
-    const saldoEmpleado = empleadoDetails.saldo;
+    const idEmpleado = idEmpleadoDetails.id_empleado;
+    const saldoEmpleado = idEmpleadoDetails.saldo;
 
     const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
     const newBalanceEmploye = saldoEmpleado - parseFloat(amount);
@@ -147,7 +160,7 @@ export const Movimientos = () => {
         toast.success("Saldo consignado correctamente.");
 
         // Actualizar el estado del empleado en el componente
-        setEmpleadoDetails((prevState) => ({
+        setIdEmpleadoDetails((prevState) => ({
           ...prevState,
           saldo: newBalanceEmploye,
         }));
@@ -221,8 +234,8 @@ export const Movimientos = () => {
   const handleRetirar = async () => {
     const id = dataUser.id_cliente;
     const saldo = dataUser.saldo;
-    const idEmpleado = empleadoDetails.id_empleado;
-    const saldoEmpleado = empleadoDetails.saldo;
+    const idEmpleado = idEmpleadoDetails.id_empleado;
+    const saldoEmpleado = idEmpleadoDetails.saldo;
 
     const newBalanceClient = parseFloat(saldo) - parseFloat(amount);
     const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
@@ -278,7 +291,7 @@ export const Movimientos = () => {
           saldo: newBalanceClient,
         }));
 
-        setEmpleadoDetails((prevState) => ({
+        setIdEmpleadoDetails((prevState) => ({
           ...prevState,
           saldo: newBalanceEmploye,
         }));
@@ -304,7 +317,7 @@ export const Movimientos = () => {
 
   // Actualiza estado al momento de solicitar saldo
   const handleSolicitarSaldo = async () => {
-    const idEmpleado = empleadoDetails.id_empleado;
+    const idEmpleado = idEmpleadoDetails.id_empleado;
 
     try {
       const response = await fetch(
@@ -329,7 +342,7 @@ export const Movimientos = () => {
       toast.success(data.message);
 
       // Modificar el estado del empleado localmente en el frontend si es necesario
-      setEmpleadoDetails((prevDetails) => ({
+      setIdEmpleadoDetails((prevDetails) => ({
         ...prevDetails,
         estado: "Solicitud",
       }));
@@ -345,7 +358,7 @@ export const Movimientos = () => {
 
   // Cancelar la solicitud de saldo.
   const handleCancelarSolicitud = async () => {
-    const idEmpleado = empleadoDetails.id_empleado;
+    const idEmpleado = idEmpleadoDetails.id_empleado;
 
     try {
       const response = await fetch(
@@ -369,7 +382,7 @@ export const Movimientos = () => {
       toast.success(data.message);
 
       // Actualizar el estado del empleado en el componente
-      setEmpleadoDetails((prevDetails) => ({
+      setIdEmpleadoDetails((prevDetails) => ({
         ...prevDetails,
         estado: "Activo",
       }));
@@ -383,10 +396,78 @@ export const Movimientos = () => {
     }
   };
 
-  function onCloseModal() {
-    setOpenModal(false);
-    setEmail("");
-  }
+  // Funcion para devolver saldo total del cajero al cajero principal
+  const handleDevolverSaldo = async () => {
+    // Funcion para filtrar usuarios con rol de cajero principal
+    const filterEmpleadoPrincipal = empleadoDetails.filter(
+      (users) => users.id_rol === 4
+    );
+
+    const idEmpleado = idEmpleadoDetails.id_empleado;
+    const saldoEmpleado = idEmpleadoDetails.saldo;
+
+    const idPricipal = filterEmpleadoPrincipal[0].id_empleado;
+    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+
+    const newBalancePrincipal =
+      parseFloat(saldoEmpleado) + parseFloat(saldoPrincipal);
+
+    try {
+      // Realiza una solicitud al servidor para actualizar el saldo del cajero
+      const responseCajero = await fetch(
+        `http://localhost:3000/empleado_balance/${idEmpleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nuevoSaldo: 0,
+          }),
+        }
+      );
+
+      if (!responseCajero.ok) {
+        throw new Error(
+          "Network response was not ok al actualizar el saldo del cajero"
+        );
+      }
+
+      // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
+      const responsePrincipal = await fetch(
+        `http://localhost:3000/empleado_balance/${idPricipal}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nuevoSaldo: newBalancePrincipal,
+          }),
+        }
+      );
+
+      if (!responsePrincipal.ok) {
+        throw new Error(
+          "Network response was not ok al actualizar el saldo del cajero principal"
+        );
+      }
+
+      toast.success("Saldo devuelto y actualizado correctamente.");
+
+      setTimeout(() => {
+        // Actualiza localmente el estado del cliente según sea necesario
+        // Puedes utilizar la función setDatauser para actualizar el estado local
+        // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+        // alert('Autorización exitosa')
+        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error al devolver el saldo:", error);
+      toast.error("Error al devolver el saldo.");
+    }
+  };
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -400,6 +481,11 @@ export const Movimientos = () => {
     // Formatea el costo usando la configuración especificada.
     return formatter.format(saldo);
   };
+
+  function onCloseModal() {
+    setOpenModal(false);
+    setEmail("");
+  }
 
   return (
     <>
@@ -424,7 +510,7 @@ export const Movimientos = () => {
                     </div>
                     <div className="flex jutify-center items-end gap-x-2">
                       <p className="font-semibold text-4xl text-white dark:text-gray-300">
-                        {formatSaldo(empleadoDetails.saldo)}
+                        {formatSaldo(idEmpleadoDetails.saldo)}
                       </p>
                     </div>
                   </div>
@@ -432,7 +518,7 @@ export const Movimientos = () => {
                   <div className="flex flex-row gap-x-4">
                     <button
                       className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
-                      onClick=""
+                      onClick={handleDevolverSaldo}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +537,7 @@ export const Movimientos = () => {
 
                       <p>Devolver saldo</p>
                     </button>
-                    {empleadoDetails.estado === "Solicitud" && (
+                    {idEmpleadoDetails.estado === "Solicitud" && (
                       <button
                         className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
                         onClick={handleCancelarSolicitud}
@@ -474,7 +560,7 @@ export const Movimientos = () => {
                         <p>Cancelar solicitud</p>
                       </button>
                     )}
-                    {empleadoDetails.estado === "Activo" && (
+                    {idEmpleadoDetails.estado === "Activo" && (
                       <button
                         className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
                         onClick={handleSolicitarSaldo}
