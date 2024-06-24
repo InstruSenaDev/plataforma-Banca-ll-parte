@@ -23,13 +23,34 @@ export const Movimientos = () => {
   const [openModal, setOpenModal] = useState(false);
   const [email, setEmail] = useState("");
 
+  const [openModal1, setOpenModal1] = useState(false);
+  const [email1, setEmail1] = useState("");
+
   //Login, user context
   const { user, isLoggedIn } = useAuth();
 
-  function onCloseModal() {
-    setOpenModal(false);
-    setEmail("");
-  }
+  useEffect(() => {
+    const fetchEmpleado = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/get_users/${user.id_empleado}`
+        );
+        if (response.ok) {
+          const userData = await response.json();
+          setEmpleadoDetails(userData);
+          console.log("Detalle empleado: ", userData);
+        } else {
+          console.error("Error fetching user info:", response.status);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    if (user) {
+      fetchEmpleado();
+    }
+  }, [user]);
 
   // Funciones Consignar -----------------------------------------------------------------------------------------------------------------------------
   const handleAccountNumberChange = (event) => {
@@ -148,10 +169,6 @@ export const Movimientos = () => {
   };
 
   // Modal retirar -----------------------------------------------------------------------------------------------------------------------------------------
-
-  //Abir Modal
-  const [openModal1, setOpenModal1] = useState(false);
-  const [email1, setEmail1] = useState("");
 
   function onCloseModal1() {
     setOpenModal1(false);
@@ -366,28 +383,23 @@ export const Movimientos = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchEmpleado = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/get_users/${user.id_empleado}`
-        );
-        if (response.ok) {
-          const userData = await response.json();
-          setEmpleadoDetails(userData);
-          console.log("Detalle empleado: ", userData);
-        } else {
-          console.error("Error fetching user info:", response.status);
-        }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    };
+  function onCloseModal() {
+    setOpenModal(false);
+    setEmail("");
+  }
 
-    if (user) {
-      fetchEmpleado();
-    }
-  }, [user]);
+  // Función para formatear el costo a miles sin decimales.
+  const formatSaldo = (saldo) => {
+    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
+    const formatter = new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    // Formatea el costo usando la configuración especificada.
+    return formatter.format(saldo);
+  };
 
   return (
     <>
@@ -411,11 +423,8 @@ export const Movimientos = () => {
                       </p>
                     </div>
                     <div className="flex jutify-center items-end gap-x-2">
-                      <p className="font-regular text-2xl text-white dark:text-gray-200">
-                        $
-                      </p>{" "}
                       <p className="font-semibold text-4xl text-white dark:text-gray-300">
-                        {empleadoDetails.saldo}
+                        {formatSaldo(empleadoDetails.saldo)}
                       </p>
                     </div>
                   </div>
