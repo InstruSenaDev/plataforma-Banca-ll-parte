@@ -68,12 +68,21 @@ export const CrearUsuario = () => {
   }, [forceUpdate]);
 
   // Función para realizar la consignación
-  const handleConsign = async () => {
+  const handleConsign = async (obj) => {
+    console.log(obj);
+    console.log(obj.id_empleado);
+    console.log(obj.username);
+
+    setDate({
+      id_empleado: obj.id_empleado,
+      username: obj.username,
+    });
+
     console.log("Datos de date:", date);
     console.log("Monto a consignar:", amount);
 
     // Verificación inicial de datos
-    if (!date || !date.id_empleado || !date.username || !amount) {
+    if (!obj || !obj.id_empleado || !obj.username || !amount) {
       console.error("Datos del usuario o monto inválidos.");
       toast.error("Datos del usuario o monto inválidos.");
       return;
