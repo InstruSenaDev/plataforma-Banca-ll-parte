@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Navbar from "../Components/Navbar/Navbar";
-import Card from "../Components/Card/Card";
+import Card from "../Components/DashBoard/Components/CajeroPrincipal/Card";
 import Transfers from "../Components/Transfers/Transfers";
 
 const DashboardCajero = () => {

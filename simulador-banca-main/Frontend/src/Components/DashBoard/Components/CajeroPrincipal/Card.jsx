@@ -8,13 +8,13 @@ const Card = () => {
       {/* row 1 */}
       {/* card1 */}
       <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/3">
-        <div className="relative flex flex-col min-w-0 break-words bg-DarkSlate shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+        <div className=" flex flex-col min-w-0 break-words bg-DarkSlate shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
           <div className="flex-auto p-4">
             <div className="flex flex-row -mx-3 items-center">
               <div className="flex-none w-2/3 max-w-full px-3">
                 <div>
                   <div className="mb-2 w-12 h-12 text-center bg-beige from-blue-500 to-violet-500 rounded-md">
-                    <i className="ni leading-none ni-money-coins text-lg relative top-3.5 text-white"><box-icon name='credit-card' color='#0a8e4d' ></box-icon></i>
+                    <i className="ni leading-none ni-money-coins text-lg  text-white"><box-icon name='credit-card' color='#0a8e4d' ></box-icon></i>
                   </div>
                   <p className="mb-0 font-sans text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
                     Saldo Total
@@ -31,13 +31,13 @@ const Card = () => {
 
       {/* card2 */}
       <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/3">
-        <div className="relative flex flex-col min-w-0 break-words bg-darkGray shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+        <div className="flex flex-col min-w-0 break-words bg-darkGray shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
           <div className="flex-auto p-4">
             <div className="flex flex-row -mx-3 items-center">
               <div className="flex-none w-2/3 max-w-full px-3">
                 <div>
                   <div className="mb-2 w-12 h-12 text-center bg-beige from-blue-500 to-violet-500 rounded-md">
-                    <i className="ni leading-none ni-money-coins text-lg relative top-3.5 text-white"><box-icon name='credit-card-alt' color='#0a4f8e' ></box-icon></i>
+                    <i className="ni leading-none ni-money-coins text-lg justify-center items-center  text-white"><box-icon name='credit-card-alt' color='#0a4f8e' ></box-icon></i>
                   </div>
                   <p className="mb-0 font-sans text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
                     Saldo T. en Bóveda
@@ -54,7 +54,7 @@ const Card = () => {
 
       {/* card3 */}
       <div className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/3">
-  <div className="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border h-full"> {/* Añadí la clase h-full aquí */}
+  <div className="flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border h-full"> {/* Añadí la clase h-full aquí */}
   <div className="flex-auto p-4 flex flex-col justify-center items-center"> 
       <div className="flex flex-row -mx-3 items-center">
         <div className="flex-none w-full max-w-full px-3">

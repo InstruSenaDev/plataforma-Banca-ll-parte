@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
+
 import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
 import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
 import { PrincipalPage } from "./Components/PrincipalPage";
@@ -21,18 +22,7 @@ import {
   HiUserCircle,
   HiUserGroup,
 } from "react-icons/hi";
-import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
-import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
-import nfcLogo from "../../assets/Img/Client/nfcLogo.svg";
 import ChipCard from "../../assets/Img/Client/ChipCard.svg";
-import { useAuth } from "../../context/AuthContext";
-import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
-import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
-import { PrincipalPage } from "./Components/PrincipalPage";
-import { No_Disponible } from "./Components/NoDisponible";
-import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
-import { CrearUsuario } from "./Components/Director/CrearUsuario";
-import { Reportes } from "./Components/Director/Reportes";
 import { Historial } from "./Components/Director/Historial";
 import { HistorialD } from "./Components/Director/HistorialD";
 import { BusquedaC } from "./Components/BusquedaC";
@@ -394,7 +384,7 @@ export const DashboardComponent = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.4}
                                 stroke="currentColor"
-                                className="xl:size-5 2xl:size-6"
+                                className="size-5 xl:size-6"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -416,7 +406,7 @@ export const DashboardComponent = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.4}
                                 stroke="currentColor"
-                                className="xl:size-5 2xl:size-6"
+                                className="size-5 xl:size-6"
                               >
                                 <path
                                   strokeLinecap="round"

@@ -11,7 +11,7 @@ import { LoaderMenu } from "./Components/Loader/LoaderMenu";
 
 import DashboardCajero from "./Pages/DashboardCajero";
 import DashboardBoveda from "./Pages/DasboardBoveda";
-import CajeroMovimientos from "./Pages/CajeroMovientos";
+
 import DashboardPage from "./Pages/DashboardPage";
 
 export default function MyPage() {
@@ -44,7 +44,6 @@ export default function MyPage() {
           <Route path="/juridica" element={<ContentCuentaAhorroJuridica />} />
 
           <Route path="/DashboardCajero" element={<DashboardCajero />} />
-          <Route path="/CajeroMovimientos" element={<CajeroMovimientos />} />
           <Route path="/DashboardBoveda" element={<DashboardBoveda />} />
           <Route path="/Dashboard" element={<DashboardPage />} />
         </Routes>
