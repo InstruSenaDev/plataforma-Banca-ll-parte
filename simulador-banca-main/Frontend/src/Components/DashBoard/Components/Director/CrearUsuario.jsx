@@ -46,6 +46,7 @@ export const CrearUsuario = () => {
 
   // Funcion para traer un empleado por id.
   const fetchEmpleadoId = async (idEmpleado) => {
+    console.log(idEmpleado);
     try {
       const response = await fetch(
         `http://localhost:3000/get_users/${idEmpleado}`
@@ -65,6 +66,7 @@ export const CrearUsuario = () => {
   useEffect(() => {
     fetchEmpleadoId();
     fetchEmpleados();
+
   }, [forceUpdate]);
 
   // Función para realizar la consignación
@@ -73,12 +75,12 @@ export const CrearUsuario = () => {
     console.log(obj.id_empleado);
     console.log(obj.username);
 
-    setDate({
+    setIdEmpleadoDetails({
       id_empleado: obj.id_empleado,
       username: obj.username,
     });
 
-    console.log("Datos de date:", date);
+    console.log("Datos de date:", idEmpleadoDetails);
     console.log("Monto a consignar:", amount);
 
     // Verificación inicial de datos
@@ -88,9 +90,9 @@ export const CrearUsuario = () => {
       return;
     }
 
-    const idEmpleado = date.id_empleado;
-    const nombreEmpleado = date.username;
-    const saldoEmpleado = parseFloat(date.saldo); // Convierte el saldo a número
+    const idEmpleado = idEmpleadoDetails.id_empleado;
+    const nombreEmpleado = idEmpleadoDetails.username;
+    const saldoEmpleado = parseFloat(idEmpleadoDetails.saldo); // Convierte el saldo a número
 
     const amountToConsign = parseFloat(amount);
 
@@ -198,7 +200,7 @@ export const CrearUsuario = () => {
   const abrir = () => {
     setactiveModal((prev) =>
       prev ===
-      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
+        "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
         ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
         : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
     );
@@ -539,7 +541,7 @@ export const CrearUsuario = () => {
                                         viewBox="0 0 24 24"
                                         strokeWidth={1.5}
                                         stroke="currentColor"
-                                        className="w-5 h-5"
+                                        className={`w-5 h-5 ${date.id_empleado}`}
                                         onClick={() =>
                                           fetchEmpleadoId(date.id_empleado)
                                         }
@@ -624,7 +626,7 @@ export const CrearUsuario = () => {
                                           </div>
                                           <div className="w-full">
                                             <button
-                                              onClick={handleConsign} // Llama a handleConsign sin argumentos
+                                              onClick={() => handleConsign(idEmpleadoDetails)} // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
                                               Enviar
@@ -653,7 +655,7 @@ export const CrearUsuario = () => {
           showModal={showModal}
           closeModal={closeModal}
         />
-      </section>
+      </section >
     </>
   );
 };
