@@ -587,6 +587,7 @@ export const CrearUsuario = () => {
                                               id="username"
                                               type="text"
                                               placeholder="Nombre del empleado"
+                                              onClick={""}
                                               value={idEmpleadoDetails.username}
                                               readOnly
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
