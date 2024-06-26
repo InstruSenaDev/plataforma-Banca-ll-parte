@@ -579,7 +579,7 @@ export const CrearUsuario = () => {
                                               type="number"
                                               placeholder="ID de empleado"
                                               value={
-                                                idEmpleadoDetails.id_empleado
+                                                idEmpleadoDetails?.id_empleado
                                               }
                                               readOnly // Campo de solo lectura para evitar que se modifique
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
@@ -597,7 +597,9 @@ export const CrearUsuario = () => {
                                               type="text"
                                               placeholder="Nombre del empleado"
                                               onClick={""}
-                                              value={idEmpleadoDetails.username}
+                                              value={
+                                                idEmpleadoDetails?.username
+                                              }
                                               readOnly
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                             />
