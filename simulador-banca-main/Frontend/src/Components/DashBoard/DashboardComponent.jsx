@@ -26,6 +26,7 @@ import { HistorialD } from "./Components/Director/HistorialD";
 import { BusquedaC } from "./Components/BusquedaC";
 import { Movimientos } from "./Components/Cajero/Movimientos";
 import { ReportesMovimientos } from "./Components/CajeroPrincipal/ReportesMovimientos";
+import Boveda from "./Components/CajeroPrincipal/Boveda";
 
 export const DashboardComponent = () => {
   const [flipped, setFlipped] = useState(false);
@@ -360,7 +361,7 @@ export const DashboardComponent = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.4}
                                 stroke="currentColor"
-                                className="xl:size-5 2xl:size-6"
+                                className="size-5 xl:size-6"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -384,7 +385,7 @@ export const DashboardComponent = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.4}
                                 stroke="currentColor"
-                                className="xl:size-5 2xl:size-6"
+                                className="size-5 xl:size-6"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -398,7 +399,7 @@ export const DashboardComponent = () => {
 
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                              onClick={() => handleBotonClick("")}
+                              onClick={() => handleBotonClick("Boveda")}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -406,7 +407,7 @@ export const DashboardComponent = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.4}
                                 stroke="currentColor"
-                                className="xl:size-5 2xl:size-6"
+                                className="size-5 xl:size-6"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -574,6 +575,7 @@ export const DashboardComponent = () => {
                   {contenidoSeleccionado === "ReportesMovimientos" && (
                     <ReportesMovimientos />
                   )}
+                  {contenidoSeleccionado === "Boveda" && <Boveda />}
                   {/* Renderiza otros contenidos según sea necesario */}
                 </div>
               </main>
