@@ -306,9 +306,9 @@ export const CrearUsuario = () => {
                             scope="col"
                             className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <div className="flex items-center gap-x-3">
-                              <button className="flex items-center gap-x-2">
-                                <span>ID</span>
+                            <div className="flex justify-center items-center gap-x-3">
+                              <button>
+                                <span>ID Empleado</span>
                               </button>
                             </div>
                           </th>
@@ -450,20 +450,33 @@ export const CrearUsuario = () => {
                         <tr>
                           <th
                             scope="col"
-                            className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <div className="flex items-center gap-x-3">
-                              <button className="flex items-center gap-x-2">
-                                <span>ID</span>
+                            <div className="flex justify-center items-center gap-x-3">
+                              <button>
+                                <span>ID Empleado</span>
                               </button>
                             </div>
                           </th>
                           <th
                             scope="col"
-                            className="py-3.5 px-10 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            className="px-8 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <div className="flex items-center gap-x-3">
-                              <span>Nombre</span>
+                            <div className="flex justify-center items-center gap-x-3">
+                              <button>
+                                <span>Nombre</span>
+                              </button>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-8 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Estado</span>
+                              </button>
                             </div>
                           </th>
 
@@ -471,36 +484,33 @@ export const CrearUsuario = () => {
                             scope="col"
                             className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <button className="flex items-center gap-x-2">
-                              <span>Estado</span>
-                            </button>
-                          </th>
-
-                          <th
-                            scope="col"
-                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                          >
-                            <button className="flex items-center gap-x-2">
-                              <span>Rol</span>
-                            </button>
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Rol</span>
+                              </button>
+                            </div>
                           </th>
 
                           <th
                             scope="col"
                             className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <button className="flex items-center gap-x-2">
-                              <span>Saldo</span>
-                            </button>
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Saldo</span>
+                              </button>
+                            </div>
                           </th>
 
                           <th
                             scope="col"
                             className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                           >
-                            <button className="flex items-center gap-x-2">
-                              <span>Acción</span>
-                            </button>
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Acción</span>
+                              </button>
+                            </div>
                           </th>
                         </tr>
                       </thead>
@@ -511,12 +521,13 @@ export const CrearUsuario = () => {
                             <React.Fragment key={date.id_empleado}>
                               <tr>
                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                  <div className="inline-flex items-center gap-x-3">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
                                     <span># {date.id_empleado}</span>
                                   </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                  <div className="inline-flex items-center gap-x-3">
+
+                                <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
                                     <div className="flex items-center gap-x-2">
                                       <img
                                         className="object-cover w-10 h-10 rounded-full"
@@ -531,25 +542,33 @@ export const CrearUsuario = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                  <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
 
-                                    <h2 className="text-sm font-normal text-emerald-500">
-                                      Activo
-                                    </h2>
+                                <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center">
+                                    <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+
+                                      <h2 className="text-sm font-normal text-emerald-500">
+                                        Activo
+                                      </h2>
+                                    </div>
                                   </div>
                                 </td>
-                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                  Cajero
-                                </td>
 
                                 <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                  {date.saldo}
+                                  <div className="w-full inline-flex justify-center items-center">
+                                    <span>Cajero</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center">
+                                    <span>{date.saldo}</span>
+                                  </div>
                                 </td>
 
                                 <td className="px-4 py-4 text-sm whitespace-nowrap">
-                                  <div className="flex items-center gap-x-6">
+                                  <div className="flex justify-center items-center gap-x-6">
                                     <button className="text-gray-500 transition-colors duration-200 dark:hover:text-emerald-500 dark:text-gray-300 hover:text-emerald-500 focus:outline-none">
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
