@@ -15,7 +15,7 @@ const Boveda = () => {
                   </h1>
                   <div className="flex items-center justify-between mt-2">
                     <p className="text-4xl font-bold text-white">
-                      $ 100.000.000,00
+                      $ 100.000.000,0
                     </p>
 
                     <svg
