@@ -149,7 +149,7 @@ export const AutorizacionCuentas = () => {
                       >
                         <div className="flex items-center gap-x-3">
                           <button className="flex items-center gap-x-2">
-                            <span>Nombre de Cliente</span>
+                            <span>Nº Documento</span>
                           </button>
                         </div>
                       </th>
@@ -158,7 +158,7 @@ export const AutorizacionCuentas = () => {
                         className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                       >
                         <div className="flex items-center gap-x-3">
-                          <span>Producto bancario</span>
+                          <span>Cliente</span>
                         </div>
                       </th>
 
@@ -167,25 +167,33 @@ export const AutorizacionCuentas = () => {
                         className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                       >
                         <button className="flex items-center gap-x-2">
-                          <span>Número de Cuenta</span>
+                          <span>Fecha</span>
                         </button>
                       </th>
 
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                      >
+                        <button className="flex items-center gap-x-2">
+                          <span>Producto Bancario</span>
+                        </button>
+                      </th>
+
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                      >
+                        <button className="flex items-center gap-x-2">
+                          <span>N° Cuenta</span>
+                        </button>
+                      </th>
                       <th
                         scope="col"
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                       >
                         <button className="flex items-center gap-x-2">
                           <span>Estado</span>
-                        </button>
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                      >
-                        <button className="flex items-center gap-x-2">
-                          <span>Acción</span>
                         </button>
                       </th>
                     </tr>
