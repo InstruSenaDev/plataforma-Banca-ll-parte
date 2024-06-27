@@ -595,12 +595,12 @@ export const Movimientos = () => {
               <div className=" grid gap-x-8 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between  ">
                     <div className="flex-1 ">
                   <Button
-                    className="border-emerald-500 w-full hover:bg-emerald-500 transition duration-300"
+                    className="border-emerald w-full hover:bg-emerald transition duration-300"
                     onClick={() => setOpenModal(true)}
                   >
                     <div className="flex flex-col items-center justify-center w-32 h-32">
                       <svg
-                        className="w-14 text-emerald-500 dark:text-white group-hover:text-white"
+                        className="w-14 text-emerald dark:text-white group-hover:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -614,7 +614,7 @@ export const Movimientos = () => {
                         />
                       </svg>
                       <svg
-                        className="w-24 text-emerald-500 dark:text-white group-hover:text-white"
+                        className="w-24 text-emerald dark:text-white group-hover:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
