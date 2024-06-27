@@ -108,15 +108,17 @@ const Transfers = () => {
                     </td>
                     <td class="w-1/6 px-4 py-4 text-sm text-DarkSlate dark:text-gray-300 whitespace-nowrap">
                       <div class="flex items-center">
-                        <span class="mr-2">Transferir</span>
-                        <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
-                          <box-icon
-                            name="right-arrow-alt"
-                            size="sm"
-                            color="#ffffff"
-                            class="text-white"
-                          ></box-icon>
-                        </div>
+                        <button className="flex">
+                          <span class="mr-2">Transferir</span>
+                          <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
+                            <box-icon
+                              name="right-arrow-alt"
+                              size="sm"
+                              color="#ffffff"
+                              class="text-white"
+                            ></box-icon>
+                          </div>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -156,159 +158,17 @@ const Transfers = () => {
                     </td>
                     <td class="w-1/6 px-4 py-4 text-sm text-DarkSlate dark:text-gray-300 whitespace-nowrap">
                       <div class="flex items-center">
-                        <span class="mr-2">Depositar</span>
-                        <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
-                          <box-icon
-                            name="right-arrow-alt"
-                            size="sm"
-                            color="#ffffff"
-                            class="text-white"
-                          ></box-icon>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="w-1/6 px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div class="inline-flex items-center gap-x-3">
-                        <div class="flex items-center gap-x-2">
-                          <div>
-                            <h2 class="font-normal text-gray-800 dark:text-white ">
-                              # 00001{" "}
-                            </h2>
+                        <button className="flex">
+                          <span class="mr-2">Depositar</span>
+                          <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
+                            <box-icon
+                              name="right-arrow-alt"
+                              size="sm"
+                              color="#ffffff"
+                              class="text-white"
+                            ></box-icon>
                           </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="w-1/6 px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div class="inline-flex items-center gap-x-3">
-                        <div class="flex items-center gap-x-2">
-                          <div class="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800 overflow-hidden">
-                            <img
-                              src={Avatar}
-                              alt="Avatar"
-                              class="w-full h-full object-cover rounded-full"
-                            />
-                          </div>
-
-                          <div>
-                            <h2 class="font-normal text-gray-800 dark:text-white ">
-                              Eduardo Dutra{" "}
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="w-1/6 px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
-                      $ 100.000,00
-                    </td>
-                    <td class="w-1/6 px-4 py-4 text-sm text-DarkSlate dark:text-gray-300 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <span class="mr-2">Transferir</span>
-                        <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
-                          <box-icon
-                            name="right-arrow-alt"
-                            size="sm"
-                            color="#ffffff"
-                            class="text-white"
-                          ></box-icon>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="w-1/6 px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div class="inline-flex items-center gap-x-3">
-                        <div class="flex items-center gap-x-2">
-                          <div>
-                            <h2 class="font-normal text-gray-800 dark:text-white ">
-                              # 00001{" "}
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="w-1/6 px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div class="inline-flex items-center gap-x-3">
-                        <div class="flex items-center gap-x-2">
-                          <div class="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800 overflow-hidden">
-                            <img
-                              src={Avatar}
-                              alt="Avatar"
-                              class="w-full h-full object-cover rounded-full"
-                            />
-                          </div>
-
-                          <div>
-                            <h2 class="font-normal text-gray-800 dark:text-white ">
-                              Eduardo Dutra{" "}
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="w-1/6 px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
-                      $ 100.000,00
-                    </td>
-                    <td class="w-1/6 px-4 py-4 text-sm text-DarkSlate dark:text-gray-300 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <span class="mr-2">Depositar</span>
-                        <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
-                          <box-icon
-                            name="right-arrow-alt"
-                            size="sm"
-                            color="#ffffff"
-                            class="text-white"
-                          ></box-icon>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="w-1/6 px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div class="inline-flex items-center gap-x-3">
-                        <div class="flex items-center gap-x-2">
-                          <div>
-                            <h2 class="font-normal text-gray-800 dark:text-white ">
-                              # 00001{" "}
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="w-1/6 px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                      <div class="inline-flex items-center gap-x-3">
-                        <div class="flex items-center gap-x-2">
-                          <div class="flex items-center justify-center w-8 h-8 text-blue-500 bg-blue-100 rounded-full dark:bg-gray-800 overflow-hidden">
-                            <img
-                              src={Avatar}
-                              alt="Avatar"
-                              class="w-full h-full object-cover rounded-full"
-                            />
-                          </div>
-
-                          <div>
-                            <h2 class="font-normal text-gray-800 dark:text-white ">
-                              Eduardo Dutra{" "}
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="w-1/6 px-12 py-4 text-sm font-normal text-gray-700 whitespace-nowrap">
-                      $ 100.000,00
-                    </td>
-                    <td class="w-1/6 px-4 py-4 text-sm text-DarkSlate dark:text-gray-300 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <span class="mr-2">Transferir</span>
-                        <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
-                          <box-icon
-                            name="right-arrow-alt"
-                            size="sm"
-                            color="#ffffff"
-                            class="text-white"
-                          ></box-icon>
-                        </div>
+                        </button>
                       </div>
                     </td>
                   </tr>
