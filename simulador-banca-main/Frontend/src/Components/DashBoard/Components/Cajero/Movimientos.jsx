@@ -24,6 +24,8 @@ export const Movimientos = () => {
   const [openModal, setOpenModal] = useState(false);
   const [email, setEmail] = useState("");
 
+  const [openModal2, setOpenModal2] = useState(false);
+
   const [openModal1, setOpenModal1] = useState(false);
   const [email1, setEmail1] = useState("");
 
@@ -180,6 +182,10 @@ export const Movimientos = () => {
       toast.error("Sin saldo suficiente");
     }
   };
+  function onCloseModal2() {
+    setOpenModal2(false);
+  
+  }
 
   // Modal retirar -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -566,30 +572,78 @@ export const Movimientos = () => {
                         <p>Cancelar solicitud</p>
                       </button>
                     )}
-                    {idEmpleadoDetails.estado === "Activo" && (
-                      <button
-                        className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
-                        onClick={handleSolicitarSaldo}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.4}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                          />
-                        </svg>
-                        <p>Solicitar saldo</p>
-                      </button>
-                    )}
+                     <>
+    {idEmpleadoDetails.estado === "Activo" && (
+      <>
+        <button
+          className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
+          onClick={() => setOpenModal2(true)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.4}
+            stroke="currentColor"
+            className="size-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+            />
+          </svg>
+          <p>Solicitar saldo</p>
+        </button>
+        <Modal
+          className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+          show={openModal2}
+          size="md"
+          onClose={() => setOpenModal(false)}
+          popup
+        >
+          <Modal.Header>
+            <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+              Solicitar Saldo
+            </span>
+          </Modal.Header>
+          <Modal.Body className="px-5 pt-2 pb-5">
+            <div className="space-y-6">               
+              <div>
+                <label
+                  htmlFor="amount"
+                  className="font-medium text-gray-700 dark:text-white"
+                >
+                  Monto a Solicitar:
+                </label>
+                <input
+                  id="amount"
+                  type="number"
+                  placeholder="Monto a consignar"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none`}
+                />
+              </div>
+              <div className="w-full">
+                <button
+                  onClick={handleSolicitarSaldo}
+                  className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
+                >
+                  Enviar
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </>
+    )}
+  </>
+
+                    
                   </div>
                 </div>
+                
               </div>
 
               <div className=" grid gap-x-8 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between  ">
