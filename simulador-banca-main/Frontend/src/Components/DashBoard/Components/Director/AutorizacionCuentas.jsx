@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalAutorizaciones } from "../ModalAutorizaciones";
+import Avatar from "../../../../assets/Img/UsoVario/Cristiano.png";
 
 export const AutorizacionCuentas = () => {
   const [dataUser, setDataUser] = useState([]);
@@ -116,173 +117,166 @@ export const AutorizacionCuentas = () => {
     setModalData(null); // Limpiar modalData
     setShowModal(false);
   };
+  const Movimientos = [
+    {
+      id: "#00001",
+      nombre: "Eduardo Dutra",
+      accion: "Consignación",
+      saldo: "$100.000",
+      NCuenta: "10000000001",
+      cliente:"Luna",
+      fecha: "1/06/2024",
+      documento: "110911639",
+    },
+    {
+      id: "#00002",
+      nombre: "Eduardo Dutra",
+      accion: "Consignación",
+      saldo: "$100.000",
+      NCuenta: "10000000001",
+      cliente:"Luna",
+      fecha: "1/06/2024",
+      documento: "110911639",
+
+    },
+    
+  ];
 
   return (
-    <>
-      <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
-        <div className="flex justify-between items-center gap-x-3">
-          <div className="flex flex-col justify-center items-start">
-            <div className="flex flex-row items-center gap-x-2">
-              <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-                Autorización de Cuentas
-              </h2>
-              <span className="px-2 py-1 text-xs font-light text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-                {countAccount()} accounts
-              </span>
-            </div>
-            <p className="text-sm text-gray-500 m-0 p-0">
-              Cuentas pendientes por autorizar
-            </p>
-          </div>
-        </div>
+    <section class="container px-4 mx-auto">
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <h6 className="mb-2 text-2xl font-bold text-black">
+      Historial de cuentas
+            </h6>
+      <div className="flex-co flex flex-row text-xs ">
+        <span className="bg-green-500 mr-3 overflow-x-auto rounded-lg px-3 py-2 text-left text-white ">
+        Listado de Cuentas
+                </span>
+      </div>
+    </div>
+    <div className="flex flex-col mt-6">
+      <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="inline-block min-w-full py-2 align-middle md:px-3 lg:px-5">
+          <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg max-w-3/6">
+            <table className="w-full divide-y divide-gray-200 dark:divide-gray-700 rounded-3xl border-separate border-spacing-y-1">
+            <thead className="text-sm font-normal text-white bg-DarkSlate">
+  <tr>
+    <th scope="col" className="px-6 py-3 rounded-s-lg">
+      <div className="flex items-center gap-x-3">
+        <span>Nº Documento</span>
+        <box-icon name="down-arrow-alt" color="#ffffff"></box-icon>
+      </div>
+    </th>
+    <th scope="col" className="px-6 py-3">
+      <div className="flex items-center gap-x-3">
+        <span>Cliente</span>
+        <box-icon name="down-arrow-alt" color="#ffffff"></box-icon>
+      </div>
+    </th>
+    <th scope="col" className="px-6 py-3">
+      <div className="flex items-center gap-x-3">
+        <span>Fecha</span>
+        <box-icon name="down-arrow-alt" color="#ffffff"></box-icon>
+      </div>
+    </th>
+    <th scope="col" className="px-6 py-3">
+      <div className="flex items-center gap-x-3">
+        <span>Producto Bancario</span>
+        <box-icon name="down-arrow-alt" color="#ffffff"></box-icon>
+      </div>
+    </th>
+    <th scope="col" className="px-6 py-3">
+      <div className="flex items-center gap-x-3">
+        <span>N° Cuenta</span>
+        <box-icon name="down-arrow-alt" color="#ffffff"></box-icon>
+      </div>
+    </th>
+    <th scope="col" className="px-6 py-3">
+      <div className="flex items-center gap-x-4">
+        <span>Estado</span>
+        <box-icon name="down-arrow-alt" color="#ffffff"></box-icon>
+      </div>
+    </th>
+  </tr>
+</thead>
 
-        <div className="flex flex-col mt-6">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-              <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-DarkSlate dark:bg-gray-800">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                      >
-                        <div className="flex items-center gap-x-3">
-                          <button className="flex items-center gap-x-2">
-                            <span>Nombre de Cliente</span>
-                          </button>
-                        </div>
-                      </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                      >
-                        <div className="flex items-center gap-x-3">
-                          <span>Producto bancario</span>
-                        </div>
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                      >
-                        <button className="flex items-center gap-x-2">
-                          <span>Número de Cuenta</span>
-                        </button>
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                      >
-                        <button className="flex items-center gap-x-2">
-                          <span>Estado</span>
-                        </button>
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                      >
-                        <button className="flex items-center gap-x-2">
-                          <span>Acción</span>
-                        </button>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {dataUser?.map((data) => (
-                      <React.Fragment key={data.id_detalle}>
-                        <tr>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                            <div className="inline-flex items-center gap-x-3">
-                              <span>{data.nombre}</span>
-                            </div>
-                          </td>
-                          <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                            <div className="inline-flex items-center gap-x-3">
-                              <div className="flex items-center gap-x-2">
-                                <img
-                                  className="object-cover w-10 h-10 rounded-full"
-                                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                                  alt=""
-                                />
-                                <div>
-                                  <h2 className="font-medium text-gray-800 dark:text-white ">
-                                    {data.descripcion}
-                                  </h2>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-
-                          <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                            {data.num_cuenta}
-                          </td>
-
-                          <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                            <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-amber-100/60 dark:bg-gray-800">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-
-                              <h2 className="text-sm font-normal text-amber-500">
-                                {data.estado_cliente}
-                              </h2>
-                            </div>
-                          </td>
-
-                          <td className="px-4 py-4 text-sm whitespace-nowrap">
-                            <div className="flex items-center gap-x-6">
-                              <button
-                                className="text-gray-500 transition-colors duration-200 dark:hover:text-red dark:text-gray-300 hover:text-red focus:outline-none"
-                                onClick={() => openModal(data)}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="w-5 h-5"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                  />
-                                </svg>
-                              </button>
-
-                              <button
-                                className="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none"
-                                onClick={() => autorizar(data.id_detalle)}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="w-5 h-5"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </React.Fragment>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+<tbody className="bg-lightgreen">
+  {Movimientos.map((cajero) => (
+    <tr
+      key={cajero.id}
+      className="shadow hover:shadow-md transition duration-200 py-3 bg-clip-border mb-1"
+    >
+      <td className="w-1/6 px-5 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <div className="inline-flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2">
+            <div>
+              <h2 className="font-normal text-gray-800">{cajero.documento}</h2>
             </div>
           </div>
         </div>
-      </section>
-    </>
-  );
+      </td>
+      <td className="w-1/6 px-3 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <div className="inline-flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2">
+            <div className="flex items-center justify-center w-7 h-7 bg-blue-100 rounded-full dark:bg-gray-800 overflow-hidden">
+              <img
+                src={Avatar}
+                alt="Avatar"
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+
+            <div>
+              <h2 className="font-normal text-gray-800 dark:text-white">{cajero.nombre}</h2>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="w-1/6 px-4 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <div className="inline-flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2 bg-green-500 mr-2 overflow-x-auto rounded-3xl px-1 py-1">
+            <div>
+              <button className="font-light text-white">{cajero.accion}</button>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="w-1/6 px-4 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <div className="inline-flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2">
+            <div>
+              <h2 className="font-normal text-gray-800">{cajero.saldo}</h2>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="w-1/6 px-5 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <div className="inline-flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2">
+            <div>
+              <h2 className="font-normal text-gray-800">{cajero.NCuenta}</h2>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="w-1/6 px-4 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <div className="inline-flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2">
+            <div>
+              <h2 className="font-normal text-gray-800">{cajero.cliente}</h2>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 };
