@@ -122,11 +122,11 @@ export const AutorizacionCuentas = () => {
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
         <div className="flex justify-between items-center gap-x-3">
           <div className="flex flex-col justify-center items-start">
-            <div className="flex flex-row items-center gap-x-3">
+            <div className="flex flex-row items-center gap-x-2">
               <h2 className="text-lg font-medium text-gray-800 dark:text-white">
                 Autorización de Cuentas
               </h2>
-              <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
+              <span className="px-2 py-1 text-xs font-light text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
                 {countAccount()} accounts
               </span>
             </div>
