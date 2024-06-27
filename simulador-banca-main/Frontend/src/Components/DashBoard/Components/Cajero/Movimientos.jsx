@@ -53,7 +53,8 @@ export const Movimientos = () => {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows);
+        setEmpleadoDetails(userData.result.rows[0]);
+        console.log(empleadoDetails)
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -487,11 +488,6 @@ export const Movimientos = () => {
     setEmail("");
   }
 
-  //Formatea el saldo para separarlo por miles //
-  const formatter = new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-  });
 
   return (
     <>
@@ -516,7 +512,7 @@ export const Movimientos = () => {
                         </div>
                         <div className="flex jutify-center items-end gap-x-2">
                           <p className="font-semibold text-3xl text-white dark:text-gray-300">
-                            {formatter.format(empleadoDetails.saldo)}
+                            {formatSaldo(empleadoDetails.saldo)}
                           </p>
                         </div>
                       </div>
