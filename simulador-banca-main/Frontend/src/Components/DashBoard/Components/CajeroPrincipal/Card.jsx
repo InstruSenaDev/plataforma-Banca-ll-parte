@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Card = () => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [empleadoDetails, setEmpleadoDetails] = useState("");
+  const [bovedaDetails, setBovedaDetails] = useState("");
+  const [allMovimientos, setAllMovimientos] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
   //Login, user context
@@ -26,7 +29,7 @@ const Card = () => {
     }
   };
 
-  // funcion para traer todos los empleados.
+  // Funcion para traer todos los empleados.
   const fetchEmpleados = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
@@ -41,9 +44,40 @@ const Card = () => {
     }
   };
 
+  // Función para traer información de la bóveda.
+  const fetchBoveda = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/get_boveda");
+      if (response.ok) {
+        const data = await response.json();
+        setBovedaDetails(data);
+      } else {
+        console.error("Error fetching data info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data info:", response.status);
+    }
+  };
+
+  // Funcion para traer información de los movimientos
+  const fetchMovimientos = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/get_movimientos");
+      if (response.ok) {
+        const data = await response.json();
+        setAllMovimientos(data);
+      } else {
+        console.error("Error fetching data info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data info:", response.status);
+    }
+  };
+
   useEffect(() => {
     fetchEmpleadoId();
     fetchEmpleados();
+    fetchBoveda();
   }, [user]);
 
   // Función para retirar saldo de la boveda y registrar sus respectivos movimientos
@@ -52,8 +86,86 @@ const Card = () => {
   };
 
   // Función para devolver saldo a la boveda y registrar sus respectivos movimientos
-  const devolverBalance = () => {
-    console.log("Devolver");
+  const devolverBalance = async () => {
+    const idEmpleado = idEmpleadoDetails.id_empleado;
+    const saldoEmpleado = idEmpleadoDetails.saldo;
+    const saldoBoveda = bovedaDetails.saldo_boveda;
+
+    const newBalanceBoveda =
+      parseFloat(saldoEmpleado) + parseFloat(saldoBoveda);
+
+    try {
+      // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
+      const responseCajero = await fetch(
+        `http://localhost:3000/empleado_balance/${idEmpleado}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nuevoSaldo: 0,
+          }),
+        }
+      );
+
+      if (!responseCajero.ok) {
+        throw new Error(
+          "Network response was not ok al actualizar el saldo del cajero"
+        );
+      }
+
+      // Realiza una solicitud al servidor para actualizar el saldo de la boveda.
+      const entradaBoveda = await fetch(
+        "http://localhost:3000/entrada_boveda",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            entradaSaldo: saldoEmpleado,
+            nuevoSaldo: newBalanceBoveda,
+          }),
+        }
+      );
+
+      if (!entradaBoveda.ok) {
+        throw new Error(
+          "Network response was not ok al actualizar el saldo del cajero"
+        );
+      }
+
+      // Realiza una solicitud al servidor para registrar el movimiento.
+      const registerMovimiento = await fetch(
+        "http://localhost:3000/post_movimiento",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idEmpleado: idEmpleado,
+            idBoveda: bovedaDetails.id_boveda,
+            tipoMovimiento: 3,
+            amount: saldoEmpleado,
+          }),
+        }
+      );
+
+      if (!registerMovimiento.ok) {
+        throw new Error("Network response was not ok al registrar movimiento");
+      }
+
+      console.log("saldo actualizado correctamente");
+      toast.success("Saldo devuelto y actualizado correctamente.");
+
+      setTimeout(() => {
+        // Actualiza localmente el estado del cliente según sea necesario
+        // Puedes utilizar la función setDatauser para actualizar el estado local
+        // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+        // alert('Autorización exitosa')
+        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error: ", error);
+      toast.error("Error al devolver el saldo.");
+    }
   };
 
   // Función para formatear el costo a miles sin decimales.
@@ -128,7 +240,7 @@ const Card = () => {
             </p>
             <div className="flex items-center justify-between">
               <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
-                {isVisible ? "99.900.00" : "****"}
+                {isVisible ? formatSaldo(bovedaDetails.saldo_boveda) : "****"}
               </h5>
               <div className="text-white sm:flex sm:items-center sm:justify-between">
                 <button onClick={toggleVisibility}>
