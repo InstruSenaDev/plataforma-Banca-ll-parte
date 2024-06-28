@@ -42,11 +42,11 @@ const Boveda = () => {
               </div>
             </div>
 
-            <button className="w-full mt-4 p-2 bg-transparent border border-emerald-500 text-emerald-500 rounded-md transition hover:bg-emerald-500 group">
+            {/* <button className="w-full mt-4 p-2 bg-transparent border border-emerald-500 text-emerald-500 rounded-md transition hover:bg-emerald-500 group">
               <p className="font-semibold text-xl group-hover:text-white">
                 Consignar
               </p>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

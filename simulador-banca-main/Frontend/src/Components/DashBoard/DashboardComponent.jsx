@@ -1,4 +1,17 @@
 import React, { useState, useEffect } from "react";
+import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
+
+import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
+import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
+import { PrincipalPage } from "./Components/PrincipalPage";
+import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
+import { No_Disponible } from "./Components/NoDisponible";
+import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
+import { CrearUsuario } from "./Components/Director/CrearUsuario";
+
+import { useAuth } from "../../context/AuthContext";
+import { Reportes } from "./Components/Director/Reportes";
+import { Sidebar } from "flowbite-react";
 import { NavLink } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
 import {
@@ -9,18 +22,7 @@ import {
   HiUserCircle,
   HiUserGroup,
 } from "react-icons/hi";
-import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
-import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
-import nfcLogo from "../../assets/Img/Client/nfcLogo.svg";
 import ChipCard from "../../assets/Img/Client/ChipCard.svg";
-import { useAuth } from "../../context/AuthContext";
-import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
-import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
-import { PrincipalPage } from "./Components/PrincipalPage";
-import { No_Disponible } from "./Components/NoDisponible";
-import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
-import { CrearUsuario } from "./Components/Director/CrearUsuario";
-import { Reportes } from "./Components/Director/Reportes";
 import { Historial } from "./Components/Director/Historial";
 import { HistorialD } from "./Components/Director/HistorialD";
 import { BusquedaC } from "./Components/BusquedaC";
@@ -369,7 +371,6 @@ export const DashboardComponent = () => {
                                   d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
                                 />
                               </svg>
-
                               <span className="mx-1">Empleados</span>
                             </button>
 

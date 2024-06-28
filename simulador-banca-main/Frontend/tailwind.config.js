@@ -26,7 +26,6 @@ module.exports = {
         lightWhite: "#8B8B8B",
         red: "#E02424",
         beige: "#F2F5F8",
-        red: "#ef4444",
       },
       spacing: {
         128: "32rem",

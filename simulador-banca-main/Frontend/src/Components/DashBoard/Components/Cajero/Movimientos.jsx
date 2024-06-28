@@ -30,7 +30,7 @@ export const Movimientos = () => {
   //Login, user context
   const { user } = useAuth();
 
-  // Funcion para traer un empleado po id.
+  // Funcion para traer un empleado por id.
   const fetchEmpleadoId = async () => {
     try {
       const response = await fetch(
@@ -487,38 +487,44 @@ export const Movimientos = () => {
     setEmail("");
   }
 
+  //Formatea el saldo para separarlo por miles //
+  const formatter = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+  });
+
   return (
     <>
       {
         <div
-          className="flex justify-center items-center flex-col gap-10"
-          style={{ minHeight: "87vh" }}
+          className="flex justify-center items-center flex-col gap-x-14 text-center"
+          style={{ minHeight: "75vh" }}
         >
           <h1 className="font-semibold text-2xl">
             Seleccione el movimiento que desee realizar
           </h1>
 
-          <div className="w-full flex overflow-hidden border-gray-200 dark:bg-gray-800">
-            <div className="w-full p-6">
-              <div className="mt-4">
-                <div className="flex flex-row items-start justify-between bg-DarkSlate px-4 py-8 rounded">
-                  <div className="flex flex-col justify-center gap-y-2 h-24">
-                    <div className="flex items-center">
-                      <p className="font-regular text-2xl text-white dark:text-gray-200">
+          <div className="w-full flex overflow-hidden border-gray-200 dark:bg-gray-800 flex-col sm:flex sm:items-center sm:justify-between">
+            <div className="w-full p-4 max-w-5xl mx-auto">
+              <div className="mt-4 ">
+                <div className="flex flex-col-reverse sm:flex-row sm:items-start sm:justify-between  bg-DarkSlate px-4 py-8 rounded">
+                  <div className="flex flex-col justify-center gap-y-2 h-24 ">
+                    <div className="flex items-center ">
+                      <p className="font-regular text-2xl text-white dark:text-gray-200 ">
                         Saldo total
                       </p>
                     </div>
                     <div className="flex jutify-center items-end gap-x-2">
-                      <p className="font-semibold text-4xl text-white dark:text-gray-300">
-                        {formatSaldo(idEmpleadoDetails.saldo)}
+                      <p className="font-semibold text-3xl text-white dark:text-gray-300">
+                        {formatter.format(empleadoDetails.saldo)}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-row gap-x-4">
+                  <div className="   grid gap-x-4 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between ">
                     <button
                       className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
-                      onClick={handleDevolverSaldo}
+                      onClick=""
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -586,15 +592,15 @@ export const Movimientos = () => {
                 </div>
               </div>
 
-              <div className="flex gap-10 mt-4">
-                <div className="flex-1">
+              <div className=" grid gap-x-8 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between  ">
+                <div className="flex-1 ">
                   <Button
-                    className="border-emerald-500 w-full hover:bg-emerald-500 transition duration-300"
+                    className="border-emerald w-full hover:bg-emerald transition duration-300"
                     onClick={() => setOpenModal(true)}
                   >
                     <div className="flex flex-col items-center justify-center w-32 h-32">
                       <svg
-                        className="w-14 text-emerald-500 dark:text-white group-hover:text-white"
+                        className="w-14 text-emerald dark:text-white group-hover:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -608,7 +614,7 @@ export const Movimientos = () => {
                         />
                       </svg>
                       <svg
-                        className="w-24 text-emerald-500 dark:text-white group-hover:text-white"
+                        className="w-24 text-emerald dark:text-white group-hover:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
@@ -828,7 +834,7 @@ export const Movimientos = () => {
                           />
                           {isAccountNumberFilled && (
                             <button
-                              onClick={handleConsultClickRetirar}
+                              onClick={() => handleConsultClick()}
                               className={`mt-2 bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
                                 isFormDisabled
                                   ? "opacity-50 cursor-not-allowed"
