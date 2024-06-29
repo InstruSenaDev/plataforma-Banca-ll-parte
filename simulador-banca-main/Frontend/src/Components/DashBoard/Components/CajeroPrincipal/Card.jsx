@@ -59,21 +59,6 @@ const Card = () => {
     }
   };
 
-  // Funcion para traer información de los movimientos
-  const fetchMovimientos = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/get_movimientos");
-      if (response.ok) {
-        const data = await response.json();
-        setAllMovimientos(data);
-      } else {
-        console.error("Error fetching data info:", response.status);
-      }
-    } catch (error) {
-      console.error("Error fetching data info:", response.status);
-    }
-  };
-
   useEffect(() => {
     fetchEmpleadoId();
     fetchEmpleados();
@@ -113,9 +98,9 @@ const Card = () => {
         );
       }
 
-      // Realiza una solicitud al servidor para actualizar el saldo de la boveda.
+      // Realiza una solicitud al servidor para actualizar el saldo de la boveda y regitrar el movimiento.
       const entradaBoveda = await fetch(
-        "http://localhost:3000/entrada_boveda",
+        `http://localhost:3000/entrada_boveda/${idEmpleado}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -130,25 +115,6 @@ const Card = () => {
         throw new Error(
           "Network response was not ok al actualizar el saldo del cajero"
         );
-      }
-
-      // Realiza una solicitud al servidor para registrar el movimiento.
-      const registerMovimiento = await fetch(
-        "http://localhost:3000/post_movimiento",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            idEmpleado: idEmpleado,
-            idBoveda: bovedaDetails.id_boveda,
-            tipoMovimiento: 3,
-            amount: saldoEmpleado,
-          }),
-        }
-      );
-
-      if (!registerMovimiento.ok) {
-        throw new Error("Network response was not ok al registrar movimiento");
       }
 
       console.log("saldo actualizado correctamente");
