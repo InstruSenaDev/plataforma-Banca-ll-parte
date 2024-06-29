@@ -3,15 +3,13 @@ const { CONFIG_BD } = require("../../config/db");
 
 const pool = new Pool(CONFIG_BD);
 
-const entradaBoveda = async (req, res) => {
-  const saldo_boveda = req.body.nuevoSaldo;
-  const entrada_saldo = req.body.entradaSaldo;
-  const { id_movimiento } = req.body;
+const salidaBoveda = async (req, res) => {
+  const { id_movimiento, saldo_boveda, salida_saldo } = req.body;
 
   try {
     const result = await pool.query(
       "INSERT INTO boveda (id_movimiento, saldo_boveda, entrada_saldo, salida_saldo) VALUES ($1, $2, $3, $4) RETURNING *",
-      [id_movimiento, saldo_boveda, entrada_saldo, 0]
+      [id_movimiento, saldo_boveda, 0, salida_saldo]
     );
 
     res.status(201).json(result.rows[0]);
@@ -24,5 +22,5 @@ const entradaBoveda = async (req, res) => {
 };
 
 module.exports = {
-  entradaBoveda,
+  salidaBoveda,
 };

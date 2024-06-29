@@ -8,14 +8,14 @@ export const ReportesMovimientos = () => {
           <div className="flex flex-col justify-center items-start">
             <div className="flex flex-row items-center gap-x-3">
               <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-                Autorización de Cuentas
+                Información de movimientos
               </h2>
               <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-                0 accounts
+                0 movimientos
               </span>
             </div>
             <p className="text-sm text-gray-500 m-0 p-0">
-              Cuentas pendientes por autorizar
+              Todos los movimientos realizados en el día
             </p>
           </div>
         </div>
@@ -50,7 +50,7 @@ export const ReportesMovimientos = () => {
 
                       <th
                         scope="col"
-                        className="px-12 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                        className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                       >
                         <div className="flex justify-center items-center gap-x-2">
                           <button>
@@ -83,7 +83,7 @@ export const ReportesMovimientos = () => {
 
                       <th
                         scope="col"
-                        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                        className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                       >
                         <div className="flex justify-center items-center gap-x-2">
                           <button>

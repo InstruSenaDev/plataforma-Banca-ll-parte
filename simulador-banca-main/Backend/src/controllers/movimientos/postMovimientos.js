@@ -4,7 +4,11 @@ const { CONFIG_BD } = require("../../config/db");
 const pool = new Pool(CONFIG_BD);
 
 const postMovimietos = async (req, res) => {
-  const { id_detalle, id_empleado, id_tipomov, id_boveda, saldo } = req.body;
+  const id_empleado = req.body.idEmpleado;
+  const id_boveda = req.body.idBoveda;
+  const saldo = req.body.amount;
+  const id_tipomov = req.body.tipoMovimiento;
+  const { id_detalle } = req.body;
 
   try {
     const result = await pool.query(
