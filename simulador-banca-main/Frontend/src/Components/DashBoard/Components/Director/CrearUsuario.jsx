@@ -33,7 +33,7 @@ export const CrearUsuario = () => {
 
   function onCloseModal() {
     setOpenModal(false);
-    setEmail("");
+
   }
 
   // Función para manejar el cambio en el número de cuenta
@@ -78,7 +78,7 @@ export const CrearUsuario = () => {
 
   // Función para realizar la consignación
   const handleConsign = async (obj) => {
- 
+
     console.log(obj);
     console.log(obj.id_empleado);
     console.log(obj.username);
@@ -655,7 +655,7 @@ export const CrearUsuario = () => {
                                           </div>
                                           <div className="w-full">
                                             <button
-                                              onClick={()=> handleConsign(date)} // Llama a handleConsign sin argumentos
+                                              onClick={() => handleConsign(date)} // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
                                               Enviar
