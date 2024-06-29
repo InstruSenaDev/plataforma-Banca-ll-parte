@@ -79,58 +79,62 @@ const Card = () => {
     const newBalanceBoveda =
       parseFloat(saldoEmpleado) + parseFloat(saldoBoveda);
 
-    try {
-      // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
-      const responseCajero = await fetch(
-        `http://localhost:3000/empleado_balance/${idEmpleado}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            nuevoSaldo: 0,
-          }),
-        }
-      );
-
-      if (!responseCajero.ok) {
-        throw new Error(
-          "Network response was not ok al actualizar el saldo del cajero"
+    if (saldoEmpleado > 0) {
+      try {
+        // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
+        const responseCajero = await fetch(
+          `http://localhost:3000/empleado_balance/${idEmpleado}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nuevoSaldo: 0,
+            }),
+          }
         );
-      }
 
-      // Realiza una solicitud al servidor para actualizar el saldo de la boveda y regitrar el movimiento.
-      const entradaBoveda = await fetch(
-        `http://localhost:3000/entrada_boveda/${idEmpleado}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            entradaSaldo: saldoEmpleado,
-            nuevoSaldo: newBalanceBoveda,
-          }),
+        if (!responseCajero.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cajero"
+          );
         }
-      );
 
-      if (!entradaBoveda.ok) {
-        throw new Error(
-          "Network response was not ok al actualizar el saldo del cajero"
+        // Realiza una solicitud al servidor para actualizar el saldo de la boveda y regitrar el movimiento.
+        const entradaBoveda = await fetch(
+          `http://localhost:3000/entrada_boveda/${idEmpleado}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              entradaSaldo: saldoEmpleado,
+              nuevoSaldo: newBalanceBoveda,
+            }),
+          }
         );
+
+        if (!entradaBoveda.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cajero"
+          );
+        }
+
+        console.log("saldo actualizado correctamente");
+        toast.success("Saldo devuelto y actualizado correctamente.");
+
+        setTimeout(() => {
+          // Actualiza localmente el estado del cliente según sea necesario
+          // Puedes utilizar la función setDatauser para actualizar el estado local
+          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+          // alert('Autorización exitosa')
+          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+          window.location = "/DashBoardMenu";
+        }, 1500);
+      } catch (error) {
+        console.error("Error: ", error);
+        toast.error("Error al devolver el saldo.");
       }
-
-      console.log("saldo actualizado correctamente");
-      toast.success("Saldo devuelto y actualizado correctamente.");
-
-      setTimeout(() => {
-        // Actualiza localmente el estado del cliente según sea necesario
-        // Puedes utilizar la función setDatauser para actualizar el estado local
-        // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-        // alert('Autorización exitosa')
-        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      console.error("Error: ", error);
-      toast.error("Error al devolver el saldo.");
+    } else {
+      toast.error("No puedes devolver un saldo igual a 0");
     }
   };
 
