@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
+import { ModalRetirar } from "./ModalRetirar";
 
 const Card = () => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [empleadoDetails, setEmpleadoDetails] = useState("");
   const [bovedaDetails, setBovedaDetails] = useState("");
-  const [allMovimientos, setAllMovimientos] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   //Login, user context
   const { user } = useAuth();
@@ -64,11 +65,6 @@ const Card = () => {
     fetchEmpleados();
     fetchBoveda();
   }, [user]);
-
-  // Función para retirar saldo de la boveda y registrar sus respectivos movimientos
-  const retirarBalance = () => {
-    console.log("Retirar");
-  };
 
   // Función para devolver saldo a la boveda y registrar sus respectivos movimientos
   const devolverBalance = async () => {
@@ -155,6 +151,7 @@ const Card = () => {
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+
   return (
     <div className="w-full mx-auto sm:p-0 lg:p-4 xl:p-4">
       <div className="flex flex-wrap gap-4">
@@ -261,7 +258,7 @@ const Card = () => {
           <div className="flex flex-col gap-y-2 h-full">
             <button
               className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-red-600 hover:bg-red-800 transition text-white font-semibold rounded-lg"
-              onClick={retirarBalance}
+              onClick={() => setOpenModal(!openModal)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -303,6 +300,8 @@ const Card = () => {
           </div>
         </div>
       </div>
+
+      <ModalRetirar openModal={openModal} setOpenModal={setOpenModal} />
     </div>
   );
 };
