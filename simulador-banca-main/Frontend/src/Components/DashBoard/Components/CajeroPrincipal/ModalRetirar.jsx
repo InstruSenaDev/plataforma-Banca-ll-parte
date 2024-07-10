@@ -1,16 +1,122 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../../../context/AuthContext";
+import { toast } from "react-toastify";
 
-export const ModalRetirar = ({
-  openModal,
-  setOpenModal,
-  idEmpleadoDetails,
-}) => {
+export const ModalRetirar = ({ openModal, setOpenModal }) => {
+  const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
+  const [bovedaDetails, setBovedaDetails] = useState("");
+  const [amount, setAmount] = useState("");
+
+  //Login, user context
+  const { user } = useAuth();
+
+  // Funcion para traer un empleado por id.
+  const fetchEmpleadoId = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_users/${user.id_empleado}`
+      );
+      if (response.ok) {
+        const userData = await response.json();
+        setIdEmpleadoDetails(userData);
+      } else {
+        console.error("Error fetching user info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  // Función para traer información de la bóveda.
+  const fetchBoveda = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/get_boveda");
+      if (response.ok) {
+        const data = await response.json();
+        setBovedaDetails(data);
+      } else {
+        console.error("Error fetching data info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching data info:", response.status);
+    }
+  };
+
   // Función para retirar saldo de la boveda y registrar sus respectivos movimientos
-  const retirarBalance = () => {
-    console.log("Retirar");
-    console.log(idEmpleadoDetails);
+  const retirarBalance = async () => {
+    const { id_empleado, saldo } = idEmpleadoDetails;
+    const saldoBoveda = bovedaDetails.saldo_boveda;
+
+    const newBalanceBoveda = parseFloat(saldoBoveda) - parseFloat(amount);
+    const newBalanceEmpleado = parseFloat(amount) - parseFloat(saldo);
+
+    if (saldoBoveda > 0) {
+      try {
+        const salidaBoveda = await fetch(
+          `http://localhost:3000/salida_boveda/${id_empleado}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceBoveda,
+              salidaSaldo: amount,
+            }),
+          }
+        );
+
+        if (!salidaBoveda.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cajero"
+          );
+        }
+
+        const responseCajero = await fetch(
+          `http://localhost:3000/empleado_balance/${id_empleado}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceEmpleado,
+            }),
+          }
+        );
+
+        if (!responseCajero.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cajero"
+          );
+        }
+
+        toast.success("Monto retirado de bóveda correctamente.");
+
+        // Actualizar el estado del empleado en el componente
+        setIdEmpleadoDetails((prevState) => ({
+          ...prevState,
+          saldo: newBalanceEmpleado,
+        }));
+
+        setTimeout(() => {
+          // Actualiza localmente el estado del cliente según sea necesario
+          // Puedes utilizar la función setDatauser para actualizar el estado local
+          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+          // alert('Autorización exitosa')
+          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+          window.location = "/DashBoardMenu";
+        }, 1500);
+      } catch (error) {
+        return toast.error("Error al retirar monto de la bóveda.");
+      }
+    } else {
+      return toast.error("Sin saldo en la bóveda.");
+    }
+
     setOpenModal(false);
   };
+
+  useEffect(() => {
+    fetchBoveda();
+    fetchEmpleadoId();
+  }, []);
 
   return (
     <>
@@ -55,7 +161,7 @@ export const ModalRetirar = ({
               <div className="space-y-2">
                 <label
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  for="amount"
+                  htmlFor="amount"
                 >
                   Monto a retirar
                 </label>
@@ -64,8 +170,9 @@ export const ModalRetirar = ({
                   id="amount"
                   placeholder="Ingresa el monto"
                   min="0"
-                  step="0.01"
+                  step="1000"
                   type="number"
+                  onChange={(event) => setAmount(event.target.value)}
                 />
               </div>
             </div>
