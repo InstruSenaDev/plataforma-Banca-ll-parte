@@ -1,7 +1,7 @@
 import React from "react";
 import PrincipalImage from "../../../assets/Img/UsoVario/Analytics.svg";
 import { useAuth } from "../../../context/AuthContext";
-import Transfers from "../../Transfers/Transfers";
+import Transfers from "./CajeroPrincipal/Transfers";
 import Card from "./CajeroPrincipal/Card";
 
 export const PrincipalPage = () => {
@@ -12,10 +12,19 @@ export const PrincipalPage = () => {
   if (user?.id_rol === 4) {
     return (
       <>
-        <p className="font-semibold text-2xl px-5">Bienvenido, {user?.username}</p>
+        <div
+          className="flex justify-start items-center flex-col"
+          style={{ minHeight: "87vh" }}
+        >
+          <div className="w-full flex justify-start items-center mb-2 lg:mb-0 lg:px-4 lg:pt-4">
+            <p className="font-semibold text-2xl">
+              Bienvenido, {user?.username}
+            </p>
+          </div>
 
-        <Card />
-        <Transfers />
+          <Card />
+          <Transfers />
+        </div>
       </>
     );
   }

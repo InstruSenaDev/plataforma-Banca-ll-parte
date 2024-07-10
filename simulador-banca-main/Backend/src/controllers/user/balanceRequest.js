@@ -5,16 +5,25 @@ const pool = new Pool(CONFIG_BD);
 
 const balanceRequest = async (req, res) => {
   const idEmpleado = req.params.idEmpleado;
+  const saldo = req.body.nuevoSaldo;
   const status = req.body.newStatus;
+  const saldoSolicitado = req.body.saldoSolicitado;
 
   try {
     // Verifica que status esté definido antes de utilizarlo
     if (typeof status !== "undefined") {
       // Realiza la actualización en la base de datos utilizando el ID
-      const updateQueryA =
-        "UPDATE empleado SET estado = $1 WHERE id_empleado = $2";
-      const updateValuesA = [status, idEmpleado];
-      await pool.query(updateQueryA, updateValuesA);
+      const updateQuery = await pool.query(
+        "UPDATE empleado SET estado = $1, saldo_solicitado = $2 WHERE id_empleado = $3",
+        [status, saldoSolicitado, idEmpleado]
+      );
+
+      if (saldo !== undefined) {
+        const updateSaldo = await pool.query(
+          "UPDATE empleado SET saldo = $1 WHERE id_empleado = $2",
+          [saldo, idEmpleado]
+        );
+      }
 
       res.status(200).json({ message: "Actualización de estado exitosa" });
     } else {

@@ -1,5 +1,23 @@
 //77vRdnArGcY4teHo
 
+CREATE TABLE boveda (
+  id_boveda SERIAL PRIMARY KEY,
+  id_movimiento INTEGER,
+  saldo_boveda NUMERIC DEFAULT 0,
+  entrada_saldo NUMERIC DEFAULT 0,
+  salida_saldo NUMERIC DEFAULT 0,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE movimientos (
+    id_movimiento SERIAL PRIMARY KEY,
+    id_empleado INTEGER NOT NULL,
+    id_tipomov INTEGER NOT NULL,
+    id_boveda INTEGER,
+    saldo NUMERIC(10, 2) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);
+
 
 CREATE TABLE cliente (
     ID_Cliente serial PRIMARY KEY,

@@ -24,10 +24,7 @@ module.exports = {
         lightgreen: "#E3F2EF",
         verde: "#7DC09E",
         lightWhite: "#8B8B8B",
-        red: "#E02424",
         beige: "#F2F5F8",
-        red: "#ef4444",
-        emerald: "#10b981",
       },
       spacing: {
         128: "32rem",

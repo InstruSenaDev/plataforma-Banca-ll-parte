@@ -9,7 +9,6 @@ import { AutorizacionCuentas } from "./Components/DashBoard/Components/Director/
 import { ContentCuentaAhorroJuridica } from "./Components/DashBoard/Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
 import { LoaderMenu } from "./Components/Loader/LoaderMenu";
 
-import DashboardCajero from "./Pages/DashboardCajero";
 import DashboardPage from "./Pages/DashboardPage";
 
 export default function MyPage() {
@@ -40,8 +39,6 @@ export default function MyPage() {
             element={<AutorizacionCuentas />}
           />
           <Route path="/juridica" element={<ContentCuentaAhorroJuridica />} />
-
-          <Route path="/DashboardCajero" element={<DashboardCajero />} />
           <Route path="/Dashboard" element={<DashboardPage />} />
         </Routes>
       )}
