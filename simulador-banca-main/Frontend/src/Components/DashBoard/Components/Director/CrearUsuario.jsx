@@ -28,22 +28,6 @@ export const CrearUsuario = () => {
 
   // Funcion para traer todos los empleados.
   const fetchEmpleados = async () => {
-
-  function onCloseModal() {
-    setOpenModal(false);
-
-  }
-
-  // Función para manejar el cambio en el número de cuenta
-  const handleAccountNumberChange = (event) => {
-    const value = event.target.value;
-    setAccountNumber(value);
-    setIsAccountNumberFilled(value.trim() !== "");
-    setIsFormDisabled(value.trim() === "");
-  };
-
-  // Función para consultar los detalles del empleado
-  const handleConsultClick = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (!response.ok) {
@@ -236,7 +220,7 @@ export const CrearUsuario = () => {
     setOpenModal(false);
     setEmail("");
   }
-  }
+
   return (
     <>
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
@@ -661,7 +645,7 @@ export const CrearUsuario = () => {
                                           </div>
                                           <div className="w-full">
                                             <button
-                                              onClick={() => handleConsign(date)} // Llama a handleConsign sin argumentos
+                                              onClick={() => handleConsign(idEmpleadoDetails)} // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
                                               Enviar

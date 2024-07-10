@@ -356,7 +356,7 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() =>
-                                handleBotonClick("AutorizacionCuentas")
+                                handleBotonClick("Busqueda")
                               }
                             >
                               <svg
