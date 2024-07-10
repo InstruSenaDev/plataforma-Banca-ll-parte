@@ -169,7 +169,7 @@ export const Formulario = ({
       {contenidoSeleccionado1 === "InfoPersonal" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo)}>
           <div className=" sm:ml-50">
-            <div className=" border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+            <div >
               <div
                 className="flex gap-5 items-center justify-center flex-col bg-white"
                 style={{ minHeight: "85vh" }}
@@ -581,8 +581,8 @@ export const Formulario = ({
       )}
       {contenidoSeleccionado1 === "contacto" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo2)}>
-          <div className="p-4 sm:ml-64">
-            <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+          <div className="sm:ml-50">
+            <div >
               <div
                 className="flex gap-5 items-center justify-center flex-col bg-white"
                 style={{ minHeight: "85vh" }}
@@ -932,8 +932,8 @@ export const Formulario = ({
       )}
       {contenidoSeleccionado1 === "economica" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo3)}>
-          <div className="p-4 sm:ml-64">
-            <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+          <div className="sm:ml-50">
+            <div>
               <div
                 className="flex gap-5 items-center justify-center flex-col bg-white"
                 style={{ minHeight: "85vh" }}
@@ -1412,8 +1412,8 @@ export const Formulario = ({
       )}
       {contenidoSeleccionado1 === "financiera" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo4)}>
-          <div className="p-4 sm:ml-64">
-            <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+          <div className="sm:ml-50">
+            <div >
               <div
                 className="flex gap-5 items-center justify-center flex-col bg-white"
                 style={{ minHeight: "85vh" }}
@@ -1704,8 +1704,8 @@ export const Formulario = ({
       )}
       {contenidoSeleccionado1 === "tributaria" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo5)}>
-          <div className="p-4 sm:ml-64">
-            <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+          <div className="sm:ml-50">
+            <div >
               <div
                 className="flex gap-5 items-center justify-center flex-col bg-white"
                 style={{ minHeight: "85vh" }}
@@ -2045,8 +2045,8 @@ export const Formulario = ({
       )}
       {contenidoSeleccionado1 === "operaciones" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo6)}>
-          <div className="p-4 sm:ml-64">
-            <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+          <div className="sm:ml-50">
+            <div>
               <div
                 className="flex gap-5 items-center justify-center flex-col bg-white"
                 style={{ minHeight: "85vh" }}
