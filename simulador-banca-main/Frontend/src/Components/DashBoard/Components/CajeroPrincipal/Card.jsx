@@ -175,7 +175,7 @@ const Card = () => {
               </svg>
             </div>
             <p className="text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
-              Saldo Total
+              Saldo T. Cajero Principal
             </p>
             <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
               {formatSaldo(idEmpleadoDetails.saldo)}
@@ -254,51 +254,53 @@ const Card = () => {
         </div>
 
         {/* content buttons  */}
-        <div className="w-full md:flex-auto md:w-0">
-          <div className="flex flex-col gap-y-2 h-full">
-            <button
-              className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-red-600 hover:bg-red-800 transition text-white font-semibold rounded-lg"
-              onClick={() => setOpenModal(!openModal)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
+        {user?.id_rol == 4 && (
+          <div className="w-full md:flex-auto md:w-0">
+            <div className="flex flex-col gap-y-2 h-full">
+              <button
+                className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-red-600 hover:bg-red-800 transition text-white font-semibold rounded-lg"
+                onClick={() => setOpenModal(!openModal)}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75"
-                />
-              </svg>
-              <span>Retirar de Bóveda</span>
-            </button>
-            <button
-              className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-emerald-600 hover:bg-emerald-700 transition text-white font-semibold rounded-lg"
-              onClick={devolverBalance}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-5"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75"
+                  />
+                </svg>
+                <span>Retirar de Bóveda</span>
+              </button>
+              <button
+                className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-emerald-600 hover:bg-emerald-700 transition text-white font-semibold rounded-lg"
+                onClick={devolverBalance}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                />
-              </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                  />
+                </svg>
 
-              <span>Devolver a Bóveda</span>
-            </button>
+                <span>Devolver a Bóveda</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <ModalRetirar openModal={openModal} setOpenModal={setOpenModal} />

@@ -521,7 +521,7 @@ export const Movimientos = () => {
                     </div>
                     <div className="flex jutify-center items-end gap-x-2">
                       <p className="font-semibold text-3xl text-white dark:text-gray-300">
-                        {formatter.format(idEmpleadoDetails.saldo)}
+                        {formatSaldo(idEmpleadoDetails.saldo)}
                       </p>
                     </div>
                   </div>

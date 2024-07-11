@@ -259,7 +259,10 @@ export const DashboardComponent = () => {
                               <span className="mx-1">Movimientos</span>
                             </button>
 
-                            <button className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base">
+                            <button
+                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                              onClick={() => handleBotonClick("Boveda")}
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -295,7 +298,43 @@ export const DashboardComponent = () => {
                               </svg>
 
                               <span className="mx-1">Historial cuentas</span>
+                              <button onClick={toggleDropdown}>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                                  />
+                                </svg>
+                              </button>
                             </button>
+                            {isOpen && (
+                              <div className="mt-2 space-y-2 ">
+                                <button
+                                  className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  onClick={() => handleBotonClick("Historial")}
+                                >
+                                  <span className="mx-1 text-center px-7 ">
+                                    Cuentas Aceptadas
+                                  </span>
+                                </button>
+                                <button
+                                  className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  onClick={() => handleBotonClick("HistorialD")}
+                                >
+                                   <span className="mx-1 text-center px-7">
+                                    Cuentas Denegadas
+                                  </span>
+                                </button>
+                              </div>
+                            )}
                           </>
                         )}
 
@@ -304,10 +343,7 @@ export const DashboardComponent = () => {
                           <>
                             {/* Dropdown */}
 
-                            <div
-                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                              
-                            >
+                            <div className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -343,21 +379,22 @@ export const DashboardComponent = () => {
                             </div>
                             {isOpen && (
                               <div className="mt-2 space-y-2 ">
-                                <button className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                              onClick={() =>
-                                handleBotonClick("FormularioPersonaNatural")
-                              }>
-                                   <span className="mx-1 text-center px-10">Natural</span>
+                                <button
+                                  className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  onClick={() =>
+                                    handleBotonClick("FormularioPersonaNatural")
+                                  }
+                                >
+                                  <span className="mx-1 text-center px-10">
+                                    Natural
+                                  </span>
                                 </button>
-                                
                               </div>
                             )}
 
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                              onClick={() =>
-                                handleBotonClick("Busqueda")
-                              }
+                              onClick={() => handleBotonClick("Busqueda")}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"

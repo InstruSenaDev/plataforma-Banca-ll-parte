@@ -102,6 +102,8 @@ const Transfers = ({ formatter }) => {
     fetchEmpleados();
   }, []);
 
+  const { user } = useAuth();
+
   return (
     <section className="container px-4 mx-auto">
       <div className="sm:flex sm:items-center sm:justify-between">
@@ -147,6 +149,7 @@ const Transfers = ({ formatter }) => {
                         </button>
                       </div>
                     </th>
+                    
                     <th
                       scope="col"
                       className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
@@ -191,115 +194,132 @@ const Transfers = ({ formatter }) => {
                           <span>{formatSaldo(empleado.saldo_solicitado)}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                      {user?.id_rol == 4 && (
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center">
+                            <button
+                              className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
+                              onClick={() => openModal(empleado)}
+                              // onClick={handleConsign}
+                            >
+                              <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
+                                Transferir Saldo
+                              </h2>
+                              <span className="text-emerald-500 group-hover:text-white">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                  />
+                                </svg>
+                              </span>
+                            </button>
+                            <Modal
+                              className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                              show={openModal1}
+                              size="md"
+                              onClose={onCloseModal}
+                              popup
+                            >
+                              <Modal.Header>
+                                <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                                  Consignar
+                                </span>
+                              </Modal.Header>
+                              <Modal.Body className="px-5 pt-2 pb-5">
+                                <div className="space-y-6">
+                                  {selectedEmpleado && (
+                                    <>
+                                      <div>
+                                        <div className="mb-2 block">
+                                          <label
+                                            htmlFor="accountNumber"
+                                            className="font-medium text-gray-700 dark:text-white"
+                                          >
+                                            ID de empleado:
+                                          </label>
+                                        </div>
+                                        <input
+                                          id="accountNumber"
+                                          type="number"
+                                          value={selectedEmpleado.id_empleado}
+                                          readOnly
+                                          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label
+                                          htmlFor="accountOwner"
+                                          className="font-medium text-gray-700 dark:text-white"
+                                        >
+                                          Nombre del empleado
+                                        </label>
+                                        <input
+                                          id="accountOwner"
+                                          type="text"
+                                          value={selectedEmpleado.username}
+                                          readOnly
+                                          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label
+                                          htmlFor="amount"
+                                          className="font-medium text-gray-700 dark:text-white"
+                                        >
+                                          Monto a consignar:
+                                        </label>
+                                        <input
+                                          id="amount"
+                                          type="number"
+                                          placeholder="Monto a consignar"
+                                          value={amount}
+                                          onChange={handleAmount}
+                                          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+
+                                  <div className="w-full">
+                                    <button
+                                      onClick={handleConsign}
+                                      className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
+                                    >
+                                      Enviar
+                                    </button>
+                                  </div>
+                                </div>
+                              </Modal.Body>
+                            </Modal>
+                          </div>
+                        </td>
+                      )}
+                      {user?.id_rol == 1 && (
+                       <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center">
                           <button
                             className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
-                            onClick={() => openModal(empleado)}
-                            // onClick={handleConsign}
+                            
                           >
                             <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
-                              Transferir Saldo
+                              Ver Detalles
                             </h2>
-                            <span className="text-emerald-500 group-hover:text-white">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-4"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                />
-                              </svg>
-                            </span>
+                           
                           </button>
-                          <Modal
-                            className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                            show={openModal1}
-                            size="md"
-                            onClose={onCloseModal}
-                            popup
-                          >
-                            <Modal.Header>
-                              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                Consignar
-                              </span>
-                            </Modal.Header>
-                            <Modal.Body className="px-5 pt-2 pb-5">
-                              <div className="space-y-6">
-                                {selectedEmpleado && (
-                                  <>
-                                    <div>
-                                      <div className="mb-2 block">
-                                        <label
-                                          htmlFor="accountNumber"
-                                          className="font-medium text-gray-700 dark:text-white"
-                                        >
-                                          ID de empleado:
-                                        </label>
-                                      </div>
-                                      <input
-                                        id="accountNumber"
-                                        type="number"
-                                        value={selectedEmpleado.id_empleado}
-                                        readOnly
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <label
-                                        htmlFor="accountOwner"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Nombre del empleado
-                                      </label>
-                                      <input
-                                        id="accountOwner"
-                                        type="text"
-                                        value={selectedEmpleado.username}
-                                        readOnly
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <label
-                                        htmlFor="amount"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Monto a consignar:
-                                      </label>
-                                      <input
-                                        id="amount"
-                                        type="number"
-                                        placeholder="Monto a consignar"
-                                        value={amount}
-                                        onChange={handleAmount}
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-
-                                <div className="w-full">
-                                  <button
-                                    onClick={handleConsign}
-                                    className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
-                                  >
-                                    Enviar
-                                  </button>
-                                </div>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
                         </div>
                       </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
