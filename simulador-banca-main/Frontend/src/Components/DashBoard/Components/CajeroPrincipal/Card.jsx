@@ -117,6 +117,12 @@ const Card = () => {
         console.log("saldo actualizado correctamente");
         toast.success("Saldo devuelto y actualizado correctamente.");
 
+        // Actualizar el estado del empleado en el componente
+        setIdEmpleadoDetails((prevState) => ({
+          ...prevState,
+          saldo: 0,
+        }));
+
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario
           // Puedes utilizar la función setDatauser para actualizar el estado local

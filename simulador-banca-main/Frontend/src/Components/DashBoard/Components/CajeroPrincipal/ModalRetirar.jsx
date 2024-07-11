@@ -47,8 +47,17 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
     const { id_empleado, saldo } = idEmpleadoDetails;
     const saldoBoveda = bovedaDetails.saldo_boveda;
 
+    // Verificar que el monto no esté vacío, sea mayor a cero y no sea superior al saldo de la bóveda
+    if (!amount || parseFloat(amount) <= 0) {
+      return toast.error("Por favor ingresa un monto válido.");
+    } else if (parseFloat(amount) > saldoBoveda) {
+      return toast.error(
+        "El monto no puede ser superior al saldo de la bóveda."
+      );
+    }
+
     const newBalanceBoveda = parseFloat(saldoBoveda) - parseFloat(amount);
-    const newBalanceEmpleado = parseFloat(amount) - parseFloat(saldo);
+    const newBalanceEmpleado = parseFloat(amount) + parseFloat(saldo);
 
     if (saldoBoveda > 0) {
       try {

@@ -16,9 +16,9 @@ export const CrearUsuario = () => {
   const { user } = useAuth();
 
   const [date, setDate] = useState({
-    id_empleado: '',
-    username: '',
-    saldo: 0
+    id_empleado: "",
+    username: "",
+    saldo: 0,
   });
   //Disable Modales
   const [accountNumber, setAccountNumber] = useState("");
@@ -28,12 +28,10 @@ export const CrearUsuario = () => {
 
   // Abrir Modal
   const [openModal1, setOpenModal] = useState(false);
-  const [amount, setAmount] = useState('');
-
+  const [amount, setAmount] = useState("");
 
   function onCloseModal() {
     setOpenModal(false);
-
   }
 
   // Función para manejar el cambio en el número de cuenta
@@ -78,14 +76,13 @@ export const CrearUsuario = () => {
 
   // Función para realizar la consignación
   const handleConsign = async (obj) => {
-
     console.log(obj);
     console.log(obj.id_empleado);
     console.log(obj.username);
 
     setDate({
       id_empleado: obj.id_empleado,
-      username: obj.username
+      username: obj.username,
     });
 
     console.log("Datos de date:", date);
@@ -114,7 +111,13 @@ export const CrearUsuario = () => {
     const newBalanceEmpleado = saldoEmpleado + amountToConsign;
 
     try {
-      console.log("Datos a enviar:", { idEmpleado, nombreEmpleado, saldoEmpleado, amountToConsign, newBalanceEmpleado });
+      console.log("Datos a enviar:", {
+        idEmpleado,
+        nombreEmpleado,
+        saldoEmpleado,
+        amountToConsign,
+        newBalanceEmpleado,
+      });
 
       const responseEmpleado = await fetch(
         `http://localhost:3000/empleado_balance/${idEmpleado}`,
@@ -147,13 +150,11 @@ export const CrearUsuario = () => {
       setTimeout(() => {
         window.location = "/DashBoardMenu";
       }, 1500);
-
     } catch (error) {
       console.error("Error general:", error);
       toast.error("Error al realizar la consignación.");
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -221,7 +222,7 @@ export const CrearUsuario = () => {
   const abrir = () => {
     setactiveModal((prev) =>
       prev ===
-        "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
+      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
         ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
         : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
     );
@@ -579,7 +580,6 @@ export const CrearUsuario = () => {
                                         className="w-5 h-5"
                                         onClick={() => setOpenModal(true)}
                                       >
-
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
@@ -614,7 +614,9 @@ export const CrearUsuario = () => {
                                               id="accountNumber"
                                               type="number"
                                               placeholder="Número de cuenta"
-                                              onChange={(event) => setDate(event.target.value)}
+                                              onChange={(event) =>
+                                                setDate(event.target.value)
+                                              }
                                               value={date.id_empleado}
                                               readOnly // Campo de solo lectura para evitar que se modifique
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
@@ -631,7 +633,9 @@ export const CrearUsuario = () => {
                                               id="accountOwner"
                                               type="text"
                                               placeholder="Nombre del dueño"
-                                              onChange={(event) => setDate(event.target.value)}
+                                              onChange={(event) =>
+                                                setDate(event.target.value)
+                                              }
                                               value={date.username}
                                               readOnly
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
@@ -649,13 +653,17 @@ export const CrearUsuario = () => {
                                               type="number"
                                               placeholder="Monto a consignar"
                                               value={amount}
-                                              onChange={(event) => setAmount(event.target.value)}
+                                              onChange={(event) =>
+                                                setAmount(event.target.value)
+                                              }
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                             />
                                           </div>
                                           <div className="w-full">
                                             <button
-                                              onClick={() => handleConsign(date)} // Llama a handleConsign sin argumentos
+                                              onClick={() =>
+                                                handleConsign(date)
+                                              } // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
                                               Enviar
@@ -664,7 +672,6 @@ export const CrearUsuario = () => {
                                         </div>
                                       </Modal.Body>
                                     </Modal>
-
                                   </div>
                                 </td>
                               </tr>

@@ -300,8 +300,8 @@ export const ReportesMovimientos = () => {
 
                                   {data.id_tipomov === 4 && (
                                     <>
-                                      <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                        <span className="text-emerald-500">
+                                      <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
+                                        <span className="text-red-500">
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
@@ -318,7 +318,7 @@ export const ReportesMovimientos = () => {
                                           </svg>
                                         </span>
 
-                                        <h2 className="text-sm font-normal text-emerald-500">
+                                        <h2 className="text-sm font-normal text-red-500">
                                           {data.tipo_movimiento}
                                         </h2>
                                       </div>
