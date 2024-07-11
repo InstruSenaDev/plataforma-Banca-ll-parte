@@ -3,20 +3,82 @@ import { Button, Modal } from "flowbite-react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 
-const Transfers = ({ formatter }) => {
+const Transfers = () => {
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
+
+  const { user } = useAuth();
+
   const [openModal1, setOpenModal1] = useState(false);
+
+  const onCloseModal = () => {
+    setOpenModal1(false);
+    setSelectedEmpleado(null);
+    setAmount(''); // Reset amount when closing the modal
+  };
+
+  const handleConsign = async () => {
+    console.log("handleConsign called");
+
+    if (!selectedEmpleado || !amount) {
+      console.error("Datos del usuario o monto inválidos.");
+      toast.error("Datos del usuario o monto inválidos.");
+      return;
+    }
+
+    const { id_empleado, username, saldo } = selectedEmpleado;
+    const amountToConsign = parseFloat(amount);
+
+    if (isNaN(amountToConsign) || amountToConsign <= 0) {
+      console.error("Monto a consignar inválido.");
+      toast.error("Monto a consignar inválido.");
+      return;
+    }
+
+    const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
+    console.log(`ID Empleado: ${id_empleado}, Nuevo Saldo: ${newBalanceEmpleado}`);
+
+    try {
+      const responseEmpleado = await fetch(
+        `http://localhost:3000/empleado_balance/${id_empleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nuevoSaldo: newBalanceEmpleado,
+            nombreEmpleado: username,
+          }),
+        }
+      );
+
+      if (!responseEmpleado.ok) {
+        const errorText = await responseEmpleado.text();
+        console.error("Error en la respuesta de la red:", errorText);
+        throw new Error("Network response was not ok: " + errorText);
+      }
+
+      const updatedEmpleadoDetails = await responseEmpleado.json();
+      toast.success("Consignación realizada correctamente.");
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
+
+    } catch (error) {
+      console.error("Error general:", error);
+      toast.error("Error al realizar la consignación.");
+    }
+  };
+
 
   const fetchEmpleados = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        const filteredEmpleados = userData.result.rows.filter(
-          (empleado) => empleado.estado === "Solicitud"
-        );
+        const filteredEmpleados = userData.result.rows.filter(empleado => empleado.estado === "Solicitud");
         setEmpleadoDetails(filteredEmpleados);
       } else {
         console.error("Error fetching user info:", response.status);
@@ -26,81 +88,15 @@ const Transfers = ({ formatter }) => {
     }
   };
 
-  const handleConsign = async () => {
-    const { id_empleado, saldo } = selectedEmpleado;
-    const amountToConsign = parseFloat(amount);
-
-    if (
-      selectedEmpleado === null ||
-      isNaN(amountToConsign) ||
-      amountToConsign <= 0
-    ) {
-      toast.error("Datos del usuario o monto inválidos.");
-    }
-
-    const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
-
-    try {
-      const responseEmpleado = await fetch(
-        `http://localhost:3000/balance_request/${id_empleado}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nuevoSaldo: newBalanceEmpleado,
-            newStatus: "Activo",
-            saldoSolicitado: 0,
-          }),
-        }
-      );
-
-      if (!responseEmpleado.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      toast.success("Consignación realizada correctamente.");
-      setTimeout(() => {
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      toast.error("Error al realizar la consignación.");
-    }
-  };
-
-  // Función para formatear el costo a miles sin decimales.
-  const formatSaldo = (saldo) => {
-    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
-    const formatter = new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 2,
-    });
-
-    // Formatea el costo usando la configuración especificada.
-    return formatter.format(saldo);
-  };
+  useEffect(() => {
+    fetchEmpleados();
+  }, []);
 
   const openModal = (empleado) => {
     setSelectedEmpleado(empleado);
     setOpenModal1(true);
-    setAmount(empleado.saldo_solicitado);
+    setAmount('');
   };
-
-  const onCloseModal = () => {
-    setOpenModal1(false);
-    setSelectedEmpleado(null);
-    setAmount(""); // Reset amount when closing the modal
-  };
-
-  const handleAmount = (event) => {
-    setAmount(event.target.value);
-  };
-
-  useEffect(() => {
-    fetchEmpleados();
-  }, []);
 
   return (
     <section className="container px-4 mx-auto">
@@ -117,44 +113,24 @@ const Transfers = ({ formatter }) => {
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-DarkSlate dark:bg-gray-800">
                   <tr>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                    >
+                    <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400">
                       <div className="flex justify-center items-center gap-x-3">
-                        <button>
-                          <span>ID Empleado</span>
-                        </button>
+                        <button><span>ID Empleado</span></button>
                       </div>
                     </th>
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                    >
+                    <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400">
                       <div className="flex justify-center items-center gap-x-3">
-                        <button>
-                          <span>Solicitud por</span>
-                        </button>
+                        <button><span>Solicitud por</span></button>
                       </div>
                     </th>
-                    <th
-                      scope="col"
-                      className="px-4 py-3 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                    >
+                    <th scope="col" className="px-4 py-3 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400">
                       <div className="flex justify-center items-center gap-x-2">
-                        <button>
-                          <span>Saldo solicitado</span>
-                        </button>
+                        <button><span>Saldo solicitado</span></button>
                       </div>
                     </th>
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                    >
+                    <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400">
                       <div className="flex justify-center items-center gap-x-2">
-                        <button>
-                          <span>Acción</span>
-                        </button>
+                        <button><span>Acción</span></button>
                       </div>
                     </th>
                   </tr>
@@ -164,17 +140,15 @@ const Transfers = ({ formatter }) => {
                     <tr key={index}>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span># {empleado.id_empleado}</span>
+                          <span>{empleado.id_empleado}</span>
                         </div>
                       </td>
                       <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
                           <div className="flex items-center gap-x-2">
-                            <img
-                              className="object-cover w-10 h-10 rounded-full"
+                            <img className="object-cover w-10 h-10 rounded-full"
                               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                              alt=""
-                            />
+                              alt="" />
                             <div>
                               <h2 className="font-medium text-gray-800 dark:text-white">
                                 {empleado.username}
@@ -188,7 +162,7 @@ const Transfers = ({ formatter }) => {
                       </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{formatSaldo(empleado.saldo_solicitado)}</span>
+                          <span>{empleado.saldo}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -196,25 +170,13 @@ const Transfers = ({ formatter }) => {
                           <button
                             className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
                             onClick={() => openModal(empleado)}
-                            // onClick={handleConsign}
                           >
                             <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
                               Transferir Saldo
                             </h2>
                             <span className="text-emerald-500 group-hover:text-white">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-4"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                />
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                               </svg>
                             </span>
                           </button>
@@ -236,10 +198,7 @@ const Transfers = ({ formatter }) => {
                                   <>
                                     <div>
                                       <div className="mb-2 block">
-                                        <label
-                                          htmlFor="accountNumber"
-                                          className="font-medium text-gray-700 dark:text-white"
-                                        >
+                                        <label htmlFor="accountNumber" className="font-medium text-gray-700 dark:text-white">
                                           ID de empleado:
                                         </label>
                                       </div>
@@ -251,12 +210,8 @@ const Transfers = ({ formatter }) => {
                                         className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                       />
                                     </div>
-
                                     <div>
-                                      <label
-                                        htmlFor="accountOwner"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
+                                      <label htmlFor="accountOwner" className="font-medium text-gray-700 dark:text-white">
                                         Nombre del empleado
                                       </label>
                                       <input
@@ -267,26 +222,21 @@ const Transfers = ({ formatter }) => {
                                         className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                       />
                                     </div>
-
-                                    <div>
-                                      <label
-                                        htmlFor="amount"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Monto a consignar:
-                                      </label>
-                                      <input
-                                        id="amount"
-                                        type="number"
-                                        placeholder="Monto a consignar"
-                                        value={amount}
-                                        onChange={handleAmount}
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
                                   </>
                                 )}
-
+                                <div>
+                                  <label htmlFor="amount" className="font-medium text-gray-700 dark:text-white">
+                                    Monto a consignar:
+                                  </label>
+                                  <input
+                                    id="amount"
+                                    type="number"
+                                    placeholder="Monto a consignar"
+                                    value={amount}
+                                    onChange={(event) => setAmount(event.target.value)}
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                  />
+                                </div>
                                 <div className="w-full">
                                   <button
                                     onClick={handleConsign}
