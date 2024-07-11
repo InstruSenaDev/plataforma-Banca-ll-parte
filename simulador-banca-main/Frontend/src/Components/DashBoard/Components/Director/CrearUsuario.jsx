@@ -9,68 +9,50 @@ import { useAuth } from "../../../../context/AuthContext";
 
 export const CrearUsuario = () => {
   const [dataUser, setDataUser] = useState([]);
+  const [idEmpleadoDetails, setIdEmpleadoDetails] = useState(null);
   const [forceUpdate, setForceUpdate] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
-  const { user } = useAuth();
-
-  const [date, setDate] = useState({
-    id_empleado: "",
-    username: "",
-    saldo: 0,
-  });
-  //Disable Modales
-  const [accountNumber, setAccountNumber] = useState("");
-  const [accountOwner, setAccountOwner] = useState("");
-  const [isAccountNumberFilled, setIsAccountNumberFilled] = useState(false);
-  const [isFormDisabled, setIsFormDisabled] = useState(true);
-
   // Abrir Modal
   const [openModal1, setOpenModal] = useState(false);
   const [amount, setAmount] = useState("");
 
-  function onCloseModal() {
-    setOpenModal(false);
-  }
+  const { user } = useAuth();
 
-  // Función para manejar el cambio en el número de cuenta
-  const handleAccountNumberChange = (event) => {
-    const value = event.target.value;
-    setAccountNumber(value);
-    setIsAccountNumberFilled(value.trim() !== "");
-    setIsFormDisabled(value.trim() === "");
-  };
-
-  // Función para consultar los detalles del empleado
-  const handleConsultClick = async () => {
+  // Funcion para traer todos los empleados.
+  const fetchEmpleados = async () => {
     try {
-      const accountNumberInt = parseInt(accountNumber, 10);
-
-      // Realizar la consulta a la base de datos utilizando el número de cuenta convertido
-      const response = await fetch(
-        `http://localhost:3000/get_account/${accountNumberInt}`
-      );
+      const response = await fetch("http://localhost:3000/get_users");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
-
-      // Verificar si se encontraron datos
-      if (data) {
-        const { id_empleado, saldo } = data;
-        setEmpleadoDetails({ id_empleado, saldo });
-        setDataUser(data);
-        console.log(data);
+      if (response.ok) {
+        const data = await response.json();
+        setDataUser(data.result.rows);
       } else {
-        console.log(
-          "No se encontraron datos para el número de cuenta proporcionado."
-        );
-        // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
+        console.error("Error fetching user info:", response.status);
       }
     } catch (error) {
-      console.error("Error al consultar la base de datos:", error);
-      // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  // Funcion para traer un empleado por id.
+  const fetchEmpleadoId = async (idEmpleado) => {
+    console.log(idEmpleado);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_users/${idEmpleado}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setIdEmpleadoDetails(data);
+        setOpenModal(true);
+      } else {
+        console.error("Error fetching user info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
     }
   };
 
@@ -80,12 +62,12 @@ export const CrearUsuario = () => {
     console.log(obj.id_empleado);
     console.log(obj.username);
 
-    setDate({
+    setIdEmpleadoDetails({
       id_empleado: obj.id_empleado,
       username: obj.username,
     });
 
-    console.log("Datos de date:", date);
+    console.log("Datos de date:", idEmpleadoDetails);
     console.log("Monto a consignar:", amount);
 
     // Verificación inicial de datos
@@ -95,9 +77,9 @@ export const CrearUsuario = () => {
       return;
     }
 
-    const idEmpleado = obj.id_empleado;
-    const nombreEmpleado = obj.username;
-    const saldoEmpleado = parseFloat(obj.saldo); // Convierte el saldo a número
+    const idEmpleado = idEmpleadoDetails.id_empleado;
+    const nombreEmpleado = idEmpleadoDetails.username;
+    const saldoEmpleado = parseFloat(idEmpleadoDetails.saldo); // Convierte el saldo a número
 
     const amountToConsign = parseFloat(amount);
 
@@ -156,23 +138,6 @@ export const CrearUsuario = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/get_users");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setDataUser(data.result.rows);
-        console.log(dataUser);
-      } catch (error) {
-        console.error("Error al encontrar información");
-      }
-    };
-    fetchData();
-  }, [forceUpdate]);
-
   const AddUser = async (data) => {
     try {
       const response = await fetch("http://localhost:3000/add_user", {
@@ -215,6 +180,19 @@ export const CrearUsuario = () => {
     }
   };
 
+  // Función para formatear el costo a miles sin decimales.
+  const formatSaldo = (saldo) => {
+    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
+    const formatter = new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 2,
+    });
+
+    // Formatea el costo usando la configuración especificada.
+    return formatter.format(saldo);
+  };
+
   const countUsers = () => {
     return dataUser.length;
   };
@@ -238,16 +216,26 @@ export const CrearUsuario = () => {
     setShowModal(false);
   };
 
+  function onCloseModal() {
+    setOpenModal(false);
+    setEmail("");
+  }
+
+  useEffect(() => {
+    fetchEmpleadoId();
+    fetchEmpleados();
+  }, [forceUpdate]);
+
   return (
     <>
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
         <div className="flex justify-between items-center gap-x-3">
           <div className="flex flex-col justify-center items-start">
-            <div className="flex flex-row items-center gap-x-3">
+            <div className="flex flex-row items-center gap-x-2">
               <h2 className="text-lg font-medium text-gray-800 dark:text-white">
                 Miembros del equipo
               </h2>
-              <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
+              <span className="px-2 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
                 {countUsers()} users
               </span>
             </div>
@@ -564,7 +552,7 @@ export const CrearUsuario = () => {
 
                                 <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center">
-                                    <span>{date.saldo}</span>
+                                    <span>{formatSaldo(date.saldo)}</span>
                                   </div>
                                 </td>
 
@@ -577,8 +565,10 @@ export const CrearUsuario = () => {
                                         viewBox="0 0 24 24"
                                         strokeWidth={1.5}
                                         stroke="currentColor"
-                                        className="w-5 h-5"
-                                        onClick={() => setOpenModal(true)}
+                                        className={`w-5 h-5 ${date.id_empleado}`}
+                                        onClick={() =>
+                                          fetchEmpleadoId(date.id_empleado)
+                                        }
                                       >
                                         <path
                                           strokeLinecap="round"
@@ -604,39 +594,38 @@ export const CrearUsuario = () => {
                                           <div>
                                             <div className="mb-2 block">
                                               <label
-                                                htmlFor="accountNumber"
+                                                htmlFor="idEmpleado"
                                                 className="font-medium text-gray-700 dark:text-white"
                                               >
                                                 ID de empleado:
                                               </label>
                                             </div>
                                             <input
-                                              id="accountNumber"
+                                              id="idEmplead"
                                               type="number"
-                                              placeholder="Número de cuenta"
-                                              onChange={(event) =>
-                                                setDate(event.target.value)
+                                              placeholder="ID de empleado"
+                                              value={
+                                                idEmpleadoDetails?.id_empleado
                                               }
-                                              value={date.id_empleado}
                                               readOnly // Campo de solo lectura para evitar que se modifique
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                             />
                                           </div>
                                           <div>
                                             <label
-                                              htmlFor="accountOwner"
+                                              htmlFor="username"
                                               className="font-medium text-gray-700 dark:text-white"
                                             >
                                               Nombre del empleado
                                             </label>
                                             <input
-                                              id="accountOwner"
+                                              id="username"
                                               type="text"
-                                              placeholder="Nombre del dueño"
-                                              onChange={(event) =>
-                                                setDate(event.target.value)
+                                              placeholder="Nombre del empleado"
+                                              onClick={""}
+                                              value={
+                                                idEmpleadoDetails?.username
                                               }
-                                              value={date.username}
                                               readOnly
                                               className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                             />
@@ -662,7 +651,7 @@ export const CrearUsuario = () => {
                                           <div className="w-full">
                                             <button
                                               onClick={() =>
-                                                handleConsign(date)
+                                                handleConsign(idEmpleadoDetails)
                                               } // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
