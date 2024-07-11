@@ -6,6 +6,7 @@ import { ModalCreacionU } from "./ModalCreacionU";
 import { Button, Modal } from "flowbite-react";
 import { data } from "autoprefixer";
 import { useAuth } from "../../../../context/AuthContext";
+import { ModalConsignarCajero } from "../CajeroPrincipal/ModalConsignarCajero";
 
 export const CrearUsuario = () => {
   const [dataUser, setDataUser] = useState([]);
@@ -15,6 +16,8 @@ export const CrearUsuario = () => {
   const [showModal, setShowModal] = useState(false);
   // Abrir Modal
   const [openModal1, setOpenModal] = useState(false);
+
+  const [openConsing, setOpenConsing] = useState(false);
   const [amount, setAmount] = useState("");
 
   const { user } = useAuth();
@@ -195,15 +198,6 @@ export const CrearUsuario = () => {
 
   const countUsers = () => {
     return dataUser.length;
-  };
-
-  const abrir = () => {
-    setactiveModal((prev) =>
-      prev ===
-      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
-        ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
-        : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
-    );
   };
 
   const openModal = (dataUser) => {
@@ -567,7 +561,7 @@ export const CrearUsuario = () => {
                                         stroke="currentColor"
                                         className={`w-5 h-5 ${date.id_empleado}`}
                                         onClick={() =>
-                                          fetchEmpleadoId(date.id_empleado)
+                                          setOpenConsing(!openConsing)
                                         }
                                       >
                                         <path
@@ -577,8 +571,8 @@ export const CrearUsuario = () => {
                                         />
                                       </svg>
                                     </button>
-                                    <Modal
-                                      className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                                    {/* <Modal
+                                      className="bg-black bg-opacity-50 flex justify-center items-center w-screen h-screen p-0"
                                       show={openModal1}
                                       size="md"
                                       onClose={onCloseModal}
@@ -660,7 +654,7 @@ export const CrearUsuario = () => {
                                           </div>
                                         </div>
                                       </Modal.Body>
-                                    </Modal>
+                                    </Modal> */}
                                   </div>
                                 </td>
                               </tr>
@@ -680,6 +674,11 @@ export const CrearUsuario = () => {
           data={modalData}
           showModal={showModal}
           closeModal={closeModal}
+        />
+
+        <ModalConsignarCajero
+          openConsing={openConsing}
+          setOpenConsing={setOpenConsing}
         />
       </section>
     </>

@@ -313,7 +313,7 @@ export const ReportesMovimientos = () => {
                                             <path
                                               strokeLinecap="round"
                                               strokeLinejoin="round"
-                                              d="M12 4.5v15m7.5-7.5h-15"
+                                              d="M5 12h14"
                                             />
                                           </svg>
                                         </span>

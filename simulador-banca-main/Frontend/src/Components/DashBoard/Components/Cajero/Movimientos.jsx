@@ -56,7 +56,7 @@ export const Movimientos = () => {
       if (response.ok) {
         const userData = await response.json();
         setEmpleadoDetails(userData.result.rows[0]);
-        console.log(empleadoDetails)
+        console.log(empleadoDetails);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -497,7 +497,6 @@ export const Movimientos = () => {
     setEmail("");
   }
 
-
   return (
     <>
       {
@@ -521,7 +520,7 @@ export const Movimientos = () => {
                     </div>
                     <div className="flex jutify-center items-end gap-x-2">
                       <p className="font-semibold text-3xl text-white dark:text-gray-300">
-                        {formatter.format(idEmpleadoDetails.saldo)}
+                        {formatSaldo(idEmpleadoDetails.saldo)}
                       </p>
                     </div>
                   </div>
