@@ -44,7 +44,7 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
               <div className="flex justify-between">
                 <div className="space-y-2">
                   <label
-                    className="text-sm text-gray-500 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     htmlFor="idEmpleado"
                   >
                     ID Empleado
@@ -60,7 +60,7 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
 
                 <div className="space-y-2">
                   <label
-                    className="text-sm text-gray-500 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     htmlFor="username"
                   >
                     Nombre
@@ -77,7 +77,7 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
 
               <div className="space-y-2">
                 <label
-                  className="text-sm text-gray-500 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="saldo"
                 >
                   Saldo a consignar

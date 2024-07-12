@@ -604,7 +604,7 @@ export const DashboardComponent = () => {
                   sidebarOpen ? "opacity-50" : "opacity-100"
                 }`}
               >
-                <div className="border-2 border-gray border-dashed rounded-lg p-2">
+                <div className="border-2 border-gray-300 border-dashed rounded-lg p-2">
                   {contenidoSeleccionado === "FormularioPersonaNatural" && (
                     <ContentCuentaAhorroNatural />
                   )}
