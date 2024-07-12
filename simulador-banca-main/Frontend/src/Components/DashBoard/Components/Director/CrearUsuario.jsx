@@ -13,6 +13,7 @@ export const CrearUsuario = () => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState(null);
   const [forceUpdate, setForceUpdate] = useState(false);
   const [modalData, setModalData] = useState(null);
+
   const [showModal, setShowModal] = useState(false);
   // Abrir Modal
   const [openModal1, setOpenModal] = useState(false);
@@ -59,6 +60,11 @@ export const CrearUsuario = () => {
     }
   };
 
+  useEffect(() => {
+    fetchEmpleadoId();
+    fetchEmpleados();
+  }, [forceUpdate]);
+
   // Función para realizar la consignación
   const handleConsign = async (obj) => {
     console.log(obj);
@@ -79,6 +85,12 @@ export const CrearUsuario = () => {
       toast.error("Datos del usuario o monto inválidos.");
       return;
     }
+    const filterEmpleadoPrincipal = dataUser.filter(
+      (users) => users.id_rol === 4
+    );
+    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+
+    console.log("nuevo saldo", saldoPrincipal);
 
     const idEmpleado = idEmpleadoDetails.id_empleado;
     const nombreEmpleado = idEmpleadoDetails.username;
@@ -92,6 +104,8 @@ export const CrearUsuario = () => {
       toast.error("Monto a consignar inválido.");
       return;
     }
+    const newSaldoCajero = parseFloat(saldoPrincipal) - amountToConsign;
+    console.log("nuevoo saldo restaa", newSaldoCajero);
 
     const newBalanceEmpleado = saldoEmpleado + amountToConsign;
 
@@ -102,6 +116,7 @@ export const CrearUsuario = () => {
         saldoEmpleado,
         amountToConsign,
         newBalanceEmpleado,
+        newSaldoCajero,
       });
 
       const responseEmpleado = await fetch(
@@ -113,6 +128,7 @@ export const CrearUsuario = () => {
           },
           body: JSON.stringify({
             nuevoSaldo: newBalanceEmpleado,
+            nuevoSaldoCajero: newSaldoCajero,
             nombreEmpleado: nombreEmpleado,
           }),
         }
@@ -561,7 +577,7 @@ export const CrearUsuario = () => {
                                         stroke="currentColor"
                                         className={`w-5 h-5 ${date.id_empleado}`}
                                         onClick={() =>
-                                          setOpenConsing(!openConsing)
+                                          fetchEmpleadoId(date.id_empleado)
                                         }
                                       >
                                         <path
@@ -644,9 +660,7 @@ export const CrearUsuario = () => {
                                           </div>
                                           <div className="w-full">
                                             <button
-                                              onClick={() =>
-                                                handleConsign(idEmpleadoDetails)
-                                              } // Llama a handleConsign sin argumentos
+                                              onClick={() => handleConsign(idEmpleadoDetails)} // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
                                               Enviar

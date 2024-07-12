@@ -3,12 +3,21 @@ import { Button, Modal } from "flowbite-react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 
-const Transfers = ({ formatter }) => {
+const Transfers = () => {
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
   const [filterEmpleados, setFilterEmpleados] = useState([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [amount, setAmount] = useState("");
+
+  const { user } = useAuth();
+
   const [openModal1, setOpenModal1] = useState(false);
+
+  const onCloseModal = () => {
+    setOpenModal1(false);
+    setSelectedEmpleado(null);
+    setAmount(""); // Reset amount when closing the modal
+  };
 
   const fetchEmpleados = async () => {
     try {
@@ -123,22 +132,8 @@ const Transfers = ({ formatter }) => {
   const openModal = (empleado) => {
     setSelectedEmpleado(empleado);
     setOpenModal1(true);
-    setAmount(empleado.saldo_solicitado);
+    setAmount("");
   };
-
-  const onCloseModal = () => {
-    setOpenModal1(false);
-    setSelectedEmpleado(null);
-    setAmount(""); // Reset amount when closing the modal
-  };
-
-  const handleAmount = (event) => {
-    setAmount(event.target.value);
-  };
-
-  useEffect(() => {
-    fetchEmpleados();
-  }, []);
 
   return (
     <section className="container px-4 mx-auto">
@@ -202,7 +197,7 @@ const Transfers = ({ formatter }) => {
                     <tr key={index}>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span># {empleado.id_empleado}</span>
+                          <span>{empleado.id_empleado}</span>
                         </div>
                       </td>
                       <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -226,7 +221,7 @@ const Transfers = ({ formatter }) => {
                       </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{formatSaldo(empleado.saldo_solicitado)}</span>
+                          <span>{empleado.saldo}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -234,7 +229,6 @@ const Transfers = ({ formatter }) => {
                           <button
                             className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
                             onClick={() => openModal(empleado)}
-                            // onClick={handleConsign}
                           >
                             <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
                               Transferir Saldo
@@ -289,7 +283,6 @@ const Transfers = ({ formatter }) => {
                                         className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                       />
                                     </div>
-
                                     <div>
                                       <label
                                         htmlFor="accountOwner"
@@ -305,26 +298,26 @@ const Transfers = ({ formatter }) => {
                                         className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                                       />
                                     </div>
-
-                                    <div>
-                                      <label
-                                        htmlFor="amount"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Monto a consignar:
-                                      </label>
-                                      <input
-                                        id="amount"
-                                        type="number"
-                                        placeholder="Monto a consignar"
-                                        value={amount}
-                                        onChange={handleAmount}
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
                                   </>
                                 )}
-
+                                <div>
+                                  <label
+                                    htmlFor="amount"
+                                    className="font-medium text-gray-700 dark:text-white"
+                                  >
+                                    Monto a consignar:
+                                  </label>
+                                  <input
+                                    id="amount"
+                                    type="number"
+                                    placeholder="Monto a consignar"
+                                    value={amount}
+                                    onChange={(event) =>
+                                      setAmount(event.target.value)
+                                    }
+                                    className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                  />
+                                </div>
                                 <div className="w-full">
                                   <button
                                     onClick={handleConsign}
