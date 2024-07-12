@@ -10,7 +10,7 @@ import { ModalConsignarCajero } from "../CajeroPrincipal/ModalConsignarCajero";
 
 export const CrearUsuario = () => {
   const [dataUser, setDataUser] = useState([]);
-  const [idEmpleadoDetails, setIdEmpleadoDetails] = useState(null);
+  const [idEmpleadoDetails, setIdEmpleadoDetails] = useState([]);
   const [forceUpdate, setForceUpdate] = useState(false);
   const [modalData, setModalData] = useState(null);
 
@@ -43,7 +43,6 @@ export const CrearUsuario = () => {
 
   // Funcion para traer un empleado por id.
   const fetchEmpleadoId = async (idEmpleado) => {
-    console.log(idEmpleado);
     try {
       const response = await fetch(
         `http://localhost:3000/get_users/${idEmpleado}`
@@ -51,109 +50,11 @@ export const CrearUsuario = () => {
       if (response.ok) {
         const data = await response.json();
         setIdEmpleadoDetails(data);
-        setOpenModal(true);
       } else {
         console.error("Error fetching user info:", response.status);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchEmpleadoId();
-    fetchEmpleados();
-  }, [forceUpdate]);
-
-  // Función para realizar la consignación
-  const handleConsign = async (obj) => {
-    console.log(obj);
-    console.log(obj.id_empleado);
-    console.log(obj.username);
-
-    setIdEmpleadoDetails({
-      id_empleado: obj.id_empleado,
-      username: obj.username,
-    });
-
-    console.log("Datos de date:", idEmpleadoDetails);
-    console.log("Monto a consignar:", amount);
-
-    // Verificación inicial de datos
-    if (!obj || !obj.id_empleado || !obj.username || !amount) {
-      console.error("Datos del usuario o monto inválidos.");
-      toast.error("Datos del usuario o monto inválidos.");
-      return;
-    }
-    const filterEmpleadoPrincipal = dataUser.filter(
-      (users) => users.id_rol === 4
-    );
-    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
-
-    console.log("nuevo saldo", saldoPrincipal);
-
-    const idEmpleado = idEmpleadoDetails.id_empleado;
-    const nombreEmpleado = idEmpleadoDetails.username;
-    const saldoEmpleado = parseFloat(idEmpleadoDetails.saldo); // Convierte el saldo a número
-
-    const amountToConsign = parseFloat(amount);
-
-    // Validación del monto a consignar
-    if (isNaN(amountToConsign) || amountToConsign <= 0) {
-      console.error("Monto a consignar inválido.");
-      toast.error("Monto a consignar inválido.");
-      return;
-    }
-    const newSaldoCajero = parseFloat(saldoPrincipal) - amountToConsign;
-    console.log("nuevoo saldo restaa", newSaldoCajero);
-
-    const newBalanceEmpleado = saldoEmpleado + amountToConsign;
-
-    try {
-      console.log("Datos a enviar:", {
-        idEmpleado,
-        nombreEmpleado,
-        saldoEmpleado,
-        amountToConsign,
-        newBalanceEmpleado,
-        newSaldoCajero,
-      });
-
-      const responseEmpleado = await fetch(
-        `http://localhost:3000/empleado_balance/${idEmpleado}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nuevoSaldo: newBalanceEmpleado,
-            nuevoSaldoCajero: newSaldoCajero,
-            nombreEmpleado: nombreEmpleado,
-          }),
-        }
-      );
-
-      if (!responseEmpleado.ok) {
-        const errorText = await responseEmpleado.text();
-        console.error("Error en la respuesta de la red:", errorText);
-        throw new Error("Network response was not ok: " + errorText);
-      }
-
-      const updatedEmpleadoDetails = await responseEmpleado.json();
-      // Actualizar el estado de empleadoDetails si es necesario
-      // setEmpleadoDetails((prevState) => ({
-      //   ...prevState,
-      //   saldo: updatedEmpleadoDetails.nuevoSaldo,
-      // }));
-
-      toast.success("Consignación realizada correctamente.");
-      setTimeout(() => {
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      console.error("Error general:", error);
-      toast.error("Error al realizar la consignación.");
     }
   };
 
@@ -216,6 +117,11 @@ export const CrearUsuario = () => {
     return dataUser.length;
   };
 
+  const handleEmpleado = (idEmpleado) => {
+    fetchEmpleadoId(idEmpleado);
+    setOpenConsing(!openConsing);
+  };
+
   const openModal = (dataUser) => {
     setModalData(dataUser);
     setShowModal(true);
@@ -232,7 +138,6 @@ export const CrearUsuario = () => {
   }
 
   useEffect(() => {
-    fetchEmpleadoId();
     fetchEmpleados();
   }, [forceUpdate]);
 
@@ -577,7 +482,7 @@ export const CrearUsuario = () => {
                                         stroke="currentColor"
                                         className={`w-5 h-5 ${date.id_empleado}`}
                                         onClick={() =>
-                                          fetchEmpleadoId(date.id_empleado)
+                                          handleEmpleado(date.id_empleado)
                                         }
                                       >
                                         <path
@@ -587,88 +492,6 @@ export const CrearUsuario = () => {
                                         />
                                       </svg>
                                     </button>
-                                    {/* <Modal
-                                      className="bg-black bg-opacity-50 flex justify-center items-center w-screen h-screen p-0"
-                                      show={openModal1}
-                                      size="md"
-                                      onClose={onCloseModal}
-                                      popup
-                                    >
-                                      <Modal.Header>
-                                        <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                          Consignar
-                                        </span>
-                                      </Modal.Header>
-                                      <Modal.Body className="px-5 pt-2 pb-5">
-                                        <div className="space-y-6">
-                                          <div>
-                                            <div className="mb-2 block">
-                                              <label
-                                                htmlFor="idEmpleado"
-                                                className="font-medium text-gray-700 dark:text-white"
-                                              >
-                                                ID de empleado:
-                                              </label>
-                                            </div>
-                                            <input
-                                              id="idEmplead"
-                                              type="number"
-                                              placeholder="ID de empleado"
-                                              value={
-                                                idEmpleadoDetails?.id_empleado
-                                              }
-                                              readOnly // Campo de solo lectura para evitar que se modifique
-                                              className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label
-                                              htmlFor="username"
-                                              className="font-medium text-gray-700 dark:text-white"
-                                            >
-                                              Nombre del empleado
-                                            </label>
-                                            <input
-                                              id="username"
-                                              type="text"
-                                              placeholder="Nombre del empleado"
-                                              onClick={""}
-                                              value={
-                                                idEmpleadoDetails?.username
-                                              }
-                                              readOnly
-                                              className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label
-                                              htmlFor="amount"
-                                              className="font-medium text-gray-700 dark:text-white"
-                                            >
-                                              Monto a consignar:
-                                            </label>
-                                            <input
-                                              id="amount"
-                                              type="number"
-                                              placeholder="Monto a consignar"
-                                              value={amount}
-                                              onChange={(event) =>
-                                                setAmount(event.target.value)
-                                              }
-                                              className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                            />
-                                          </div>
-                                          <div className="w-full">
-                                            <button
-                                              onClick={() => handleConsign(idEmpleadoDetails)} // Llama a handleConsign sin argumentos
-                                              className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
-                                            >
-                                              Enviar
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </Modal.Body>
-                                    </Modal> */}
                                   </div>
                                 </td>
                               </tr>
@@ -693,6 +516,9 @@ export const CrearUsuario = () => {
         <ModalConsignarCajero
           openConsing={openConsing}
           setOpenConsing={setOpenConsing}
+          idEmpleadoDetails={idEmpleadoDetails}
+          setIdEmpleadoDetails={setIdEmpleadoDetails}
+          dataUser={dataUser}
         />
       </section>
     </>

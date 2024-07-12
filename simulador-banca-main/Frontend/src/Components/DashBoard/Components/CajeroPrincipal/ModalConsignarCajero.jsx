@@ -1,6 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
-export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
+export const ModalConsignarCajero = ({
+  dataUser,
+  openConsing,
+  setOpenConsing,
+  idEmpleadoDetails,
+  setIdEmpleadoDetails,
+}) => {
+  const [amount, setAmount] = useState("");
+
+  // Función para realizar la consignación
+  const handleConsign = async () => {
+    const filterEmpleadoPrincipal = dataUser.filter(
+      (users) => users.id_rol === 4
+    );
+
+    const { id_empleado, saldo } = idEmpleadoDetails;
+
+    // const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
+    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+
+    const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
+    const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
+
+    if (amount <= 0 || isNaN(amount)) {
+      return toast.error("El saldo no puede ser menor o igual a 0.");
+    } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {
+      return toast.error("El salo no es suficiente.");
+    } else {
+      try {
+        const responseEmpleado = await fetch(
+          `http://localhost:3000/empleado_balance/${id_empleado}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceEmpleado,
+              nuevoSaldoCajero: newBalancePrincipal,
+            }),
+          }
+        );
+
+        if (!responseEmpleado.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        toast.success("Consignación realizada correctamente.");
+        setTimeout(() => {
+          window.location = "/DashBoardMenu";
+        }, 1500);
+      } catch (error) {
+        toast.error("Error al realizar la consignación.");
+      }
+    }
+  };
+
+  const closeConsing = () => {
+    setIdEmpleadoDetails(null);
+    setOpenConsing(false);
+  };
+
   return (
     <>
       {openConsing && (
@@ -14,7 +76,7 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
 
                 <button
                   type="button"
-                  onClick={() => setOpenConsing(false)}
+                  onClick={closeConsing}
                   className="text-gray-400 bg-transparent transition hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-toggle="crud-modal"
                 >
@@ -52,7 +114,7 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
                   <input
                     id="idEmpleado"
                     type="number"
-                    placeholder="1234"
+                    value={idEmpleadoDetails?.id_empleado || ""}
                     disabled
                     className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   />
@@ -68,7 +130,7 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
                   <input
                     id="username"
                     type="text"
-                    placeholder="Juan Esteban"
+                    value={idEmpleadoDetails?.username || ""}
                     disabled
                     className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   />
@@ -88,12 +150,17 @@ export const ModalConsignarCajero = ({ openConsing, setOpenConsing }) => {
                   min="0"
                   step="1000"
                   placeholder="Ingrese saldo a consignar"
+                  value={amount}
+                  onChange={(event) => setAmount(event.target.value)}
                   className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
             </div>
             <div className="flex items-center p-6">
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto">
+              <button
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
+                onClick={handleConsign}
+              >
                 Enviar
               </button>
             </div>
