@@ -14,7 +14,7 @@ const Transfers = ({ formatter }) => {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        const filteredEmpleados = userData.result.rows.filter(
+        const filteredEmpleados = userData.filter(
           (empleado) => empleado.estado === "Solicitud"
         );
         setEmpleadoDetails(filteredEmpleados);
@@ -149,7 +149,7 @@ const Transfers = ({ formatter }) => {
                         </button>
                       </div>
                     </th>
-                    
+
                     <th
                       scope="col"
                       className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
@@ -306,19 +306,15 @@ const Transfers = ({ formatter }) => {
                         </td>
                       )}
                       {user?.id_rol == 1 && (
-                       <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center">
-                          <button
-                            className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
-                            
-                          >
-                            <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
-                              Ver Detalles
-                            </h2>
-                           
-                          </button>
-                        </div>
-                      </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center">
+                            <button className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800">
+                              <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
+                                Ver Detalles
+                              </h2>
+                            </button>
+                          </div>
+                        </td>
                       )}
                     </tr>
                   ))}

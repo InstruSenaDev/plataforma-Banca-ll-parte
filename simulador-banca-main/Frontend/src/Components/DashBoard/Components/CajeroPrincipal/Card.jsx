@@ -5,7 +5,6 @@ import { ModalRetirar } from "./ModalRetirar";
 
 const Card = () => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
-  const [empleadoDetails, setEmpleadoDetails] = useState("");
   const [bovedaDetails, setBovedaDetails] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -13,30 +12,19 @@ const Card = () => {
   //Login, user context
   const { user } = useAuth();
 
-  // Funcion para traer un empleado por id.
-  const fetchEmpleadoId = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/get_users/${user.id_empleado}`
-      );
-      if (response.ok) {
-        const userData = await response.json();
-        setIdEmpleadoDetails(userData);
-      } else {
-        console.error("Error fetching user info:", response.status);
-      }
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  };
-
   // Funcion para traer todos los empleados.
   const fetchEmpleados = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows);
+        // setEmpleadoDetails(userData.result.rows);
+
+        const empleadoPrincipal = userData.filter(
+          (users) => users.id_rol === 4
+        );
+
+        return setIdEmpleadoDetails(empleadoPrincipal[0]);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -61,7 +49,6 @@ const Card = () => {
   };
 
   useEffect(() => {
-    fetchEmpleadoId();
     fetchEmpleados();
     fetchBoveda();
   }, [user]);

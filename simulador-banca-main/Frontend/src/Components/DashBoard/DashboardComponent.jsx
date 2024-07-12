@@ -281,7 +281,10 @@ export const DashboardComponent = () => {
                               <span className="mx-1">Bóveda</span>
                             </button>
 
-                            <button className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base">
+                            <button
+                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                              onClick={toggleDropdown}
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -329,7 +332,7 @@ export const DashboardComponent = () => {
                                   className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                                   onClick={() => handleBotonClick("HistorialD")}
                                 >
-                                   <span className="mx-1 text-center px-7">
+                                  <span className="mx-1 text-center px-7">
                                     Cuentas Denegadas
                                   </span>
                                 </button>
