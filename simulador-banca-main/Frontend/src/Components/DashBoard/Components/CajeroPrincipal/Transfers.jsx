@@ -159,150 +159,172 @@ const Transfers = ({ formatter }) => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                  {empleadoDetails.map((empleado, index) => (
-                    <tr key={index}>
-                      <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span># {empleado.id_empleado}</span>
-                        </div>
-                      </td>
-                      <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <div className="flex items-center gap-x-2">
-                            <img
-                              className="object-cover w-10 h-10 rounded-full"
-                              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                              alt=""
-                            />
-                            <div>
-                              <h2 className="font-medium text-gray-800 dark:text-white">
-                                {empleado.username}
-                              </h2>
-                              <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                Cajero
-                              </p>
+                {empleadoDetails.length > 0 ? (
+                  <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                    {empleadoDetails.map((empleado, index) => (
+                      <tr key={index}>
+                        <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <span># {empleado.id_empleado}</span>
+                          </div>
+                        </td>
+                        <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <div className="flex items-center gap-x-2">
+                              <img
+                                className="object-cover w-10 h-10 rounded-full"
+                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                alt=""
+                              />
+                              <div>
+                                <h2 className="font-medium text-gray-800 dark:text-white">
+                                  {empleado.username}
+                                </h2>
+                                <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                  Cajero
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{formatSaldo(empleado.saldo_solicitado)}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center">
-                          <button
-                            className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
-                            onClick={() => openModal(empleado)}
+                        </td>
+                        <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <span>{formatSaldo(empleado.saldo_solicitado)}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center">
+                            <button
+                              className="flex justify-center items-center px-5 py-2 rounded-full gap-x-2 bg-emerald-100/60 hover:bg-emerald-500 group transition dark:bg-gray-800"
+                              onClick={() => openModal(empleado)}
                             // onClick={handleConsign}
-                          >
-                            <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
-                              Transferir Saldo
-                            </h2>
-                            <span className="text-emerald-500 group-hover:text-white">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-4"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                />
-                              </svg>
-                            </span>
-                          </button>
-                          <Modal
-                            className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                            show={openModal1}
-                            size="md"
-                            onClose={onCloseModal}
-                            popup
-                          >
-                            <Modal.Header>
-                              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                Consignar
+                            >
+                              <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
+                                Transferir Saldo
+                              </h2>
+                              <span className="text-emerald-500 group-hover:text-white">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                  />
+                                </svg>
                               </span>
-                            </Modal.Header>
-                            <Modal.Body className="px-5 pt-2 pb-5">
-                              <div className="space-y-6">
-                                {selectedEmpleado && (
-                                  <>
-                                    <div>
-                                      <div className="mb-2 block">
+                            </button>
+                            <Modal
+                              className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                              show={openModal1}
+                              size="md"
+                              onClose={onCloseModal}
+                              popup
+                            >
+                              <Modal.Header>
+                                <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                                  Consignar
+                                </span>
+                              </Modal.Header>
+                              <Modal.Body className="px-5 pt-2 pb-5">
+                                <div className="space-y-6">
+                                  {selectedEmpleado && (
+                                    <>
+                                      <div>
+                                        <div className="mb-2 block">
+                                          <label
+                                            htmlFor="accountNumber"
+                                            className="font-medium text-gray-700 dark:text-white"
+                                          >
+                                            ID de empleado:
+                                          </label>
+                                        </div>
+                                        <input
+                                          id="accountNumber"
+                                          type="number"
+                                          value={selectedEmpleado.id_empleado}
+                                          readOnly
+                                          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                        />
+                                      </div>
+
+                                      <div>
                                         <label
-                                          htmlFor="accountNumber"
+                                          htmlFor="accountOwner"
                                           className="font-medium text-gray-700 dark:text-white"
                                         >
-                                          ID de empleado:
+                                          Nombre del empleado
                                         </label>
+                                        <input
+                                          id="accountOwner"
+                                          type="text"
+                                          value={selectedEmpleado.username}
+                                          readOnly
+                                          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                        />
                                       </div>
-                                      <input
-                                        id="accountNumber"
-                                        type="number"
-                                        value={selectedEmpleado.id_empleado}
-                                        readOnly
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
 
-                                    <div>
-                                      <label
-                                        htmlFor="accountOwner"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Nombre del empleado
-                                      </label>
-                                      <input
-                                        id="accountOwner"
-                                        type="text"
-                                        value={selectedEmpleado.username}
-                                        readOnly
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
+                                      <div>
+                                        <label
+                                          htmlFor="amount"
+                                          className="font-medium text-gray-700 dark:text-white"
+                                        >
+                                          Monto a consignar:
+                                        </label>
+                                        <input
+                                          id="amount"
+                                          type="number"
+                                          placeholder="Monto a consignar"
+                                          value={amount}
+                                          onChange={handleAmount}
+                                          className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                                        />
+                                      </div>
+                                    </>
+                                  )}
 
-                                    <div>
-                                      <label
-                                        htmlFor="amount"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Monto a consignar:
-                                      </label>
-                                      <input
-                                        id="amount"
-                                        type="number"
-                                        placeholder="Monto a consignar"
-                                        value={amount}
-                                        onChange={handleAmount}
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-
-                                <div className="w-full">
-                                  <button
-                                    onClick={handleConsign}
-                                    className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
-                                  >
-                                    Enviar
-                                  </button>
+                                  <div className="w-full">
+                                    <button
+                                      onClick={handleConsign}
+                                      className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
+                                    >
+                                      Enviar
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
-                        </div>
+                              </Modal.Body>
+                            </Modal>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                ) : (
+                  <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                    <tr>
+                      <td colSpan="4" className="px-6 py-4 text-center text-gray-700 dark:text-gray-400">
+                        <section class="bg-white dark:bg-gray-900 ">
+                          <div class="container flex items-center min-h-5/6 px-6 py-12 mx-auto">
+                            <div class="flex flex-col items-center max-w-sm mx-auto text-center">
+                              <p class="p-2 text-sm font-medium text-blue-500 bg-lightgreen dark:bg-gray-800 inline-flex items-center rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="green" class="w-4 h-4">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                                </svg>
+                              </p>
+
+                              <p class="mt-4 text-gray-500 dark:text-gray-400">No se encuntran cajeros solicitantes</p>
+                            </div>
+                          </div>
+                        </section>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  </tbody>
+                )}
               </table>
             </div>
           </div>
