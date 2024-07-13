@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ModalAutorizaciones } from "../ModalAutorizaciones";
 import Avatar from "../../../../assets/Img/UsoVario/Cristiano.png";
-import { Button } from "bootstrap";
 
 export const AutorizacionCuentas = () => {
 
