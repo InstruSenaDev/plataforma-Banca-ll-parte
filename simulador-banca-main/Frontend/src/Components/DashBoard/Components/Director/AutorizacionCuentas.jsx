@@ -5,8 +5,15 @@ import { ModalAutorizaciones } from "../ModalAutorizaciones";
 import Avatar from "../../../../assets/Img/UsoVario/Cristiano.png";
 
 export const AutorizacionCuentas = () => {
+  // const [waitingAccount, setWaitingAccount] = useState([])
 
+  // const fetchAccount = async () => {
+  //   try {
+  //     const result = await
+  //   } catch (error) {
 
+  //   }
+  // }
   return (
     <>
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
@@ -14,7 +21,7 @@ export const AutorizacionCuentas = () => {
           <div className="flex flex-col justify-center items-start">
             <div className="flex flex-row items-center gap-x-3">
               <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-                Historial de Cuentas
+                Autorización de Cuentas
               </h2>
               <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
                 0 accounts
@@ -24,11 +31,6 @@ export const AutorizacionCuentas = () => {
               Cuentas autorizadas y denegadas
             </p>
           </div>
-          <button
-            class="flex gap-x-1 items-center px-3 py-1 font-normal text-white transition-colors duration-300 transform bg-green rounded-lg hover:bg-green"
-          >
-            <span class="mx-1">Listado de cuentas</span>
-          </button>
         </div>
 
         <div className="flex flex-col mt-6">
@@ -115,7 +117,6 @@ export const AutorizacionCuentas = () => {
                               <h2 class="font-medium text-gray-800 dark:text-white ">
                                 Cuentas de Ahorros
                               </h2>
-
                             </div>
                           </div>
                         </div>
@@ -145,7 +146,6 @@ export const AutorizacionCuentas = () => {
                           </div>
                         </div>
                       </td>
-
 
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
