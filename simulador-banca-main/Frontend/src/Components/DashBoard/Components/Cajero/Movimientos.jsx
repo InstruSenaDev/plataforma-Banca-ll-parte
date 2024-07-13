@@ -55,8 +55,8 @@ export const Movimientos = () => {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows[0]);
-        console.log(empleadoDetails)
+        setEmpleadoDetails(userData[0]);
+        console.log(empleadoDetails);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -496,7 +496,6 @@ export const Movimientos = () => {
     setOpenModal(false);
     setEmail("");
   }
-
 
   return (
     <>

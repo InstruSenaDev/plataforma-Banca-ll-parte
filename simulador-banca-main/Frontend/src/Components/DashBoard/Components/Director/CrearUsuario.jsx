@@ -35,7 +35,7 @@ export const CrearUsuario = () => {
       }
       if (response.ok) {
         const data = await response.json();
-        setDataUser(data.result.rows);
+        setDataUser(data);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -66,7 +66,6 @@ export const CrearUsuario = () => {
   useEffect(() => {
     fetchEmpleadoId();
     fetchEmpleados();
-
   }, [forceUpdate]);
 
   // Función para realizar la consignación
@@ -200,7 +199,7 @@ export const CrearUsuario = () => {
   const abrir = () => {
     setactiveModal((prev) =>
       prev ===
-        "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
+      "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
         ? "absolute flex items-center overflow-y-auto overflow-x-hidden bg-gray-400 bg-opacity-60 justify-center items-center w- md:inset-0 h-[calc(100%)] max-h-full not-sr-only"
         : "absolute overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full sr-only"
     );
@@ -645,7 +644,9 @@ export const CrearUsuario = () => {
                                           </div>
                                           <div className="w-full">
                                             <button
-                                              onClick={() => handleConsign(idEmpleadoDetails)} // Llama a handleConsign sin argumentos
+                                              onClick={() =>
+                                                handleConsign(idEmpleadoDetails)
+                                              } // Llama a handleConsign sin argumentos
                                               className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
                                             >
                                               Enviar
@@ -674,7 +675,7 @@ export const CrearUsuario = () => {
           showModal={showModal}
           closeModal={closeModal}
         />
-      </section >
+      </section>
     </>
   );
 };
