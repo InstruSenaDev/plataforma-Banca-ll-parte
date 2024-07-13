@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "flowbite-react";
-import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 
 const Transfers = () => {
@@ -8,8 +7,6 @@ const Transfers = () => {
   const [filterEmpleados, setFilterEmpleados] = useState([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [amount, setAmount] = useState("");
-
-  const { user } = useAuth();
 
   const [openModal1, setOpenModal1] = useState(false);
 
@@ -51,68 +48,68 @@ const Transfers = () => {
     const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
     const amountToConsign = parseFloat(amount);
 
-    if (
-      selectedEmpleado === null ||
-      isNaN(amountToConsign) ||
-      amountToConsign <= 0
-    ) {
-      toast.error("Datos del usuario o monto inválidos.");
-    }
-
     const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
     const newBalancePrincipal = parseFloat(saldoPrincipal) - amountToConsign;
 
-    if (estado === "Solicitud") {
-      try {
-        const responseEmpleado = await fetch(
-          `http://localhost:3000/balance_request/${id_empleado}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              nuevoSaldo: newBalanceEmpleado,
-              newStatus: "Activo",
-              saldoSolicitado: 0,
-            }),
-          }
-        );
-
-        if (!responseEmpleado.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const responsePrincipal = await fetch(
-          `http://localhost:3000/balance_request/${idPricipal}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              nuevoSaldo: newBalancePrincipal,
-              newStatus: "Activo",
-              saldoSolicitado: 0,
-            }),
-          }
-        );
-
-        if (!responsePrincipal.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        toast.success("Consignación realizada correctamente.");
-        setTimeout(() => {
-          window.location = "/DashBoardMenu";
-        }, 1500);
-      } catch (error) {
-        toast.error("Error al realizar la consignación.");
-      }
+    if (selectedEmpleado === null) {
+      return toast.error("Error: Datos del usuario inválidos.");
+    } else if (isNaN(amountToConsign) || amountToConsign <= 0) {
+      return toast.error("Error: El saldo no debe ser menor o igual a cero.");
+    } else if (amountToConsign > saldoPrincipal) {
+      return toast.error("Error: El saldo enviado es mayor a tu saldo total.");
     } else {
-      return toast.error(
-        "Error al realizar la consignación: El usuario ha cancelado la solicitud"
-      );
+      if (estado === "Solicitud") {
+        try {
+          const responseEmpleado = await fetch(
+            `http://localhost:3000/balance_request/${id_empleado}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nuevoSaldo: newBalanceEmpleado,
+                newStatus: "Activo",
+                saldoSolicitado: 0,
+              }),
+            }
+          );
+
+          if (!responseEmpleado.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const responsePrincipal = await fetch(
+            `http://localhost:3000/balance_request/${idPricipal}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nuevoSaldo: newBalancePrincipal,
+                newStatus: "Activo",
+                saldoSolicitado: 0,
+              }),
+            }
+          );
+
+          if (!responsePrincipal.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          toast.success("Consignación realizada correctamente.");
+          setTimeout(() => {
+            window.location = "/DashBoardMenu";
+          }, 1500);
+        } catch (error) {
+          toast.error("Error al realizar la consignación.");
+        }
+      } else {
+        return toast.error(
+          "Error al realizar la consignación: El usuario ha cancelado la solicitud"
+        );
+      }
     }
   };
 
@@ -134,6 +131,14 @@ const Transfers = () => {
     setOpenModal1(true);
     setAmount("");
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchEmpleados();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="container px-4 mx-auto">
@@ -193,11 +198,11 @@ const Transfers = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                  {filterEmpleados.map((empleado, index) => (
-                    <tr key={index}>
+                  {filterEmpleados.map((empleado) => (
+                    <tr key={empleado.id_empleado}>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{empleado.id_empleado}</span>
+                          <span># {empleado.id_empleado}</span>
                         </div>
                       </td>
                       <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -221,7 +226,7 @@ const Transfers = () => {
                       </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                         <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{empleado.saldo}</span>
+                          <span>{formatSaldo(empleado.saldo_solicitado)}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">

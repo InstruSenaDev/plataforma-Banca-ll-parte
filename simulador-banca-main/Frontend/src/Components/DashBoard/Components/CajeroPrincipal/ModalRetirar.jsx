@@ -80,11 +80,13 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
         }
 
         const responseCajero = await fetch(
-          `http://localhost:3000/empleado_balance/${id_empleado}`,
+          `http://localhost:3000/balance_request/${id_empleado}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              newStatus: "Activo",
+              saldoSolicitado: 0,
               nuevoSaldo: newBalanceEmpleado,
             }),
           }
@@ -97,12 +99,6 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
         }
 
         toast.success("Monto retirado de bóveda correctamente.");
-
-        // Actualizar el estado del empleado en el componente
-        setIdEmpleadoDetails((prevState) => ({
-          ...prevState,
-          saldo: newBalanceEmpleado,
-        }));
 
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario

@@ -60,12 +60,6 @@ const Card = () => {
     }
   };
 
-  useEffect(() => {
-    fetchEmpleadoId();
-    fetchEmpleados();
-    fetchBoveda();
-  }, [user]);
-
   // Función para devolver saldo a la boveda y registrar sus respectivos movimientos
   const devolverBalance = async () => {
     const idEmpleado = idEmpleadoDetails.id_empleado;
@@ -117,12 +111,6 @@ const Card = () => {
         console.log("saldo actualizado correctamente");
         toast.success("Saldo devuelto y actualizado correctamente.");
 
-        // Actualizar el estado del empleado en el componente
-        setIdEmpleadoDetails((prevState) => ({
-          ...prevState,
-          saldo: 0,
-        }));
-
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario
           // Puedes utilizar la función setDatauser para actualizar el estado local
@@ -136,7 +124,7 @@ const Card = () => {
         toast.error("Error al devolver el saldo.");
       }
     } else {
-      toast.error("No puedes devolver un saldo igual a 0");
+      toast.error("No tienes saldo para devolver a bóveda.");
     }
   };
 
@@ -157,6 +145,16 @@ const Card = () => {
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchEmpleados();
+      fetchEmpleadoId();
+      fetchBoveda();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="w-full mx-auto sm:p-0 lg:p-4 xl:p-4">
