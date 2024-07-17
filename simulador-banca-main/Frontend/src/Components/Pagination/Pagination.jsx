@@ -32,7 +32,7 @@ export const Pagination = ({
           className={`px-4 py-2 mx-1 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-600 ${
             currentPage === 1
               ? "cursor-not-allowed text-gray-500"
-              : "text-gray-700 hover:text-white hover:bg-blue-500"
+              : "text-gray-700 hover:text-white hover:bg-emerald-700"
           }`}
           onClick={onPreviousPage}
         >
@@ -60,10 +60,10 @@ export const Pagination = ({
           <button
             key={page}
             onClick={() => onSpecifyPage(page)}
-            className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200
+            className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-emerald-700 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-gray-200
                 ${
                   page === currentPage
-                    ? "bg-DarkSlate text-white"
+                    ? "bg-emerald-600 text-white"
                     : "bg-white text-gray-700"
                 }`}
           >
@@ -73,10 +73,10 @@ export const Pagination = ({
 
         <button
           disabled={currentPage >= pageNumbers.length}
-          className={`px-4 py-2 mx-1 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-500 dark:hover:text-gray-200 ${
+          className={`px-4 py-2 mx-1 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-blue-600 dark:hover:text-gray-200 ${
             currentPage >= pageNumbers.length
               ? "cursor-not-allowed text-gray-500"
-              : "text-gray-700 hover:text-white hover:bg-blue-500"
+              : "text-gray-700 hover:text-white hover:bg-emerald-700"
           }`}
           onClick={onNextPage}
         >
