@@ -119,8 +119,12 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
   };
 
   useEffect(() => {
-    fetchBoveda();
-    fetchEmpleadoId();
+    const interval = setInterval(() => {
+      fetchEmpleadoId();
+      fetchBoveda();
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
