@@ -21,13 +21,8 @@ const Transfers = () => {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows);
-
-        const filteredEmpleados = userData.result.rows.filter(
-          (empleado) => empleado.estado === "Solicitud"
-        );
-
-        setFilterEmpleados(filteredEmpleados);
+        const filteredEmpleados = userData.result.rows.filter(empleado => empleado.estado === "Solicitud");
+        setEmpleadoDetails(filteredEmpleados);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -35,6 +30,10 @@ const Transfers = () => {
       console.error("Error fetching user info:", error);
     }
   };
+
+  useEffect(() => {
+    fetchEmpleados();
+  }, []);
 
   const handleConsign = async () => {
     // Funcion para filtrar usuarios con rol de cajero principal
