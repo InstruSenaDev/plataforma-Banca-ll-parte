@@ -8,9 +8,22 @@ const Card = () => {
   const [bovedaDetails, setBovedaDetails] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [empleadoDetails, setEmpleadoDetails] = useState([]);
 
   //Login, user context
   const { user } = useAuth();
+
+  const saldoOficina = () => {
+    const sumaSaldosEmpleados = empleadoDetails.reduce(
+      (total, empleado) => total + parseFloat(empleado.saldo),
+      0
+    );
+
+    const sumaTotal =
+      sumaSaldosEmpleados + parseFloat(bovedaDetails.saldo_boveda);
+
+    return sumaTotal;
+  };
 
   // Funcion para traer todos los empleados.
   const fetchEmpleados = async () => {
@@ -18,7 +31,7 @@ const Card = () => {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
-        // setEmpleadoDetails(userData.result.rows);
+        setEmpleadoDetails(userData);
 
         const empleadoPrincipal = userData.filter(
           (users) => users.id_rol === 4
@@ -143,33 +156,34 @@ const Card = () => {
     <div className="w-full mx-auto sm:p-0 lg:p-4 xl:p-4">
       <div className="flex flex-wrap gap-4">
         {/* content saldo total */}
-        <div className="w-full md:flex-auto md:w-0">
-          <div className="flex flex-col bg-DarkSlate p-4 dark:bg-slate-850 dark:shadow-dark-xl rounded-xl bg-clip-border">
-            <div className="mb-2 w-12 h-12 bg-white rounded-md p-3 text-center text-green">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                />
-              </svg>
+        {user?.id_rol == 4 && (
+          <div className="w-full md:flex-auto md:w-0">
+            <div className="flex flex-col bg-DarkSlate p-4 dark:bg-slate-850 dark:shadow-dark-xl rounded-xl bg-clip-border">
+              <div className="mb-2 w-12 h-12 bg-white rounded-md p-3 text-center text-green">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+                  />
+                </svg>
+              </div>
+              <p className="text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
+                Saldo T. Cajero Principal
+              </p>
+              <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
+                {formatSaldo(idEmpleadoDetails.saldo)}
+              </h5>
             </div>
-            <p className="text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
-              Saldo T. Cajero Principal
-            </p>
-            <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
-              {formatSaldo(idEmpleadoDetails.saldo)}
-            </h5>
           </div>
-        </div>
-
+        )}
         {/* content saldo boveda */}
         <div className="w-full md:flex-auto md:w-0">
           <div className="flex flex-col bg-darkGray p-4 dark:bg-slate-850 rounded-xl bg-clip-border">
@@ -239,6 +253,36 @@ const Card = () => {
             </div>
           </div>
         </div>
+
+        {user?.id_rol == 1 && (
+          <div className="w-full md:flex-auto md:w-0">
+            <div className="flex flex-col bg-DarkSlate p-4 dark:bg-slate-850 dark:shadow-dark-xl rounded-xl bg-clip-border">
+              <div className="mb-2 w-12 h-12 bg-white rounded-md p-3 text-center text-green">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+                  />
+                </svg>
+              </div>
+
+              <p className="text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
+                Saldo de oficina
+              </p>
+              <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
+                {formatSaldo(saldoOficina())}
+              </h5>
+            </div>
+          </div>
+        )}
 
         {/* content buttons  */}
         {user?.id_rol == 4 && (

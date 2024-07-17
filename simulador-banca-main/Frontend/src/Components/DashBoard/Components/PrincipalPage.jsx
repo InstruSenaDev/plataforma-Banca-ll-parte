@@ -3,6 +3,7 @@ import PrincipalImage from "../../../assets/Img/UsoVario/Analytics.svg";
 import { useAuth } from "../../../context/AuthContext";
 import Transfers from "./CajeroPrincipal/Transfers";
 import Card from "./CajeroPrincipal/Card";
+import MovimientosCajeros from "./Director/MovimientoCajeros";
 
 export const PrincipalPage = () => {
   const { user } = useAuth();
@@ -43,7 +44,7 @@ export const PrincipalPage = () => {
           </div>
 
           <Card />
-          <Transfers />
+          <MovimientosCajeros />
         </div>
       </>
     );
