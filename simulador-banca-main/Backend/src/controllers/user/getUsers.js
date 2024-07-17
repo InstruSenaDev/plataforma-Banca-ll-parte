@@ -8,7 +8,7 @@ const getUsers = async (req, res) => {
     const result = await pool.query("SELECT * FROM empleado");
 
     if (result.rows.length > 0) {
-      return res.status(200).json({ result });
+      return res.status(200).json(result.rows);
     }
   } catch (error) {
     console.error(error);
