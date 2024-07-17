@@ -54,9 +54,8 @@ export const Movimientos = () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
-        const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows[0]);
-        console.log(empleadoDetails);
+        const data = await response.json();
+        setEmpleadoDetails(data);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -66,8 +65,12 @@ export const Movimientos = () => {
   };
 
   useEffect(() => {
-    fetchEmpleadoId();
-    fetchEmpleados();
+    const interval = setInterval(() => {
+      fetchEmpleados();
+      fetchEmpleadoId();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [user]);
 
   // Funciones Consignar -----------------------------------------------------------------------------------------------------------------------------
@@ -161,12 +164,6 @@ export const Movimientos = () => {
         const data = await responseClient.json();
         console.log(data.message);
         toast.success("Saldo consignado correctamente.");
-
-        // Actualizar el estado del empleado en el componente
-        setIdEmpleadoDetails((prevState) => ({
-          ...prevState,
-          saldo: newBalanceEmploye,
-        }));
 
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario
@@ -291,17 +288,6 @@ export const Movimientos = () => {
 
         toast.success("Saldo retirado y actualizado correctamente.");
 
-        // Actualizar el estado del cliente y del empleado en el componente
-        setDataUser((prevState) => ({
-          ...prevState,
-          saldo: newBalanceClient,
-        }));
-
-        setIdEmpleadoDetails((prevState) => ({
-          ...prevState,
-          saldo: newBalanceEmploye,
-        }));
-
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario
           // Puedes utilizar la función setDatauser para actualizar el estado local
@@ -325,9 +311,6 @@ export const Movimientos = () => {
   const handleSolicitarSaldo = async () => {
     const idEmpleado = idEmpleadoDetails.id_empleado;
 
-    console.log(idEmpleado);
-    console.log(amount);
-
     try {
       const response = await fetch(
         `http://localhost:3000/balance_request/${idEmpleado}`,
@@ -337,7 +320,6 @@ export const Movimientos = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            idEmpleado: idEmpleado,
             newStatus: "Solicitud",
             saldoSolicitado: amount,
           }),
@@ -350,12 +332,6 @@ export const Movimientos = () => {
 
       const data = await response.json();
       toast.success(data.message);
-
-      // Modificar el estado del empleado localmente en el frontend si es necesario
-      setIdEmpleadoDetails((prevDetails) => ({
-        ...prevDetails,
-        estado: "Solicitud",
-      }));
 
       setTimeout(() => {
         window.location = "/DashBoardMenu";
@@ -379,8 +355,8 @@ export const Movimientos = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            idEmpleado: idEmpleado,
             newStatus: "Activo",
+            saldoSolicitado: 0,
           }),
         }
       );
@@ -390,12 +366,6 @@ export const Movimientos = () => {
 
       const data = await response.json();
       toast.success(data.message);
-
-      // Actualizar el estado del empleado en el componente
-      setIdEmpleadoDetails((prevDetails) => ({
-        ...prevDetails,
-        estado: "Activo",
-      }));
 
       setTimeout(() => {
         window.location = "/DashBoardMenu";
@@ -425,14 +395,16 @@ export const Movimientos = () => {
     try {
       // Realiza una solicitud al servidor para actualizar el saldo del cajero
       const responseCajero = await fetch(
-        `http://localhost:3000/empleado_balance/${idEmpleado}`,
+        `http://localhost:3000/balance_request/${idEmpleado}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            newStatus: "Activo",
             nuevoSaldo: 0,
+            saldoSolicitado: 0,
           }),
         }
       );
@@ -445,14 +417,16 @@ export const Movimientos = () => {
 
       // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
       const responsePrincipal = await fetch(
-        `http://localhost:3000/empleado_balance/${idPricipal}`,
+        `http://localhost:3000/balance_request/${idPricipal}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            newStatus: "Activo",
             nuevoSaldo: newBalancePrincipal,
+            saldoSolicitado: 0,
           }),
         }
       );
@@ -528,7 +502,7 @@ export const Movimientos = () => {
                   <div className="   grid gap-x-4 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between ">
                     <button
                       className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
-                      onClick=""
+                      onClick={handleDevolverSaldo}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
