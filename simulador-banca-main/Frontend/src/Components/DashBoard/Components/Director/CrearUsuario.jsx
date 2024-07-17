@@ -9,7 +9,7 @@ import { useAuth } from "../../../../context/AuthContext";
 import { ModalConsignarCajero } from "../CajeroPrincipal/ModalConsignarCajero";
 
 export const CrearUsuario = () => {
-  const [dataUser, setDataUser] = useState([]);
+  const [empleadoDetails, setEpleadoDetails] = useState([]);
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState([]);
   const [forceUpdate, setForceUpdate] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -32,7 +32,7 @@ export const CrearUsuario = () => {
       }
       if (response.ok) {
         const data = await response.json();
-        setDataUser(data.result.rows);
+        setEpleadoDetails(data.result.rows);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -114,7 +114,7 @@ export const CrearUsuario = () => {
   };
 
   const countUsers = () => {
-    return dataUser.length;
+    return empleadoDetails.length;
   };
 
   const handleEmpleado = (idEmpleado) => {
@@ -122,8 +122,8 @@ export const CrearUsuario = () => {
     setOpenConsing(!openConsing);
   };
 
-  const openModal = (dataUser) => {
-    setModalData(dataUser);
+  const openModal = (empleadoDetails) => {
+    setModalData(empleadoDetails);
     setShowModal(true);
   };
 
@@ -174,7 +174,7 @@ export const CrearUsuario = () => {
           {user?.id_rol === 1 && (
             <button
               class="flex gap-x-1 items-center px-4 py-2 font-normal text-white transition-colors duration-300 transform bg-green-500 rounded-lg hover:bg-green"
-              onClick={() => openModal(dataUser)}
+              onClick={() => openModal(empleadoDetails)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -254,7 +254,7 @@ export const CrearUsuario = () => {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                        {dataUser?.map((date) => (
+                        {empleadoDetails?.map((date) => (
                           <React.Fragment key={date.id_empleado}>
                             <tr>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
@@ -419,7 +419,7 @@ export const CrearUsuario = () => {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                        {dataUser
+                        {empleadoDetails
                           ?.filter((user) => user.id_rol === 3)
                           .map((date) => (
                             <React.Fragment key={date.id_empleado}>
@@ -518,7 +518,7 @@ export const CrearUsuario = () => {
           setOpenConsing={setOpenConsing}
           idEmpleadoDetails={idEmpleadoDetails}
           setIdEmpleadoDetails={setIdEmpleadoDetails}
-          dataUser={dataUser}
+          empleadoDetails={empleadoDetails}
         />
       </section>
     </>

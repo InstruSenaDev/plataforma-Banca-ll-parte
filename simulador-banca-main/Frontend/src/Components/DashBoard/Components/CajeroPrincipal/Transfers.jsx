@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "flowbite-react";
 import { toast } from "react-toastify";
+import { ModalConsignarCajero } from "./ModalConsignarCajero";
 
 const Transfers = () => {
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
   const [filterEmpleados, setFilterEmpleados] = useState([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
-  const [amount, setAmount] = useState("");
+  const [idEmpleadoDetails, setIdEmpleadoDetails] = useState([]);
+  const [amountSolicitud, setAmountSolicitud] = useState("");
 
   const [openModal1, setOpenModal1] = useState(false);
+  const [openConsing, setOpenConsing] = useState(false);
 
   const fetchEmpleados = async () => {
     try {
@@ -30,82 +33,101 @@ const Transfers = () => {
     }
   };
 
-  const handleConsign = async () => {
-    // Funcion para filtrar usuarios con rol de cajero principal
-    const filterEmpleadoPrincipal = empleadoDetails.filter(
-      (users) => users.id_rol === 4
-    );
+  // Funcion para traer un empleado por id.
+  const fetchEmpleadoId = async (idEmpleado) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_users/${idEmpleado}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setIdEmpleadoDetails(data);
 
-    const { id_empleado, saldo, estado } = selectedEmpleado;
-
-    const idPricipal = filterEmpleadoPrincipal[0].id_empleado;
-    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
-    const amountToConsign = parseFloat(amount);
-
-    const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
-    const newBalancePrincipal = parseFloat(saldoPrincipal) - amountToConsign;
-
-    if (selectedEmpleado === null) {
-      return toast.error("Error: Datos del usuario inválidos.");
-    } else if (isNaN(amountToConsign) || amountToConsign <= 0) {
-      return toast.error("Error: El saldo no debe ser menor o igual a cero.");
-    } else if (amountToConsign > saldoPrincipal) {
-      return toast.error("Error: El saldo enviado es mayor a tu saldo total.");
-    } else {
-      if (estado === "Solicitud") {
-        try {
-          const responseEmpleado = await fetch(
-            `http://localhost:3000/balance_request/${id_empleado}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                nuevoSaldo: newBalanceEmpleado,
-                newStatus: "Activo",
-                saldoSolicitado: 0,
-              }),
-            }
-          );
-
-          if (!responseEmpleado.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const responsePrincipal = await fetch(
-            `http://localhost:3000/balance_request/${idPricipal}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                nuevoSaldo: newBalancePrincipal,
-                newStatus: "Activo",
-                saldoSolicitado: 0,
-              }),
-            }
-          );
-
-          if (!responsePrincipal.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          toast.success("Consignación realizada correctamente.");
-          setTimeout(() => {
-            window.location = "/DashBoardMenu";
-          }, 1500);
-        } catch (error) {
-          toast.error("Error al realizar la consignación.");
-        }
+        setAmountSolicitud(data.saldo_solicitado);
       } else {
-        return toast.error(
-          "Error al realizar la consignación: El usuario ha cancelado la solicitud"
-        );
+        console.error("Error fetching user info:", response.status);
       }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
     }
   };
+
+  // const handleConsign = async () => {
+  //   // Funcion para filtrar usuarios con rol de cajero principal
+  //   const filterEmpleadoPrincipal = empleadoDetails.filter(
+  //     (users) => users.id_rol === 4
+  //   );
+
+  //   const { id_empleado, saldo, estado } = selectedEmpleado;
+
+  //   const idPricipal = filterEmpleadoPrincipal[0].id_empleado;
+  //   const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+  //   const amountToConsign = parseFloat(amount);
+
+  //   const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
+  //   const newBalancePrincipal = parseFloat(saldoPrincipal) - amountToConsign;
+
+  //   if (selectedEmpleado === null) {
+  //     return toast.error("Error: Datos del usuario inválidos.");
+  //   } else if (isNaN(amountToConsign) || amountToConsign <= 0) {
+  //     return toast.error("Error: El saldo no debe ser menor o igual a cero.");
+  //   } else if (amountToConsign > saldoPrincipal) {
+  //     return toast.error("Error: El saldo enviado es mayor a tu saldo total.");
+  //   } else {
+  //     if (estado === "Solicitud") {
+  //       try {
+  //         const responseEmpleado = await fetch(
+  //           `http://localhost:3000/balance_request/${id_empleado}`,
+  //           {
+  //             method: "PUT",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({
+  //               nuevoSaldo: newBalanceEmpleado,
+  //               newStatus: "Activo",
+  //               saldoSolicitado: 0,
+  //             }),
+  //           }
+  //         );
+
+  //         if (!responseEmpleado.ok) {
+  //           throw new Error("Network response was not ok");
+  //         }
+
+  //         const responsePrincipal = await fetch(
+  //           `http://localhost:3000/balance_request/${idPricipal}`,
+  //           {
+  //             method: "PUT",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({
+  //               nuevoSaldo: newBalancePrincipal,
+  //               newStatus: "Activo",
+  //               saldoSolicitado: 0,
+  //             }),
+  //           }
+  //         );
+
+  //         if (!responsePrincipal.ok) {
+  //           throw new Error("Network response was not ok");
+  //         }
+
+  //         toast.success("Consignación realizada correctamente.");
+  //         setTimeout(() => {
+  //           window.location = "/DashBoardMenu";
+  //         }, 1500);
+  //       } catch (error) {
+  //         toast.error("Error al realizar la consignación.");
+  //       }
+  //     } else {
+  //       return toast.error(
+  //         "Error al realizar la consignación: El usuario ha cancelado la solicitud"
+  //       );
+  //     }
+  //   }
+  // };
 
   // Función para cancelar la solicitud
   const handleCancel = async (empleado) => {
@@ -161,10 +183,9 @@ const Transfers = () => {
     return formatter.format(saldo);
   };
 
-  const openModal = (empleado) => {
-    setSelectedEmpleado(empleado);
-    setOpenModal1(true);
-    setAmount("");
+  const openModal = (idEmpleado) => {
+    fetchEmpleadoId(idEmpleado);
+    setOpenConsing(!openConsing);
   };
 
   const onCloseModal = () => {
@@ -274,7 +295,7 @@ const Transfers = () => {
                         <div className="w-full inline-flex justify-center items-center gap-x-4">
                           <button
                             className="flex justify-center items-center dark:bg-gray-800"
-                            onClick={() => openModal(empleado)}
+                            onClick={() => openModal(empleado.id_empleado)}
                           >
                             {/* <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
                               Transferir Saldo
@@ -321,85 +342,6 @@ const Transfers = () => {
                               </svg>
                             </span>
                           </button>
-                          <Modal
-                            className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                            show={openModal1}
-                            size="md"
-                            onClose={onCloseModal}
-                            popup
-                          >
-                            <Modal.Header>
-                              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                Consignar
-                              </span>
-                            </Modal.Header>
-                            <Modal.Body className="px-5 pt-2 pb-5">
-                              <div className="space-y-6">
-                                {selectedEmpleado && (
-                                  <>
-                                    <div>
-                                      <div className="mb-2 block">
-                                        <label
-                                          htmlFor="accountNumber"
-                                          className="font-medium text-gray-700 dark:text-white"
-                                        >
-                                          ID de empleado:
-                                        </label>
-                                      </div>
-                                      <input
-                                        id="accountNumber"
-                                        type="number"
-                                        value={selectedEmpleado.id_empleado}
-                                        readOnly
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
-                                    <div>
-                                      <label
-                                        htmlFor="accountOwner"
-                                        className="font-medium text-gray-700 dark:text-white"
-                                      >
-                                        Nombre del empleado
-                                      </label>
-                                      <input
-                                        id="accountOwner"
-                                        type="text"
-                                        value={selectedEmpleado.username}
-                                        readOnly
-                                        className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                                <div>
-                                  <label
-                                    htmlFor="amount"
-                                    className="font-medium text-gray-700 dark:text-white"
-                                  >
-                                    Monto a consignar:
-                                  </label>
-                                  <input
-                                    id="amount"
-                                    type="number"
-                                    placeholder="Monto a consignar"
-                                    value={amount}
-                                    onChange={(event) =>
-                                      setAmount(event.target.value)
-                                    }
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                                  />
-                                </div>
-                                <div className="w-full">
-                                  <button
-                                    onClick={handleConsign}
-                                    className="w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all"
-                                  >
-                                    Enviar
-                                  </button>
-                                </div>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
                         </div>
                       </td>
                     </tr>
@@ -410,6 +352,14 @@ const Transfers = () => {
           </div>
         </div>
       </div>
+
+      <ModalConsignarCajero
+        openConsing={openConsing}
+        setOpenConsing={setOpenConsing}
+        idEmpleadoDetails={idEmpleadoDetails}
+        setIdEmpleadoDetails={setIdEmpleadoDetails}
+        empleadoDetails={empleadoDetails}
+      />
     </section>
   );
 };

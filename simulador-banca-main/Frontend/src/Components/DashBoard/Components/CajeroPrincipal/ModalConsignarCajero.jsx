@@ -1,37 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export const ModalConsignarCajero = ({
-  dataUser,
+  empleadoDetails,
   openConsing,
   setOpenConsing,
   idEmpleadoDetails,
   setIdEmpleadoDetails,
+  amountSolicitud,
 }) => {
   const [amount, setAmount] = useState("");
 
   // Función para realizar la consignación
   const handleConsign = async () => {
-    const filterEmpleadoPrincipal = dataUser.filter(
+    const filterEmpleadoPrincipal = empleadoDetails.filter(
       (users) => users.id_rol === 4
     );
 
     const { id_empleado, saldo } = idEmpleadoDetails;
 
-    // const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
+    const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
     const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
 
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
 
     if (amount <= 0 || isNaN(amount)) {
-      return toast.error("El saldo no puede ser menor o igual a 0.");
+      return toast.error("Error: El saldo no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {
-      return toast.error("El salo no es suficiente.");
+      return toast.error("Error: El saldo enviado es mayor a tu saldo total.");
     } else {
       try {
         const responseEmpleado = await fetch(
-          `http://localhost:3000/empleado_balance/${id_empleado}`,
+          `http://localhost:3000/balance_request/${id_empleado}`,
           {
             method: "PUT",
             headers: {
@@ -39,12 +40,32 @@ export const ModalConsignarCajero = ({
             },
             body: JSON.stringify({
               nuevoSaldo: newBalanceEmpleado,
-              nuevoSaldoCajero: newBalancePrincipal,
+              newStatus: "Activo",
+              saldoSolicitado: 0,
             }),
           }
         );
 
         if (!responseEmpleado.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responsePrincipal = await fetch(
+          `http://localhost:3000/balance_request/${idPrincipal}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalancePrincipal,
+              newStatus: "Activo",
+              saldoSolicitado: 0,
+            }),
+          }
+        );
+
+        if (!responsePrincipal.ok) {
           throw new Error("Network response was not ok");
         }
 
@@ -62,6 +83,13 @@ export const ModalConsignarCajero = ({
     setIdEmpleadoDetails(null);
     setOpenConsing(false);
   };
+
+  // useEffect para actualizar el saldo inicial si amountSolicitud tiene algún saldo
+  useEffect(() => {
+    if (amountSolicitud) {
+      setAmount(amountSolicitud);
+    }
+  }, [amountSolicitud]);
 
   return (
     <>
