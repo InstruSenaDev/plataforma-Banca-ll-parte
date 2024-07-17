@@ -34,14 +34,14 @@ export const ContentCuentaAhorroNatural = ({ }) => {
   return (
     <>
       <div className={active}>
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-          <div className='flex justify-center items-center flex-col gap-10' style={{ minHeight: '85vh' }}>
-            <div className='w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center'>
+        <div className='flex justify-center items-center '>
+          <div className='flex justify-center items-start flex-col gap-5' style={{ minHeight: '85vh' }}>
+            <div className='w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-3'>
               <p>Información de Cliente Persona Natural</p>
             </div>
-            <div className='w-3/4'>
+            <div className='w-3/4 '>
               <form>
-                <div className="grid gap-8 mb-8 lg:grid-cols-3">
+                <div className="grid gap-8 mb-8 lg:grid-cols-3 p-4">
                   <div onClick={() => handleBotonClick('InfoPersonal', volver())} className="cursor-pointer flex flex-col w-full min-h-56 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <img className="rounded-t-lg h-56" src={personalinfo} alt="" />
                     <div className="w-full h-full">
@@ -96,6 +96,7 @@ export const ContentCuentaAhorroNatural = ({ }) => {
           </div>
         </div>
       </div>
+    
       <Formulario contenidoSeleccionado1={contenidoSeleccionado1} regresar={volver} handleBotonClick={handleBotonClick}/>
       
       {/* {contenidoSeleccionado1 === 'InfoPersonal' && <InfoPersonal regresar={volver} />}

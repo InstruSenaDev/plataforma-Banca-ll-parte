@@ -16,6 +16,13 @@ const updateBalanceEmpleado = async (req, res) => {
       const updateValuesA = [saldo, idEmpleado];
       await pool.query(updateQueryA, updateValuesA);
 
+      // Agrega la siguiente sección para actualizar el saldo del cajero (id_rol = 4)
+      // const updateQueryB =
+      //   "UPDATE empleado SET saldo = $1 WHERE id_rol = 4";
+      // const saldoCajero = req.body.nuevoSaldoCajero;
+      // const updateValuesB = [saldoCajero];
+      // await pool.query(updateQueryB, updateValuesB);
+
       res
         .status(200)
         .json({ message: "Actualización de autorización exitosa" });

@@ -47,8 +47,17 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
     const { id_empleado, saldo } = idEmpleadoDetails;
     const saldoBoveda = bovedaDetails.saldo_boveda;
 
+    // Verificar que el monto no esté vacío, sea mayor a cero y no sea superior al saldo de la bóveda
+    if (!amount || parseFloat(amount) <= 0) {
+      return toast.error("Por favor ingresa un monto válido.");
+    } else if (parseFloat(amount) > saldoBoveda) {
+      return toast.error(
+        "El monto no puede ser superior al saldo de la bóveda."
+      );
+    }
+
     const newBalanceBoveda = parseFloat(saldoBoveda) - parseFloat(amount);
-    const newBalanceEmpleado = parseFloat(amount) - parseFloat(saldo);
+    const newBalanceEmpleado = parseFloat(amount) + parseFloat(saldo);
 
     if (saldoBoveda > 0) {
       try {
@@ -71,11 +80,13 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
         }
 
         const responseCajero = await fetch(
-          `http://localhost:3000/empleado_balance/${id_empleado}`,
+          `http://localhost:3000/balance_request/${id_empleado}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              newStatus: "Activo",
+              saldoSolicitado: 0,
               nuevoSaldo: newBalanceEmpleado,
             }),
           }
@@ -88,12 +99,6 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
         }
 
         toast.success("Monto retirado de bóveda correctamente.");
-
-        // Actualizar el estado del empleado en el componente
-        setIdEmpleadoDetails((prevState) => ({
-          ...prevState,
-          saldo: newBalanceEmpleado,
-        }));
 
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario
@@ -157,16 +162,16 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
                 Ingresa el monto que deseas retirar de la bóveda.
               </p>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="px-6 space-y-4">
               <div className="space-y-2">
                 <label
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="amount"
                 >
                   Monto a retirar
                 </label>
                 <input
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   id="amount"
                   placeholder="Ingresa el monto"
                   min="0"

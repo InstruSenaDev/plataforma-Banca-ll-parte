@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "flowbite-react";
-import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 
-const Transfers = ({ formatter }) => {
+const Transfers = () => {
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
+  const [filterEmpleados, setFilterEmpleados] = useState([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [amount, setAmount] = useState("");
+
   const [openModal1, setOpenModal1] = useState(false);
+
+  const onCloseModal = () => {
+    setOpenModal1(false);
+    setSelectedEmpleado(null);
+    setAmount(""); // Reset amount when closing the modal
+  };
 
   const fetchEmpleados = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
         const userData = await response.json();
+        setEmpleadoDetails(userData.result.rows);
+
         const filteredEmpleados = userData.result.rows.filter(
           (empleado) => empleado.estado === "Solicitud"
         );
-        setEmpleadoDetails(filteredEmpleados);
+
+        setFilterEmpleados(filteredEmpleados);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -27,45 +37,79 @@ const Transfers = ({ formatter }) => {
   };
 
   const handleConsign = async () => {
-    const { id_empleado, saldo } = selectedEmpleado;
+    // Funcion para filtrar usuarios con rol de cajero principal
+    const filterEmpleadoPrincipal = empleadoDetails.filter(
+      (users) => users.id_rol === 4
+    );
+
+    const { id_empleado, saldo, estado } = selectedEmpleado;
+
+    const idPricipal = filterEmpleadoPrincipal[0].id_empleado;
+    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
     const amountToConsign = parseFloat(amount);
 
-    if (
-      selectedEmpleado === null ||
-      isNaN(amountToConsign) ||
-      amountToConsign <= 0
-    ) {
-      toast.error("Datos del usuario o monto inválidos.");
-    }
-
     const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
+    const newBalancePrincipal = parseFloat(saldoPrincipal) - amountToConsign;
 
-    try {
-      const responseEmpleado = await fetch(
-        `http://localhost:3000/balance_request/${id_empleado}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nuevoSaldo: newBalanceEmpleado,
-            newStatus: "Activo",
-            saldoSolicitado: 0,
-          }),
+    if (selectedEmpleado === null) {
+      return toast.error("Error: Datos del usuario inválidos.");
+    } else if (isNaN(amountToConsign) || amountToConsign <= 0) {
+      return toast.error("Error: El saldo no debe ser menor o igual a cero.");
+    } else if (amountToConsign > saldoPrincipal) {
+      return toast.error("Error: El saldo enviado es mayor a tu saldo total.");
+    } else {
+      if (estado === "Solicitud") {
+        try {
+          const responseEmpleado = await fetch(
+            `http://localhost:3000/balance_request/${id_empleado}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nuevoSaldo: newBalanceEmpleado,
+                newStatus: "Activo",
+                saldoSolicitado: 0,
+              }),
+            }
+          );
+
+          if (!responseEmpleado.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const responsePrincipal = await fetch(
+            `http://localhost:3000/balance_request/${idPricipal}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nuevoSaldo: newBalancePrincipal,
+                newStatus: "Activo",
+                saldoSolicitado: 0,
+              }),
+            }
+          );
+
+          if (!responsePrincipal.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          toast.success("Consignación realizada correctamente.");
+          setTimeout(() => {
+            window.location = "/DashBoardMenu";
+          }, 1500);
+        } catch (error) {
+          toast.error("Error al realizar la consignación.");
         }
-      );
-
-      if (!responseEmpleado.ok) {
-        throw new Error("Network response was not ok");
+      } else {
+        return toast.error(
+          "Error al realizar la consignación: El usuario ha cancelado la solicitud"
+        );
       }
-
-      toast.success("Consignación realizada correctamente.");
-      setTimeout(() => {
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      toast.error("Error al realizar la consignación.");
     }
   };
 
@@ -85,21 +129,15 @@ const Transfers = ({ formatter }) => {
   const openModal = (empleado) => {
     setSelectedEmpleado(empleado);
     setOpenModal1(true);
-    setAmount(empleado.saldo_solicitado);
-  };
-
-  const onCloseModal = () => {
-    setOpenModal1(false);
-    setSelectedEmpleado(null);
-    setAmount(""); // Reset amount when closing the modal
-  };
-
-  const handleAmount = (event) => {
-    setAmount(event.target.value);
+    setAmount("");
   };
 
   useEffect(() => {
-    fetchEmpleados();
+    const interval = setInterval(() => {
+      fetchEmpleados();
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (

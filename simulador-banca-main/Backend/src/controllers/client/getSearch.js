@@ -7,7 +7,7 @@ const getSearch = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT
-      c.ID_Cliente,
+      c.id_cliente,
       fpn.IP_primerNombre AS Nombre,
       fpn.IP_primerApellido AS PrimerApellido,
       fpn.IP_segundoApellido AS SegundoApellido,
@@ -33,20 +33,19 @@ const getSearch = async (req, res) => {
       fpn.AE_ocupacion AS Ocupacion,
       fpn.AE_detalle_act AS Actividad ,
       fpn.IP_tipoDoc AS Tipodocumento,
-      c.Estado AS EstadoCliente,
-      tp.Descripcion AS Producto,
-      dp.N_Cuenta,
-      dp.fecha
+      dc.estado AS EstadoCliente,
+      tc.descripcion AS Tipo_Cuenta,
+      dc.num_cuenta,
+      dc.fecha
       FROM
-      DetalleProducto dp
-      JOIN cliente c ON dp.Cliente = c.ID_Cliente
-      JOIN FormPersonNatural fpn ON c.inf_cliente = fpn.ID_FormPN
-      JOIN producto p ON dp.Producto = p.ID_Producto
-      JOIN tipoproducto tp ON p.Tipo = tp.ID_tipo;
+      detalle_cuenta AS dc
+      JOIN cliente AS c ON dc.id_cliente = c.id_cliente
+      JOIN FormPersonNatural AS fpn ON c.id_formpn = fpn.id_formpn
+      JOIN tipo_cuentas AS tc ON dc.id_tcuenta = tc.id_tcuenta
       `);
 
     if (result.rows.length > 0) {
-      return res.status(200).json({ result });
+      return res.status(200).json(result.rows);
     } else {
       return res.status(404).json({ message: "No se encontraron resultados." });
     }
