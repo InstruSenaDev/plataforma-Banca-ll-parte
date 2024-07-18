@@ -49,10 +49,10 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
 
     // Verificar que el monto no esté vacío, sea mayor a cero y no sea superior al saldo de la bóveda
     if (!amount || parseFloat(amount) <= 0) {
-      return toast.error("Por favor ingresa un monto válido.");
+      return toast.error("Error: El monto no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > saldoBoveda) {
       return toast.error(
-        "El monto no puede ser superior al saldo de la bóveda."
+        "Error: El saldo enviado es mayor al saldo total en bóveda."
       );
     }
 

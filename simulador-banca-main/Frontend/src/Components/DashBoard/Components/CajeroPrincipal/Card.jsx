@@ -20,8 +20,8 @@ const Card = () => {
         `http://localhost:3000/get_users/${user.id_empleado}`
       );
       if (response.ok) {
-        const userData = await response.json();
-        setIdEmpleadoDetails(userData);
+        const data = await response.json();
+        setIdEmpleadoDetails(data);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -35,8 +35,8 @@ const Card = () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
-        const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows);
+        const data = await response.json();
+        setEmpleadoDetails(data);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -151,7 +151,7 @@ const Card = () => {
       fetchEmpleados();
       fetchEmpleadoId();
       fetchBoveda();
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);

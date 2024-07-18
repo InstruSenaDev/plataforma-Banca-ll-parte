@@ -32,7 +32,7 @@ export const CrearUsuario = () => {
       }
       if (response.ok) {
         const data = await response.json();
-        setEpleadoDetails(data.result.rows);
+        setEpleadoDetails(data);
       } else {
         console.error("Error fetching user info:", response.status);
       }

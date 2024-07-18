@@ -17,10 +17,10 @@ const Transfers = () => {
     try {
       const response = await fetch("http://localhost:3000/get_users");
       if (response.ok) {
-        const userData = await response.json();
-        setEmpleadoDetails(userData.result.rows);
+        const data = await response.json();
+        setEmpleadoDetails(data);
 
-        const filteredEmpleados = userData.result.rows.filter(
+        const filteredEmpleados = data.filter(
           (empleado) => empleado.estado === "Solicitud"
         );
 
@@ -51,83 +51,6 @@ const Transfers = () => {
       console.error("Error fetching user info:", error);
     }
   };
-
-  // const handleConsign = async () => {
-  //   // Funcion para filtrar usuarios con rol de cajero principal
-  //   const filterEmpleadoPrincipal = empleadoDetails.filter(
-  //     (users) => users.id_rol === 4
-  //   );
-
-  //   const { id_empleado, saldo, estado } = selectedEmpleado;
-
-  //   const idPricipal = filterEmpleadoPrincipal[0].id_empleado;
-  //   const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
-  //   const amountToConsign = parseFloat(amount);
-
-  //   const newBalanceEmpleado = parseFloat(saldo) + amountToConsign;
-  //   const newBalancePrincipal = parseFloat(saldoPrincipal) - amountToConsign;
-
-  //   if (selectedEmpleado === null) {
-  //     return toast.error("Error: Datos del usuario inválidos.");
-  //   } else if (isNaN(amountToConsign) || amountToConsign <= 0) {
-  //     return toast.error("Error: El saldo no debe ser menor o igual a cero.");
-  //   } else if (amountToConsign > saldoPrincipal) {
-  //     return toast.error("Error: El saldo enviado es mayor a tu saldo total.");
-  //   } else {
-  //     if (estado === "Solicitud") {
-  //       try {
-  //         const responseEmpleado = await fetch(
-  //           `http://localhost:3000/balance_request/${id_empleado}`,
-  //           {
-  //             method: "PUT",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             body: JSON.stringify({
-  //               nuevoSaldo: newBalanceEmpleado,
-  //               newStatus: "Activo",
-  //               saldoSolicitado: 0,
-  //             }),
-  //           }
-  //         );
-
-  //         if (!responseEmpleado.ok) {
-  //           throw new Error("Network response was not ok");
-  //         }
-
-  //         const responsePrincipal = await fetch(
-  //           `http://localhost:3000/balance_request/${idPricipal}`,
-  //           {
-  //             method: "PUT",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             body: JSON.stringify({
-  //               nuevoSaldo: newBalancePrincipal,
-  //               newStatus: "Activo",
-  //               saldoSolicitado: 0,
-  //             }),
-  //           }
-  //         );
-
-  //         if (!responsePrincipal.ok) {
-  //           throw new Error("Network response was not ok");
-  //         }
-
-  //         toast.success("Consignación realizada correctamente.");
-  //         setTimeout(() => {
-  //           window.location = "/DashBoardMenu";
-  //         }, 1500);
-  //       } catch (error) {
-  //         toast.error("Error al realizar la consignación.");
-  //       }
-  //     } else {
-  //       return toast.error(
-  //         "Error al realizar la consignación: El usuario ha cancelado la solicitud"
-  //       );
-  //     }
-  //   }
-  // };
 
   // Función para cancelar la solicitud
   const handleCancel = async (empleado) => {
@@ -197,7 +120,7 @@ const Transfers = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchEmpleados();
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -359,6 +282,7 @@ const Transfers = () => {
         idEmpleadoDetails={idEmpleadoDetails}
         setIdEmpleadoDetails={setIdEmpleadoDetails}
         empleadoDetails={empleadoDetails}
+        amountSolicitud={amountSolicitud}
       />
     </section>
   );
