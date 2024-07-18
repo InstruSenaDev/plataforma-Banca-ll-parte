@@ -19,7 +19,7 @@ export const TopNavbar = () => {
           </Link>
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <Link to="/Login">
-              <button class="px-3 md:px-5 py-2 text-md font-regular text-white transition-colors duration-300 transform bg-emerald-600 rounded-lg hover:bg-emerald-700">
+              <button className="px-3 md:px-5 py-2 text-md font-regular text-white transition-colors duration-300 transform bg-emerald-600 rounded-lg hover:bg-emerald-700">
                 Iniciar Sesión
               </button>
             </Link>

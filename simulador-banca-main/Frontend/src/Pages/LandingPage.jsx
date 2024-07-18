@@ -7,7 +7,7 @@ import { Banner } from "../Components/LandingPage/Banner/Banner";
 export const LandingPage = () => {
   return (
     <>
-      <div class="flex flex-col min-h-dvh">
+      <div className="flex flex-col min-h-dvh">
         <TopNavbar />
 
         <div className="bg-slate-100">
