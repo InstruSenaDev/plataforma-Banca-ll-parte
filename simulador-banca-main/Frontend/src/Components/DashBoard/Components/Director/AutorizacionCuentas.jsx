@@ -229,7 +229,7 @@ export const AutorizacionCuentas = () => {
                                 </h2>
                               </div>
                             </td>
-                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                            <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <button
                                 onClick={() => openModal(data)}
                                 href="#"

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 export const MovimientosCajeros = () => {
   const [movCajeros, setMoviCajeros] = useState([]);
@@ -126,7 +125,7 @@ export const MovimientosCajeros = () => {
                                       {data.username}
                                     </h2>
                                     <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                      {data.rol}
+                                      {data.id_rol === 3 && <>Cajero</>}
                                     </p>
                                   </div>
                                 </div>
@@ -141,61 +140,35 @@ export const MovimientosCajeros = () => {
 
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <span>{data.fecha}</span>
+                                <span>03/07/2024, 04:56:02 p. m.</span>
                               </div>
                             </td>
 
-                            <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center">
-                                <>
-                                  <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                    <span className="text-emerald-500">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.3}
-                                        stroke="currentColor"
-                                        className="size-4"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          d="M12 4.5v15m7.5-7.5h-15"
-                                        />
-                                      </svg>
-                                    </span>
+                            <td className="flex justify-center px-5 py-5 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
 
-                                    <h2 className="text-sm font-normal text-emerald-500">
-                                      Activo
-                                    </h2>
-                                  </div>
-                                </>
-
-                                <>
-                                  <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
-                                    <span className="text-red-500">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-4"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          d="M5 12h14"
-                                        />
-                                      </svg>
-                                    </span>
-
-                                    <h2 className="text-sm font-normal text-red-500">
-                                      inactivo
-                                    </h2>
-                                  </div>
-                                </>
+                                <h2 className="text-sm font-normal text-emerald-500">
+                                  Activo
+                                </h2>
+                              </div>
+                              <div className="inline-flex items-center px-3 py-1 text-gray-500 dark:text-gray-400">
+                                <button className="text-gray-500 transition-colors duration-200 dark:hover:text-emerald-500 dark:text-gray-300 hover:text-emerald-500 focus:outline-none">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-5 h-5"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                    />
+                                  </svg>
+                                </button>
                               </div>
                             </td>
                           </tr>
