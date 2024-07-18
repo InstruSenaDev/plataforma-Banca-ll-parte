@@ -92,10 +92,9 @@ export const HistorialD = () => {
 
   return (
     <>
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+      
           <div
-            className=" flex justify-center items-center flex-col gap-10"
+            className=" flex justify-center items-center flex-col gap-5"
             style={{ minHeight: "85vh" }}
           >
             <div className="w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center">
@@ -117,7 +116,7 @@ export const HistorialD = () => {
             </div>
             <div className="w-8/12 relative overflow-x-auto shadow-md sm:rounded-lg">
               <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-center text-white  uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400  bg-DarkSlate">
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       Nombre de Cliente
@@ -156,8 +155,6 @@ export const HistorialD = () => {
               </table>
             </div>
           </div>
-        </div>
-      </div>
     </>
   );
 };

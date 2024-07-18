@@ -19,7 +19,6 @@ const Transfers = () => {
       if (response.ok) {
         const data = await response.json();
         setEmpleadoDetails(data);
-
         const filteredEmpleados = data.filter(
           (empleado) => empleado.estado === "Solicitud"
         );
@@ -170,6 +169,7 @@ const Transfers = () => {
                         </button>
                       </div>
                     </th>
+
                     <th
                       scope="col"
                       className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"

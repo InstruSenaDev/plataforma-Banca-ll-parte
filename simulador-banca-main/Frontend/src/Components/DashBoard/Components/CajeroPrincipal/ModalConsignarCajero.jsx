@@ -17,10 +17,13 @@ export const ModalConsignarCajero = ({
       (users) => users.id_rol === 4
     );
     const { id_empleado, saldo } = idEmpleadoDetails;
+
     const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
     const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
+
     if (amount <= 0 || isNaN(amount)) {
       return toast.error("Error: El saldo no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {

@@ -23,7 +23,7 @@ const getWaiting = async (req, res) => {
     `);
 
     if (result.rows.length > 0) {
-      return res.status(200).json({ result });
+      return res.status(200).json({result});
     } else {
       return res.status(404).json({ message: "No se encontraron resultados." });
     }
