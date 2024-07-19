@@ -4,26 +4,24 @@ import "react-toastify/dist/ReactToastify.css";
 import { ModalAutorizaciones } from "../ModalAutorizaciones";
 
 export const AutorizacionCuentas = () => {
-  const [datauser, setdatauser] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
+  const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    const fecthData = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/waiting");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setdatauser(data.result.rows);
-        console.log(data.result.rows[0]);
-      } catch (error) {
-        console.error("error al encontrar informacion");
+  const waitingAccounts = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/waiting");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
-    fecthData();
-  }, []);
+      const data = await response.json();
+      setDataUser(data.result.rows);
+    } catch (error) {
+      console.error("error al encontrar informacion");
+    }
+  };
 
-  const estado = datauser.map((user) => user.estado_cliente == "Pendiente");
+  const estado = dataUser.map((user) => user.estado_cliente == "Pendiente");
 
   const autorizar = (id) => {
     console.log(id);
@@ -49,8 +47,8 @@ export const AutorizacionCuentas = () => {
           toast.success("Autorizado");
           setTimeout(() => {
             // Actualiza localmente el estado del cliente según sea necesario
-            // Puedes utilizar la función setDatauser para actualizar el estado local
-            // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+            // Puedes utilizar la función setDataUser para actualizar el estado local
+            // Ejemplo: setDataUser(prevData => [...prevData, data.updatedClient]);
             // alert('Autorización exitosa')
             // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
             window.location = "/DashBoardMenu";
@@ -64,49 +62,10 @@ export const AutorizacionCuentas = () => {
     }
   };
 
-  const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
-  const [showModal, setShowModal] = useState(false);
+  const waitingLength = dataUser.length;
 
-  const denegar = (id) => {
-    try {
-      // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-      fetch(`http://localhost:3000/client_status/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nuevoEstado: "Denegado",
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data.message);
-          toast.error("denegado");
-          setTimeout(() => {
-            // Actualiza localmente el estado del cliente según sea necesario
-            // Puedes utilizar la función setDatauser para actualizar el estado local
-            // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-            // alert('Autorización exitosa')
-            // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-            window.location = "/DashBoardMenu";
-          }, 1500); // 2000 milisegundos = 2 segundos
-        })
-        .catch((error) => {
-          console.error("Error al cambiar el estado del cliente:", error);
-        });
-    } catch (error) {
-      console.error("Error general:", error);
-    }
-  };
-
-  const openModal = (datauser) => {
-    setModalData(datauser);
+  const openModal = (dataUser) => {
+    setModalData(dataUser);
     setShowModal(true);
   };
 
@@ -114,6 +73,10 @@ export const AutorizacionCuentas = () => {
     setModalData(null); // Limpiar modalData
     setShowModal(false);
   };
+
+  useEffect(() => {
+    waitingAccounts();
+  }, []);
 
   return (
     <>
@@ -126,7 +89,7 @@ export const AutorizacionCuentas = () => {
                   Autorización de Cuentas
                 </h2>
                 <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-                  0 movimientos
+                  {waitingLength} cuenta(s) pendientes
                 </span>
               </div>
               <p className="text-sm text-gray-500 m-0 p-0">
@@ -198,7 +161,7 @@ export const AutorizacionCuentas = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {datauser?.map((data) => (
+                      {dataUser?.map((data) => (
                         <React.Fragment key={data.id_detalle}>
                           <tr>
                             <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -208,71 +171,94 @@ export const AutorizacionCuentas = () => {
                                 </h2>
                               </div>
                             </td>
+
                             <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <h2 className="font-medium text-gray-800 dark:text-white ">
+                                <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
                                   {data.descripcion}
                                 </h2>
                               </div>
                             </td>
+
                             <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <h2 className="font-medium text-gray-800 dark:text-white ">
+                                <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
                                   {data.num_cuenta}
                                 </h2>
                               </div>
                             </td>
+
                             <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <h2 className="font-medium text-gray-800 dark:text-white ">
-                                  {data.estado_cliente}
-                                </h2>
+                              <div className="w-full inline-flex justify-center items-center">
+                                <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-amber-100/60 dark:bg-gray-800">
+                                  <span className="text-amber-500">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="size-4"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                      />
+                                    </svg>
+                                  </span>
+
+                                  <h2 className="text-sm font-normal text-amber-500">
+                                    {data.estado_cliente}
+                                  </h2>
+                                </div>
                               </div>
                             </td>
-                            <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <button
-                                onClick={() => openModal(data)}
-                                href="#"
-                                class="hover:bg-gray-200 p-1 rounded-sm"
-                              >
-                                <svg
-                                  class="w-6 h-6 text-red-600 dark:text-white"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18 18 6m0 12L6 6"
-                                  />
-                                </svg>
-                              </button>
 
-                              <button
-                                onClick={() => autorizar(data.id_detalle)}
-                                href="#"
-                                class="hover:bg-gray-200 p-1 rounded-sm"
-                              >
-                                <svg
-                                  class="w-6 h-6 text-neutralGreen dark:text-white"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
+                            <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="inline-flex items-center gap-x-2 px-3 py-1 text-gray-500 dark:text-gray-400">
+                                <button
+                                  onClick={() => openModal(data)}
+                                  href="#"
+                                  className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-600 focus:outline-none"
                                 >
-                                  <path
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
                                     stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="m5 12 4.7 4.5 9.3-9"
-                                  />
-                                </svg>
-                              </button>
+                                    className="size-6"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                    />
+                                  </svg>
+                                </button>
+
+                                <button
+                                  onClick={() => autorizar(data.id_detalle)}
+                                  href="#"
+                                  className="ext-gray-500 transition-colors duration-200 dark:hover:text-emerald-500 dark:text-gray-300 hover:text-emerald-600 focus:outline-none"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-6"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         </React.Fragment>
@@ -281,6 +267,7 @@ export const AutorizacionCuentas = () => {
                   </table>
                 </div>
               </div>
+
               <ModalAutorizaciones
                 data={modalData}
                 closeModal={closeModal}

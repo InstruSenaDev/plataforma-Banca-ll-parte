@@ -321,7 +321,7 @@ export const DashboardComponent = () => {
                             {isOpen && (
                               <div className="mt-2 space-y-2 ">
                                 <button
-                                  className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  className="flex items-center ml-10 px-2 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x- xl:text-sm 2xl:text-base"
                                   onClick={() => handleBotonClick("Historial")}
                                 >
                                   <span className="mx-1 text-center px-7 ">
@@ -329,7 +329,7 @@ export const DashboardComponent = () => {
                                   </span>
                                 </button>
                                 <button
-                                  className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  className="flex items-center ml-10 px-1 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 xl:text-sm 2xl:text-base"
                                   onClick={() => handleBotonClick("HistorialD")}
                                 >
                                   <span className="mx-1 text-center px-7">

@@ -23,6 +23,7 @@ const getMovimientos = async (req, res) => {
       LEFT JOIN tipo_movimiento AS tm ON mov.id_tipomov = tm.id_tipomov
       LEFT JOIN empleado AS em ON mov.id_empleado = em.id_empleado
       LEFT JOIN rol ON em.id_rol = rol.id_rol
+      ORDER BY id_movimiento DESC
     `);
 
     if (result.rows.length > 0) {

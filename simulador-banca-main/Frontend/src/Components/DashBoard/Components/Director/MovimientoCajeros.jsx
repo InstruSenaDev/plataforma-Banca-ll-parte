@@ -86,6 +86,17 @@ export const MovimientosCajeros = () => {
                         >
                           <div className="flex justify-center items-center gap-x-2">
                             <button>
+                              <span>Estado</span>
+                            </button>
+                          </div>
+                        </th>
+
+                        <th
+                          scope="col"
+                          className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                        >
+                          <div className="flex justify-center items-center gap-x-2">
+                            <button>
                               <span>Fecha y Hora</span>
                             </button>
                           </div>
@@ -114,19 +125,21 @@ export const MovimientosCajeros = () => {
                             </td>
                             <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <div class="flex items-center gap-x-2">
-                                  <img
-                                    class="object-cover w-10 h-10 rounded-full"
-                                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                                    alt=""
-                                  />
-                                  <div>
-                                    <h2 class="font-medium text-gray-800 dark:text-white ">
-                                      {data.username}
-                                    </h2>
-                                    <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                      {data.id_rol === 3 && <>Cajero</>}
-                                    </p>
+                                <div className="flex justify-start w-40">
+                                  <div className="flex items-center gap-x-2">
+                                    <img
+                                      className="object-cover w-10 h-10 rounded-full"
+                                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                      alt=""
+                                    />
+                                    <div>
+                                      <h2 className="font-medium text-gray-800 dark:text-white ">
+                                        {data.username}
+                                      </h2>
+                                      <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        {data.id_rol === 3 && <>Cajero</>}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -138,12 +151,6 @@ export const MovimientosCajeros = () => {
                               </div>
                             </td>
 
-                            <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <span>03/07/2024, 04:56:02 p. m.</span>
-                              </div>
-                            </td>
-
                             <td className="flex justify-center px-5 py-5 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
@@ -152,8 +159,17 @@ export const MovimientosCajeros = () => {
                                   Activo
                                 </h2>
                               </div>
+                            </td>
+
+                            <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span>03/07/2024, 04:56:02 p. m.</span>
+                              </div>
+                            </td>
+
+                            <td className="flex justify-center px-5 py-5 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="inline-flex items-center px-3 py-1 text-gray-500 dark:text-gray-400">
-                                <button className="text-gray-500 transition-colors duration-200 dark:hover:text-emerald-500 dark:text-gray-300 hover:text-emerald-500 focus:outline-none">
+                                <button className="text-gray-500 transition-colors duration-200 dark:hover:text-amber-500 dark:text-gray-300 hover:text-amber-500 focus:outline-none">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"

@@ -5,12 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
   const [descripcion, setDescripcion] = useState("");
 
-  const handleDescripcionChange = (event) => {
-    setDescripcion(event.target.value);
-  };
-
-  const denegar = (id) => {
-    console.log(id);
+  const handleDenegar = (id) => {
     try {
       // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
       fetch(`http://localhost:3000/EstadoD/${id}`, {
@@ -30,34 +25,39 @@ export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
           return response.json();
         })
         .then((data) => {
-          console.log(data.message);
-          toast.error("Denegado");
+          toast.success("Cuenta rechazada correctamente.");
           setTimeout(() => {
             window.location = "/DashBoardMenu";
           }, 1500);
         })
+
         .catch((error) => {
-          console.error("Error al cambiar el estado del cliente:", error);
+          console.error("Error el actualiza estado de la cuenta:", error);
         });
     } catch (error) {
       console.error("Error general:", error);
     }
   };
 
+  const handleDescripcionChange = (event) => {
+    setDescripcion(event.target.value);
+  };
+
   return (
     <>
       {showModal && (
-        <div className=" overflow-y-auto fixed top-0 right-0 left-0 z-50 bg-slate-100/50 flex justify-center items-center w-full md:inset-0  h-[calc(100%)] max-h-full">
-          <div className="relative p-4 w-full max-w-md max-h-full ">
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  ¿Por qué deniegas la cuenta?
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="rounded-lg bg-white shadow-sm w-full max-w-md">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
+                  Rechazar cuenta bancaria
                 </h3>
+
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="text-gray-400 bg-transparent transition hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-toggle="crud-modal"
                 >
                   <svg
@@ -78,14 +78,36 @@ export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-              <form className="p-4 md:p-5">
+              <p className="text-sm text-gray-600">
+                Proporcione un motivo para rechazar esta cuenta bancaria.
+              </p>
+            </div>
+            <div className="px-6 space-y-4">
+              <div className="w-full">
+                <div className="space-y-2">
+                  <label
+                    className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    htmlFor="idEmpleado"
+                  >
+                    Número de Cuenta
+                  </label>
+                  <input
+                    id="idEmpleado"
+                    type="number"
+                    value={data?.num_cuenta || ""}
+                    disabled
+                    className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+              </div>
+
+              <form className="">
                 <div className="grid gap-4 mb-4 grid-cols-2">
-                  <div className="col-span-2">
+                  <div className="col-span-2 space-y-2">
                     <label
                       htmlFor="description"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      {" "}
                       Descripcion
                     </label>
                     <textarea
@@ -93,19 +115,21 @@ export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
                       value={descripcion}
                       onChange={handleDescripcionChange}
                       rows="4"
-                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green focus:border-green dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
+                      className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border-gray-400 bg-white placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       placeholder="Escribe la razón aquí..."
                     ></textarea>
                   </div>
                 </div>
+              </form>
+
+              <div className="flex items-center pb-6">
                 <button
-                  type="submit"
-                  onClick={() => denegar(data.id_detalle)}
-                  className="text-white inline-flex items-center bg-red-600 focus:ring-4 focus:outline-none focus:ring-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green dark:hover:bg-green dark:focus:ring-green"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-red-600 hover:bg-red-700 h-10 px-6 py-2 ml-auto"
+                  onClick={() => handleDenegar(data.id_detalle)}
                 >
                   Denegar
                 </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
