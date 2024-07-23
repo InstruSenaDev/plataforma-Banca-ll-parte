@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Pagination } from "../../../Pagination/Pagination";
 
 export const HistorialD = () => {
   const [datauser, setdatauser] = useState([]);
+
+  const [allMovimientos, setAllMovimientos] = useState([]);
+  const [movementsPage, setMovementsPage] = useState(7);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fecthData = async () => {
@@ -14,7 +19,7 @@ export const HistorialD = () => {
         }
         const data = await response.json();
         setdatauser(data.result.rows);
-        console.log(data.result.rows[0]);
+        setAllMovimientos(data.result.rows);
       } catch (error) {
         console.error("error al encontrar informacion");
       }
@@ -90,71 +95,221 @@ export const HistorialD = () => {
   const fechaOriginal = "2024-03-14T05:00:00.000Z";
   const fechaFormateada = mostrarFechaEnFormato(fechaOriginal);
 
+  const movementsTotal = allMovimientos.length;
+
+  // Función para formatear la fecha en "dd/mm/yyyy hh:mm:ss a.m./p.m.".
+  const formatFecha = (fecha) => {
+    const date = new Date(fecha);
+
+    const options = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    };
+
+    return new Intl.DateTimeFormat("es-CO", options).format(date);
+  };
+
+  const lastIndex = currentPage * movementsPage;
+  const firstIndex = lastIndex - movementsPage;
+
   return (
     <>
-      
-          <div
-            className=" flex justify-center items-center flex-col gap-5"
-            style={{ minHeight: "85vh" }}
-          >
-            <div className="w-3/4 text-black text-4xl flex items-center justify-center font-semibold text-center">
-              <p>Historial de Denegados</p>
+      <section>
+        <div
+          className="container p-4 mx-auto flex flex-col"
+          style={{ minHeight: "87vh" }}
+        >
+          <div className="flex justify-between items-center gap-x-3">
+            <div className="flex flex-col justify-center items-start">
+              <div className="flex flex-row items-center gap-x-3">
+                <h2 className="text-lg font-medium text-gray-800 dark:text-white">
+                  Historial de cuentas rechazadas
+                </h2>
+                <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
+                  {movementsTotal} cuentas rechazadas
+                </span>
+              </div>
+              <p className="text-sm text-gray-500 m-0 p-0">
+                Cuentas que han sido oficialmente rechazadas
+              </p>
             </div>
-            <div className="flex flex-row justify-evenly items-center max-[500px]:flex-col max-[500px]:justify-center max-[500px]:items-center ">
+
+            <div className="flex flex-row justify-center items-center gap-x-2 max-[1024px]:flex-col max-[1024px]:justify-center max-[1024px]:items-center">
               <input
                 type="date"
-                className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52"
+                className="rounded-md border-gray-300 focus:ring-green focus:border-green w-48 "
                 defaultValue={fechaInicio}
                 onChange={handleFechaInicioChange}
               />
               <input
                 type="date"
-                className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52"
+                className="rounded-md border-gray-300 focus:ring-green focus:border-green w-48"
                 defaultValue={fechaFin}
                 onChange={handleFechaFinChange}
               />
             </div>
-            <div className="w-8/12 relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-center text-white  uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400  bg-DarkSlate">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Nombre de Cliente
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Producto bancario
-                    </th>
-
-                    <th scope="col" className="px-6 py-3">
-                      N° Cuenta
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Estado
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataFiltrados?.map((data) => (
-                    <tr
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      key={data.id_detalle}
-                    >
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        {data.nombre}
-                      </th>
-
-                      <td className="px-6 py-4">{data.descripcion}</td>
-                      <td className="px-6 py-4">{data.num_cuenta}</td>
-                      <td className="px-6 py-4">{data.estado_cliente}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
+
+          <div className="flex flex-col justify-between flex-1">
+            <div className="flex flex-col mt-6">
+              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                  <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                      <thead className="bg-DarkSlate dark:bg-gray-800">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-3">
+                              <button>
+                                <span>Número de Documento</span>
+                              </button>
+                            </div>
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-3">
+                              <button>
+                                <span>Nombre del Cliente</span>
+                              </button>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-3 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Número de Cuenta</span>
+                              </button>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Producto Bancario</span>
+                              </button>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Fecha</span>
+                              </button>
+                            </div>
+                          </th>
+
+                          <th
+                            scope="col"
+                            className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          >
+                            <div className="flex justify-center items-center gap-x-2">
+                              <button>
+                                <span>Acción</span>
+                              </button>
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                        {dataFiltrados
+                          ?.map((data) => (
+                            <React.Fragment key={data.id_detalle}>
+                              <tr>
+                                <td className="px-12 py-4 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                  <div class="flex flex-col justify-center items-center gap-x-2">
+                                    {data.ip_documento}
+                                  </div>
+                                </td>
+
+                                <td className="px-12 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    {data.nombre}
+                                  </div>
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    {data.num_cuenta}
+                                  </div>
+                                </td>
+
+                                <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    {data.descripcion}
+                                  </div>
+                                </td>
+
+                                <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    {formatFecha(data.fecha)}
+                                  </div>
+                                </td>
+
+                                <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
+                                      <span className="text-red-500">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          strokeWidth={1.5}
+                                          stroke="currentColor"
+                                          className="size-4"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M5 12h14"
+                                          />
+                                        </svg>
+                                      </span>
+
+                                      <h2 className="text-sm font-normal text-red-500">
+                                        {data.estado_cliente}
+                                      </h2>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            </React.Fragment>
+                          ))
+                          .slice(firstIndex, lastIndex)}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Pagination
+              movementsPage={movementsPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              movementsTotal={movementsTotal}
+            />
+          </div>
+        </div>
+      </section>
     </>
   );
 };
