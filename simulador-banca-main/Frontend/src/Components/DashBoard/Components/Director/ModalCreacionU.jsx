@@ -41,17 +41,18 @@ export const ModalCreacionU = ({ data, showModal, closeModal }) => {
   return (
     <>
       {showModal && (
-        <div class=" overflow-y-auto fixed top-0 right-0 left-0 z-50 bg-slate-100/50 flex justify-center items-center w-full md:inset-0  h-[calc(100%)] max-h-full">
-          <div class="relative p-4 w-full max-w-md max-h-full ">
-            <div className="bg-white rounded-lg shadow dark:bg-gray-700 ">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="rounded-lg bg-white shadow-sm w-full max-w-md">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
                   Crear nuevo usuario
                 </h3>
+
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="text-gray-400 bg-transparent transition hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-toggle="crud-modal"
                 >
                   <svg
@@ -72,77 +73,80 @@ export const ModalCreacionU = ({ data, showModal, closeModal }) => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
+              <p className="text-sm text-gray-600">
+                Complete el siguiente formulario para crear una nueva cuenta de
+                usuario.
+              </p>
+            </div>
 
-              <form className="p-4 md:p-5" onSubmit={handleSubmit(AddUser)}>
-                <div className="p-6 space-y-6">
-                  <div className="grid grid-cols-6 gap-6">
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="name"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Nombre
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green focus:border-green block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
-                        placeholder="Nombre"
-                        {...register("username", { required: true })}
-                        required=""
-                      />
-                    </div>
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="password"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Contraseña
-                      </label>
-                      <input
-                        type="text"
-                        name="password"
-                        id="password"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green focus:border-green block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
-                        placeholder="Contraseña"
-                        {...register("password", { required: true })}
-                        required=""
-                      />
-                    </div>
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="rol"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Rol
-                      </label>
-                      <select
-                        name="id_rol"
-                        id="id_rol"
-                        className="rounded-md w-full border bg-gray-50 border-gray-300 text-gray-900 text-sm p-2.5 focus:ring-green focus:border-green dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green"
-                        {...register("id_rol", { required: true })}
-                      >
-                        <option value="" disabled>
-                          Seleccionar
-                        </option>
-                        <option value="2">Asesor</option>
-                        <option value="3">Cajero</option>
-                      </select>
-                    </div>
+            <form onSubmit={handleSubmit(AddUser)}>
+              <div className="px-6 space-y-4">
+                <div className="flex justify-between flex-wrap w-full gap-y-2">
+                  <div className="space-y-2 w-full md:w-auto">
+                    <label
+                      className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      htmlFor="username"
+                    >
+                      Nombre de usuario
+                    </label>
+                    <input
+                      id="username"
+                      placeholder="Ingrese nombre"
+                      type="text"
+                      className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                      {...register("username", { required: true })}
+                      required=""
+                    />
+                  </div>
+
+                  <div className="space-y-2 w-full md:w-auto">
+                    <label
+                      className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      htmlFor="password"
+                    >
+                      Contraseña
+                    </label>
+                    <input
+                      id="password"
+                      placeholder="Ingrese contraseña"
+                      type="text"
+                      className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                      {...register("password", { required: true })}
+                      required=""
+                    />
                   </div>
                 </div>
 
-                <div className="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                  <button
-                    type="submmit"
-                    className="w-full my-4 text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                <div className="space-y-2">
+                  <label
+                    className="text-sm text-gray-600 font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    htmlFor="rol"
                   >
-                    Crear
-                  </button>
+                    Rol
+                  </label>
+                  <select
+                    name="id_rol"
+                    id="id_rol"
+                    className="rounded-md w-full border bg-white border-gray-400 text-gray-900 text-sm p-2.5 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    {...register("id_rol", { required: true })}
+                  >
+                    <option value="" disabled>
+                      Seleccionar
+                    </option>
+                    <option value="2">Asesor</option>
+                    <option value="3">Cajero</option>
+                  </select>
                 </div>
-              </form>
-            </div>
+              </div>
+              <div className="flex items-center p-6">
+                <button
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
+                  type="submmit"
+                >
+                  Crear
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
