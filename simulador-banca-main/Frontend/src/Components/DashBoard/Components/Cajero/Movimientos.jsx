@@ -92,40 +92,51 @@ export const Movimientos = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
       const data = await response.json();
 
       // Verificar si se encontraron datos
       if (data) {
         const { primernombre, primerapellido, segundoapellido } = data;
+
         const ownerName = `${primernombre} ${primerapellido} ${segundoapellido}`;
-        console.log(ownerName);
         setAccountOwner(ownerName);
         setIsFormDisabled(false);
         setDataUser(data);
-        console.log(data);
-        console.log(accountOwner); // Habilitar el formulario después de obtener los datos
       } else {
         console.log(
           "No se encontraron datos para el número de cuenta proporcionado."
         );
+
         // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
       }
     } catch (error) {
       console.error("Error al consultar la base de datos:", error);
+      toast.error("Error: Número de cuenta no encontrado.");
       // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
     }
   };
 
   const handleConsign = async () => {
-    const id = dataUser.id_cliente;
-    const saldo = dataUser.saldo;
+    const id = dataUser.id_detalle;
+    const { saldo, estado } = dataUser;
+
     const idEmpleado = idEmpleadoDetails.id_empleado;
     const saldoEmpleado = idEmpleadoDetails.saldo;
 
     const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
     const newBalanceEmploye = saldoEmpleado - parseFloat(amount);
 
-    if (saldoEmpleado > 0) {
+    // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
+    if (estado === "Denegado") {
+      toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
+    } else if (estado === "Pendiente") {
+      toast.error("Error: Esta cuenta no ha sido autorizada por un Director.");
+    } else if (parseFloat(amount) > saldoEmpleado) {
+      toast.error("Error: No tienes saldo suficiente para esta consignación.");
+    } else if (parseFloat(amount) <= 0) {
+      toast.error("Error: El saldo a consignar no puede ser 0 o menor a 0.");
+    } else {
       try {
         // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
         const responseClient = await fetch(
@@ -145,7 +156,7 @@ export const Movimientos = () => {
         }
 
         const responseEmploye = await fetch(
-          `http://localhost:3000/empleado_balance/${idEmpleado}`,
+          `http://localhost:3000/balance_request/${idEmpleado}`,
           {
             method: "PUT",
             headers: {
@@ -153,6 +164,8 @@ export const Movimientos = () => {
             },
             body: JSON.stringify({
               nuevoSaldo: newBalanceEmploye,
+              newStatus: "Activo",
+              saldoSolicitado: 0,
             }),
           }
         );
@@ -176,10 +189,9 @@ export const Movimientos = () => {
       } catch (error) {
         console.error("Error general:", error);
       }
-    } else {
-      toast.error("Sin saldo suficiente");
     }
   };
+
   function onCloseModal2() {
     setOpenModal2(false);
   }
@@ -216,12 +228,10 @@ export const Movimientos = () => {
       if (data) {
         const { primernombre, primerapellido, segundoapellido } = data;
         const ownerName = `${primernombre} ${primerapellido} ${segundoapellido}`;
-        console.log(ownerName);
         setAccountOwner(ownerName);
         setIsFormDisabled(false);
         setDataUser(data);
         console.log(data);
-        console.log(accountOwner); // Habilitar el formulario después de obtener los datos
       } else {
         console.log(
           "No se encontraron datos para el número de cuenta proporcionado."
@@ -230,21 +240,31 @@ export const Movimientos = () => {
       }
     } catch (error) {
       console.error("Error al consultar la base de datos:", error);
+      toast.error("Error: Número de cuenta no encontrado.");
       // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
     }
   };
 
   const handleRetirar = async () => {
-    const id = dataUser.id_cliente;
-    const saldo = dataUser.saldo;
+    const id = dataUser.id_detalle;
+    const { saldo, estado } = dataUser;
+
     const idEmpleado = idEmpleadoDetails.id_empleado;
     const saldoEmpleado = idEmpleadoDetails.saldo;
 
     const newBalanceClient = parseFloat(saldo) - parseFloat(amount);
     const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
 
-    // Verificar que el nuevo saldo del cliente no sea menor que cero
-    if (newBalanceClient > 0) {
+    // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
+    if (estado === "Denegado") {
+      toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
+    } else if (estado === "Pendiente") {
+      toast.error("Error: Esta cuenta no ha sido autorizada por un Director.");
+    } else if (parseFloat(amount) > saldo) {
+      toast.error("Error: Esta cuenta no tiene saldo suficiente.");
+    } else if (parseFloat(amount) <= 0) {
+      toast.error("Error: El saldo a retirar no puede ser 0 o menor a 0.");
+    } else {
       try {
         // Realiza una solicitud al servidor para actualizar el saldo del cliente
         const responseClient = await fetch(
@@ -268,7 +288,7 @@ export const Movimientos = () => {
 
         // Realiza una solicitud al servidor para actualizar el saldo del empleado
         const responseEmploye = await fetch(
-          `http://localhost:3000/empleado_balance/${idEmpleado}`,
+          `http://localhost:3000/balance_request/${idEmpleado}`,
           {
             method: "PUT",
             headers: {
@@ -276,6 +296,8 @@ export const Movimientos = () => {
             },
             body: JSON.stringify({
               nuevoSaldo: newBalanceEmploye,
+              newStatus: "Activo",
+              saldoSolicitado: 0,
             }),
           }
         );
@@ -300,10 +322,6 @@ export const Movimientos = () => {
         console.error("Error general:", error);
         toast.error("Error al realizar la operación.");
       }
-    } else {
-      toast.error(
-        "El saldo del cliente no puede ser cero (0) o menor que cero (0)."
-      );
     }
   };
 
@@ -857,7 +875,7 @@ export const Movimientos = () => {
                           />
                           {isAccountNumberFilled && (
                             <button
-                              onClick={() => handleConsultClick()}
+                              onClick={() => handleConsultClickRetirar()}
                               className={`mt-2 bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
                                 isFormDisabled
                                   ? "opacity-50 cursor-not-allowed"
