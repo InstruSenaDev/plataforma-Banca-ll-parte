@@ -282,27 +282,27 @@ const Transfers = () => {
                           colSpan="4"
                           className="px-6 py-4 text-center text-gray-700 dark:text-gray-400"
                         >
-                          <section class="bg-white dark:bg-gray-900 ">
-                            <div class="container flex items-center min-h-5/6 px-6 py-12 mx-auto">
-                              <div class="flex flex-col items-center max-w-sm mx-auto text-center">
-                                <p class="p-2 text-sm font-medium text-blue-500 bg-lightgreen dark:bg-gray-800 inline-flex items-center rounded-full">
+                          <section className="bg-white dark:bg-gray-900 ">
+                            <div className="container flex items-center min-h-5/6 px-6 py-12 mx-auto">
+                              <div className="flex flex-col items-center max-w-sm mx-auto text-center">
+                                <p className="p-2 text-sm font-medium text-blue-500 bg-lightgreen dark:bg-gray-800 inline-flex items-center rounded-full">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                     stroke="green"
-                                    class="w-4 h-4"
+                                    className="w-4 h-4"
                                   >
                                     <path
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
                                       d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
                                     />
                                   </svg>
                                 </p>
 
-                                <p class="mt-4 text-gray-500 dark:text-gray-400">
+                                <p className="mt-4 text-gray-500 dark:text-gray-400">
                                   No se encuntran cajeros solicitantes
                                 </p>
                               </div>
