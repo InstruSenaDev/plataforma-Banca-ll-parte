@@ -124,7 +124,7 @@ export const HistorialD = () => {
           className="container p-4 mx-auto flex flex-col"
           style={{ minHeight: "87vh" }}
         >
-          <div className="flex justify-between items-center gap-x-3">
+          <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
             <div className="flex flex-col justify-center items-start">
               <div className="flex flex-row items-center gap-x-3">
                 <h2 className="text-lg font-medium text-gray-800 dark:text-white">
