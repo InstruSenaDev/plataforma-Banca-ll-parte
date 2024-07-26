@@ -74,12 +74,14 @@ const Card = () => {
       try {
         // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
         const responseCajero = await fetch(
-          `http://localhost:3000/empleado_balance/${idEmpleado}`,
+          `http://localhost:3000/balance_request/${idEmpleado}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               nuevoSaldo: 0,
+              saldoSolicitado: 0,
+              newStatus: "Activo",
             }),
           }
         );

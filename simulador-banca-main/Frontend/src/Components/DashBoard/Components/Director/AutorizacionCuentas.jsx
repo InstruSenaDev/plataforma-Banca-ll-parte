@@ -5,7 +5,7 @@ import { ModalAutorizaciones } from "../ModalAutorizaciones";
 
 export const AutorizacionCuentas = () => {
   const [dataUser, setDataUser] = useState([]);
-  const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
+  const [modalData, setModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const waitingAccounts = async () => {

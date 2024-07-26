@@ -19,7 +19,6 @@ router.put(
   "/empleado_balance/:id",
   updateBalanceEmpleado.updateBalanceEmpleado
 );
-router.put("/balance_request/:idEmpleado", balanceRequest.balanceRequest);
 router.delete("/delete_user/:userId", deleteUser.deleteUser);
 
 module.exports = router;
