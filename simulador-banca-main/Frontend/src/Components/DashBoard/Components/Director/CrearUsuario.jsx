@@ -9,7 +9,7 @@ import { useAuth } from "../../../../context/AuthContext";
 import { ModalConsignarCajero } from "../CajeroPrincipal/ModalConsignarCajero";
 
 export const CrearUsuario = () => {
-  const [empleadoDetails, setEpleadoDetails] = useState([]);
+  const [empleadoDetails, setEmpleadoDetails] = useState([]);
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState([]);
   const [forceUpdate, setForceUpdate] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -29,7 +29,7 @@ export const CrearUsuario = () => {
       }
       if (response.ok) {
         const data = await response.json();
-        setEpleadoDetails(data);
+        setEmpleadoDetails(data);
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -84,6 +84,8 @@ export const CrearUsuario = () => {
     }
   };
 
+  const cajerosLength = empleadoDetails.filter((users) => users.id_rol === 3);
+
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
     // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
@@ -127,11 +129,15 @@ export const CrearUsuario = () => {
         <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
           <div className="flex flex-col justify-center items-start">
             <div className="flex flex-row items-center gap-x-2">
-              <h2 className="text-lg font-medium text-gray-800 dark:text-white">
+              <h2 className="text-sm sm:text-lg lg:text-xl font-medium text-gray-800 dark:text-white">
                 Miembros del equipo
               </h2>
               <span className="px-2 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-                {empleadoDetails.length} empleado(s)
+                {user?.id_rol === 1 ? (
+                  <>{empleadoDetails.length} empleado(s)</>
+                ) : (
+                  <>{cajerosLength.length} cajero(s)</>
+                )}
               </span>
             </div>
             {user?.id_rol === 1 && (
@@ -434,16 +440,18 @@ export const CrearUsuario = () => {
 
                                 <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <div className="flex items-center gap-x-2">
-                                      <img
-                                        className="object-cover w-10 h-10 rounded-full"
-                                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                                        alt=""
-                                      />
-                                      <div>
-                                        <h2 className="font-medium text-gray-800 dark:text-white ">
-                                          {date.username}
-                                        </h2>
+                                    <div className="flex justify-start w-40">
+                                      <div className="flex items-center gap-x-2">
+                                        <img
+                                          className="object-cover w-10 h-10 rounded-full"
+                                          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          alt=""
+                                        />
+                                        <div>
+                                          <h2 className="font-medium text-gray-800 dark:text-white ">
+                                            {date.username}
+                                          </h2>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
