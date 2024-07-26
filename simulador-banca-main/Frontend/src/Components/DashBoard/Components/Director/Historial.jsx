@@ -229,7 +229,7 @@ export const Historial = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {allMovimientos
+                      {dataFiltrados
                         ?.map((data) => (
                           <React.Fragment key={data.id_detalle}>
                             <tr>
