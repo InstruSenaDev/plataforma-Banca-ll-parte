@@ -184,7 +184,7 @@ const Card = () => {
               <p className="text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
                 Saldo T. Cajero Principal
               </p>
-              <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
+              <h5 className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold text-white">
                 {formatSaldo(idEmpleadoDetails.saldo)}
               </h5>
             </div>
@@ -213,10 +213,11 @@ const Card = () => {
               Saldo T. en Bóveda
             </p>
             <div className="flex items-center justify-between">
-              <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
+              <h5 className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold text-white">
+                {/* {isVisible ? formatSaldo(bovedaDetails.saldo_boveda) : "****"} */}
                 {isVisible ? formatSaldo(bovedaDetails.saldo_boveda) : "****"}
               </h5>
-              <div className="text-white sm:flex sm:items-center sm:justify-between">
+              <div className="text-white flex justify-center items-center">
                 <button onClick={toggleVisibility}>
                   {isVisible ? (
                     <svg
@@ -225,7 +226,7 @@ const Card = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="size-6"
+                      className="size-5 lg:size-5 2xl:size-6"
                     >
                       <path
                         strokeLinecap="round"
@@ -245,7 +246,7 @@ const Card = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="size-6"
+                      className="size-5 lg:size-5 2xl:size-6"
                     >
                       <path
                         strokeLinecap="round"
