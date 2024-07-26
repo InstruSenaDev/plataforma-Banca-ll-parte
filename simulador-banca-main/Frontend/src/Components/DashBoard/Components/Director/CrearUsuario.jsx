@@ -159,7 +159,7 @@ export const CrearUsuario = () => {
 
           {user?.id_rol === 1 && (
             <button
-              class="flex gap-x-1 items-center px-4 py-2 font-normal text-white transition-colors duration-300 transform bg-green-500 rounded-lg hover:bg-green"
+              class="flex gap-x-1 items-center px-4 py-2 font-normal text-white transition-colors duration-300 bg-green-500 rounded-lg hover:bg-green"
               onClick={() => openModal(empleadoDetails)}
             >
               <svg

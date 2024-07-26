@@ -12,6 +12,7 @@ export const Movimientos = () => {
   const [dataUser, setDataUser] = useState();
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [empleadoDetails, setEmpleadoDetails] = useState("");
+  const [bovedaDetails, setBovedaDetails] = useState("");
 
   //Disable Modales
   const [accountNumber, setAccountNumber] = useState("");
@@ -174,6 +175,25 @@ export const Movimientos = () => {
           throw new Error("Network response was not ok");
         }
 
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_movimiento/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: idEmpleado,
+              saldo: amount,
+              tipoMovimiento: 1,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
+          throw new Error("Network response was not ok");
+        }
+
         const data = await responseClient.json();
         console.log(data.message);
         toast.success("Saldo consignado correctamente.");
@@ -306,6 +326,25 @@ export const Movimientos = () => {
           throw new Error(
             "Network response was not ok al actualizar el saldo del empleado"
           );
+        }
+
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_movimiento/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: idEmpleado,
+              saldo: amount,
+              tipoMovimiento: 2,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
+          throw new Error("Network response was not ok");
         }
 
         toast.success("Saldo retirado y actualizado correctamente.");
@@ -589,7 +628,7 @@ export const Movimientos = () => {
                             className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
                             show={openModal2}
                             size="md"
-                            onClose={() => setOpenModal(false)}
+                            onClose={() => setOpenModal2(false)}
                             popup
                           >
                             <Modal.Header>
