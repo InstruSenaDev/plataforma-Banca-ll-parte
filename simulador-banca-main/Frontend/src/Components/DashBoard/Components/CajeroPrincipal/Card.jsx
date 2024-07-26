@@ -214,7 +214,6 @@ const Card = () => {
             </p>
             <div className="flex items-center justify-between">
               <h5 className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold text-white">
-                {/* {isVisible ? formatSaldo(bovedaDetails.saldo_boveda) : "****"} */}
                 {isVisible ? formatSaldo(bovedaDetails.saldo_boveda) : "****"}
               </h5>
               <div className="text-white flex justify-center items-center">
