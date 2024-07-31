@@ -7,6 +7,10 @@ const deleteUser = async (req, res) => {
   try {
     const userId = req.params.userId;
 
+    const result3 = await pool.query(
+      `UPDATE movimientos SET id_empleado = NULL WHERE id_empleado = ${userId}`
+    );
+
     const result2 = await pool.query(`
       UPDATE detalle_cuenta SET id_empleado = NULL WHERE id_empleado = ${userId}
     `);

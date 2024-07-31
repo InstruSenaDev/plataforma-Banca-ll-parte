@@ -19,8 +19,8 @@ const addUser = async (req, res) => {
     }
     // Insertar el nuevo usuario sin proporcionar un valor para id_usuario
     const insertQuery =
-      "INSERT INTO empleado (id_rol, username, password, saldo, estado) VALUES ($1, $2, $3, $4, $5)";
-    const insertValues = [id_rol, username, password, 0, "Activo"];
+      "INSERT INTO empleado (id_rol, username, password, saldo, estado, saldo_solicitado) VALUES ($1, $2, $3, $4, $5, $6)";
+    const insertValues = [id_rol, username, password, 0, "Activo", 0];
     const result = await pool.query(insertQuery, insertValues);
 
     res.status(201).json({ message: "Registro de usuario exitoso" });

@@ -177,12 +177,20 @@ export const ReportesMovimientos = () => {
                                           alt=""
                                         />
                                         <div>
-                                          <h2 className="font-medium text-gray-800 dark:text-white ">
-                                            {data.empleado}
-                                          </h2>
-                                          <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            {data.rol}
-                                          </p>
+                                          {data.empleado ? (
+                                            <>
+                                              <h2 className="font-medium text-gray-800 dark:text-white ">
+                                                {data.empleado}
+                                              </h2>
+                                              <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                                {data.rol}
+                                              </p>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <h2>Usuario eliminado</h2>
+                                            </>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
