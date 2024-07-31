@@ -93,6 +93,25 @@ export const CrearUsuario = () => {
           throw new Error("Network response was not ok");
         }
 
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_devolver/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: userId,
+              saldo: saldoEmpleado,
+              tipoMovimiento: 5,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
+          throw new Error("Network response was not ok");
+        }
+
         const response = await fetch(
           `http://localhost:3000/delete_user/${userId}`,
           {
