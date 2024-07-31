@@ -282,7 +282,7 @@ const Transfers = () => {
                           colSpan="4"
                           className="px-6 py-4 text-center text-gray-700 dark:text-gray-400"
                         >
-                          <section className="bg-white dark:bg-gray-900 ">
+                          <section className="bg-white dark:bg-gray-900">
                             <div className="container flex items-center min-h-5/6 px-6 py-12 mx-auto">
                               <div className="flex flex-col items-center max-w-sm mx-auto text-center">
                                 <p className="p-2 text-sm font-medium text-blue-500 bg-lightgreen dark:bg-gray-800 inline-flex items-center rounded-full">
