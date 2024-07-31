@@ -8,8 +8,6 @@ import MovimientosCajeros from "./Director/MovimientoCajeros";
 export const PrincipalPage = () => {
   const { user } = useAuth();
 
-  console.log(user);
-
   if (user?.id_rol === 4) {
     return (
       <>

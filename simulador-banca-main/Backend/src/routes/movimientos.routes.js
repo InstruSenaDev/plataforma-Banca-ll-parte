@@ -9,7 +9,7 @@ const getMovimientos = require("../controllers/movimientos/getMovimientos");
 
 router.get("/get_boveda", getBoveda.getBoveda);
 router.get("/get_movimientos", getMovimientos.getMovimientos);
-router.post("/post_movimiento", postMovimietos.postMovimietos);
+router.post("/post_movimiento/:id", postMovimietos.postMovimietos);
 router.post("/entrada_boveda/:idEmpleado", entradaBoveda.entradaBoveda);
 router.post("/salida_boveda/:idEmpleado", salidaBoveda.salidaBoveda);
 

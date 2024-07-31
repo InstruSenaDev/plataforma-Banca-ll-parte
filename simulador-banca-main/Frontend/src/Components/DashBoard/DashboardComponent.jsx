@@ -64,7 +64,6 @@ export const DashboardComponent = () => {
           const data = await response.json();
           setUserData(data); // Almacenar los datos del usuario en el estado
           setData(userData.ip_primernombre);
-          console.log(data);
         }
       } catch (error) {
         console.error("Error al obtener información:", error);
@@ -105,10 +104,10 @@ export const DashboardComponent = () => {
     logout();
   };
 
-  console.log(userName);
-  console.log(userData);
-  console.log(user);
-  console.log({ contenidoSeleccionado });
+  // console.log(userName);
+  // console.log(userData);
+  // console.log(user);
+  // console.log({ contenidoSeleccionado });
 
   return (
     <>
@@ -119,7 +118,7 @@ export const DashboardComponent = () => {
             <div
               className={`${
                 sidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } lg:flex lg:flex-col absolute lg:static z-40 left-0 top-0 lg:translate-x-0 bg-beige h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
+              } xl:flex xl:flex-col absolute xl:static z-40 left-0 top-0 xl:translate-x-0 bg-beige h-screen overflow-y-scroll xl:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
               aria-label="Sidebar"
             >
               <div className="h-full bg-white xl:border-r-2 border-beige">
@@ -127,7 +126,7 @@ export const DashboardComponent = () => {
                 <div className="flex flex-col justify-between h-full py-4">
                   {/* Close sidebar (only movil) */}
                   <button
-                    className="lg:hidden text-slate-500 hover:text-slate-400 px-2"
+                    className="xl:hidden text-slate-500 hover:text-slate-400 px-2"
                     aria-controls="sidebar"
                     onClick={toggleSidebar}
                   >
@@ -162,7 +161,7 @@ export const DashboardComponent = () => {
                     </NavLink>
 
                     <div className="items-center block w-full max-h-screen overflow-auto h-sidenav grow basis-full px-6">
-                      <hr class="border-gray-200 dark:border-gray-700 mb-6" />
+                      <hr className="border-gray-200 dark:border-gray-700 mb-6" />
                       <ul className="flex flex-col space-y-1 pl-0 mb-0">
                         <button
                           className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
@@ -521,7 +520,7 @@ export const DashboardComponent = () => {
                           </>
                         )}
                       </ul>
-                      <hr class="border-gray-200 dark:border-gray-700 mt-6" />
+                      <hr className="border-gray-200 dark:border-gray-700 mt-6" />
                     </div>
 
                     <div className="mx-4">
@@ -543,7 +542,7 @@ export const DashboardComponent = () => {
 
             {sidebarOpen && (
               <div
-                className="fixed inset-0 bg-black opacity-25 z-30 lg:hidden"
+                className="fixed inset-0 bg-black opacity-25 z-30 md:hidden"
                 onClick={toggleSidebar}
               ></div>
             )}
@@ -558,7 +557,7 @@ export const DashboardComponent = () => {
                     <div className="flex">
                       {/* Hamburger button */}
                       <button
-                        className="text-slate-500 hover:text-slate-600 lg:hidden"
+                        className="text-slate-500 hover:text-slate-600 xl:hidden"
                         aria-controls="sidebar"
                         onClick={toggleSidebar}
                       >

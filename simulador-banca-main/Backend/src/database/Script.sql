@@ -25,7 +25,7 @@ CREATE TABLE detalle_cuenta(
     id_empleado INTEGER,
     num_cuenta bigint GENERATED ALWAYS AS IDENTITY (START WITH 1000000001 INCREMENT BY 1) NOT NULL,
     CHECK (num_cuenta  >= 1000000000 AND num_cuenta  <= 9999999999),
-    saldo NUMERIC(10, 2),
+    saldo NUMERIC(10, 2) DEFAULT 0,
     estado TEXT,
     razon_rechazo TEXT,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -34,8 +34,8 @@ CREATE TABLE detalle_cuenta(
 CREATE TABLE empleado (
     id_empleado SERIAL PRIMARY KEY,
     id_rol INTEGER,
-    saldo NUMERIC(10, 2),
-    saldo_solicitado NUMERIC(10, 2),
+    saldo NUMERIC(10, 2) DEFAULT 0,
+    saldo_solicitado NUMERIC(10, 2) DEFAULT 0,
     username varchar(30),
     username varchar(30),
     estado varchar(15)

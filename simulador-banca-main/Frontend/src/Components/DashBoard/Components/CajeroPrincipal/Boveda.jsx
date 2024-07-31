@@ -48,17 +48,17 @@ const Boveda = () => {
             <div className="w-full sm:w-full sm:flex-none">
               <div className="flex px-4 py-8 flex-col bg-DarkSlate rounded-md bg-clip-border">
                 <div>
-                  <h1 className="text-xl font-normal text-white dark:opacity-60">
+                  <h1 className="text-md xl:text-xl font-normal text-white dark:opacity-60">
                     Saldo Total de Bóveda
                   </h1>
                   <div className="flex items-center justify-between mt-2">
-                    <p className="text-4xl font-bold text-white">
+                    <p className="text-lg md:text-xl lg:text-3xl xl:text-4xl 2xl:text-3xl font-bold text-white">
                       {isVisible
                         ? formatSaldo(bovedaDetails.saldo_boveda)
                         : "****"}
                     </p>
 
-                    <div className="text-white sm:flex sm:items-center sm:justify-between">
+                    <div className="text-white flex justify-center items-center">
                       <button onClick={toggleVisibility}>
                         {isVisible ? (
                           <svg
@@ -67,7 +67,7 @@ const Boveda = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="size-6"
+                            className="size-5 2xl:size-6"
                           >
                             <path
                               strokeLinecap="round"
@@ -87,7 +87,7 @@ const Boveda = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="size-6"
+                            className="size-5 2xl:size-6"
                           >
                             <path
                               strokeLinecap="round"

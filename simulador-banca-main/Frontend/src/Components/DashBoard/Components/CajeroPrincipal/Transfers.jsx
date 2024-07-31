@@ -125,15 +125,15 @@ const Transfers = () => {
   }, []);
 
   return (
-    <section className="container px-4 mx-auto">
+    <section className="container px-0 lg:px-4 mx-auto mt-6">
       <div className="sm:flex sm:items-center sm:justify-between">
         <h2 className="text-lg font-medium text-gray-800 dark:text-white">
           Cajeros
         </h2>
       </div>
 
-      <div className="flex flex-col mt-6">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div className="flex flex-col mt-2">
+        <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -182,94 +182,137 @@ const Transfers = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                  {filterEmpleados.map((empleado) => (
-                    <tr key={empleado.id_empleado}>
-                      <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span># {empleado.id_empleado}</span>
-                        </div>
-                      </td>
-                      <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <div className="flex items-center gap-x-2">
-                            <img
-                              className="object-cover w-10 h-10 rounded-full"
-                              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                              alt=""
-                            />
-                            <div>
-                              <h2 className="font-medium text-gray-800 dark:text-white">
-                                {empleado.username}
-                              </h2>
-                              <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                Cajero
-                              </p>
+
+                {filterEmpleados.length > 0 ? (
+                  <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                    {filterEmpleados.map((empleado) => (
+                      <tr key={empleado.id_empleado}>
+                        <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <span># {empleado.id_empleado}</span>
+                          </div>
+                        </td>
+                        <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <div className="flex items-center gap-x-2">
+                              <img
+                                className="object-cover w-10 h-10 rounded-full"
+                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                alt=""
+                              />
+                              <div>
+                                <h2 className="font-medium text-gray-800 dark:text-white">
+                                  {empleado.username}
+                                </h2>
+                                <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                  Cajero
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{formatSaldo(empleado.saldo_solicitado)}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                        <div className="w-full inline-flex justify-center items-center gap-x-4">
-                          <button
-                            className="flex justify-center items-center dark:bg-gray-800"
-                            onClick={() => openModal(empleado.id_empleado)}
-                          >
-                            {/* <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
+                        </td>
+                        <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <span>
+                              {formatSaldo(empleado.saldo_solicitado)}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                          <div className="w-full inline-flex justify-center items-center gap-x-4">
+                            <button
+                              className="flex justify-center items-center dark:bg-gray-800"
+                              onClick={() => openModal(empleado.id_empleado)}
+                            >
+                              {/* <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
                               Transferir Saldo
                             </h2> */}
-                            <span className="text-gray-500 hover:text-emerald-600">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.6}
-                                stroke="currentColor"
-                                className="size-5"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                />
-                              </svg>
-                            </span>
-                          </button>
+                              <span className="text-gray-500 hover:text-emerald-600">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.6}
+                                  stroke="currentColor"
+                                  className="size-5"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                  />
+                                </svg>
+                              </span>
+                            </button>
 
-                          <button
-                            className="flex justify-center items-center dark:bg-gray-800"
-                            onClick={() => handleCancel(empleado)}
-                          >
-                            {/* <h2 className="text-md font-normal text-red-500 group-hover:text-white">
+                            <button
+                              className="flex justify-center items-center dark:bg-gray-800"
+                              onClick={() => handleCancel(empleado)}
+                            >
+                              {/* <h2 className="text-md font-normal text-red-500 group-hover:text-white">
                               Cancelar Solicitud
                             </h2> */}
-                            <span className="text-gray-500 hover:text-red-600">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.6}
-                                stroke="currentColor"
-                                className="size-5"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                />
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                              <span className="text-gray-500 hover:text-red-600">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.6}
+                                  stroke="currentColor"
+                                  className="size-5"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                  />
+                                </svg>
+                              </span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                ) : (
+                  <>
+                    <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                      <tr>
+                        <td
+                          colSpan="4"
+                          className="px-6 py-4 text-center text-gray-700 dark:text-gray-400"
+                        >
+                          <section className="bg-white dark:bg-gray-900">
+                            <div className="container flex items-center min-h-5/6 px-6 py-12 mx-auto">
+                              <div className="flex flex-col items-center max-w-sm mx-auto text-center">
+                                <p className="p-2 text-sm font-medium text-blue-500 bg-lightgreen dark:bg-gray-800 inline-flex items-center rounded-full">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth="2"
+                                    stroke="green"
+                                    className="w-4 h-4"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                                    />
+                                  </svg>
+                                </p>
+
+                                <p className="mt-4 text-gray-500 dark:text-gray-400">
+                                  No se encuntran cajeros solicitantes
+                                </p>
+                              </div>
+                            </div>
+                          </section>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </>
+                )}
               </table>
             </div>
           </div>

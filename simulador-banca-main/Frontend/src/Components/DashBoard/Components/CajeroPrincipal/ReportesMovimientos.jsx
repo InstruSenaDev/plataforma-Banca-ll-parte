@@ -180,7 +180,7 @@ export const ReportesMovimientos = () => {
                                           <h2 className="font-medium text-gray-800 dark:text-white ">
                                             {data.empleado}
                                           </h2>
-                                          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                          <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                             {data.rol}
                                           </p>
                                         </div>
@@ -190,18 +190,18 @@ export const ReportesMovimientos = () => {
                                 </td>
 
                                 <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                  <div class="flex flex-col justify-center items-center gap-x-2">
+                                  <div className="flex flex-col justify-center items-center gap-x-2">
                                     {data.cliente ? (
                                       <>
-                                        <h2 class="font-medium text-gray-800 dark:text-white ">
+                                        <h2 className="font-medium text-gray-800 dark:text-white ">
                                           {data.cliente}
                                         </h2>
-                                        <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                           N° {data.num_cuenta}
                                         </p>
                                       </>
                                     ) : (
-                                      <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                      <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                         Bóveda
                                       </p>
                                     )}
