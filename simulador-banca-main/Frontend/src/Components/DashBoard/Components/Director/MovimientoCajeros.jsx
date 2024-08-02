@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import ModalInfoCajeros from "../ModalInfoCajeros";
 
 export const MovimientosCajeros = () => {
+
   const [movCajeros, setMoviCajeros] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalcajero, setModalCajero] = useState(null);
 
   const fetchCajeros = async () => {
     try {
@@ -10,8 +14,8 @@ export const MovimientosCajeros = () => {
         throw new Error("Network response was not ok");
       }
       if (response.ok) {
-        const data = await response.json();
-        const filterCajeros = data.filter((users) => users.id_rol === 3);
+        const cajero = await response.json();
+        const filterCajeros = cajero.filter((users) => users.id_rol === 3);
         setMoviCajeros(filterCajeros);
       } else {
         console.error("Error fetching user info:", response.status);
@@ -23,6 +27,16 @@ export const MovimientosCajeros = () => {
   useEffect(() => {
     fetchCajeros();
   });
+
+  const openModal = (cajero) => {
+    setModalCajero(cajero);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalCajero(null);
+  };
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -36,6 +50,7 @@ export const MovimientosCajeros = () => {
     // Formatea el costo usando la configuración especificada.
     return formatter.format(saldo);
   };
+
 
   return (
     <>
@@ -115,12 +130,12 @@ export const MovimientosCajeros = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {movCajeros?.map((data) => (
-                        <React.Fragment key={data.id_empleado}>
+                      {movCajeros?.map((cajero) => (
+                        <React.Fragment key={cajero.id_empleado}>
                           <tr>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <span># {data.id_empleado}</span>
+                                <span># {cajero.id_empleado}</span>
                               </div>
                             </td>
                             <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -134,10 +149,10 @@ export const MovimientosCajeros = () => {
                                     />
                                     <div>
                                       <h2 className="font-medium text-gray-800 dark:text-white ">
-                                        {data.username}
+                                        {cajero.username}
                                       </h2>
                                       <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                        {data.id_rol === 3 && <>Cajero</>}
+                                        {cajero.id_rol === 3 && <>Cajero</>}
                                       </p>
                                     </div>
                                   </div>
@@ -147,7 +162,7 @@ export const MovimientosCajeros = () => {
 
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <span>{formatSaldo(data.saldo)}</span>
+                                <span>{formatSaldo(cajero.saldo)}</span>
                               </div>
                             </td>
 
@@ -169,7 +184,10 @@ export const MovimientosCajeros = () => {
 
                             <td className="flex justify-center px-5 py-5 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="inline-flex items-center px-3 py-1 text-gray-500 dark:text-gray-400">
-                                <button className="text-gray-500 transition-colors duration-200 dark:hover:text-amber-500 dark:text-gray-300 hover:text-amber-500 focus:outline-none">
+                                <button
+                                  className="text-gray-500 transition-colors duration-200 dark:hover:text-amber-500 dark:text-gray-300 hover:text-amber-500 focus:outline-none"
+                                  onClick={() => openModal(cajero)}
+                                >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
@@ -197,6 +215,11 @@ export const MovimientosCajeros = () => {
             </div>
           </div>
         </div>
+        <ModalInfoCajeros
+          showModal={showModal}
+          closeModal={closeModal}
+          cajero={modalcajero}
+        />
       </section>
     </>
   );
