@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import ModalInfoCajeros from "../ModalInfoCajeros";
 
 export const MovimientosCajeros = () => {
-
   const [movCajeros, setMoviCajeros] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalcajero, setModalCajero] = useState(null);
@@ -50,7 +49,6 @@ export const MovimientosCajeros = () => {
     // Formatea el costo usando la configuración especificada.
     return formatter.format(saldo);
   };
-
 
   return (
     <>
