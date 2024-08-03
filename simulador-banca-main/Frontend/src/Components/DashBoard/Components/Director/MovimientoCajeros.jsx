@@ -12,24 +12,26 @@ export const MovimientosCajeros = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      if (response.ok) {
-        const cajero = await response.json();
-        const filterCajeros = cajero.filter((users) => users.id_rol === 3);
-        setMoviCajeros(filterCajeros);
-      } else {
-        console.error("Error fetching user info:", response.status);
-      }
+      const cajero = await response.json();
+      const filterCajeros = cajero.filter((users) => users.id_rol === 3);
+      setMoviCajeros(filterCajeros);
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
   };
+
   useEffect(() => {
     fetchCajeros();
-  });
+  }, []); // Dependencia vacía para que solo se ejecute al montar
+
+  useEffect(() => {
+    if (modalcajero) {
+      setShowModal(true);
+    }
+  }, [modalcajero]);
 
   const openModal = (cajero) => {
     setModalCajero(cajero);
-    setShowModal(true);
   };
 
   const closeModal = () => {
@@ -37,16 +39,12 @@ export const MovimientosCajeros = () => {
     setModalCajero(null);
   };
 
-  // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
-    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
     const formatter = new Intl.NumberFormat("es-CO", {
       style: "currency",
       currency: "COP",
       minimumFractionDigits: 0,
     });
-
-    // Formatea el costo usando la configuración especificada.
     return formatter.format(saldo);
   };
 
@@ -128,7 +126,7 @@ export const MovimientosCajeros = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {movCajeros?.map((cajero) => (
+                      {movCajeros.map((cajero) => (
                         <React.Fragment key={cajero.id_empleado}>
                           <tr>
                             <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
@@ -146,10 +144,10 @@ export const MovimientosCajeros = () => {
                                       alt=""
                                     />
                                     <div>
-                                      <h2 className="font-medium text-gray-800 dark:text-white ">
+                                      <h2 className="font-medium text-gray-800 dark:text-white">
                                         {cajero.username}
                                       </h2>
-                                      <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                      <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                         {cajero.id_rol === 3 && <>Cajero</>}
                                       </p>
                                     </div>
@@ -167,7 +165,6 @@ export const MovimientosCajeros = () => {
                             <td className="flex justify-center px-5 py-5 text-sm font-medium text-gray-700 whitespace-nowrap">
                               <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-
                                 <h2 className="text-sm font-normal text-emerald-500">
                                   Activo
                                 </h2>
@@ -213,11 +210,13 @@ export const MovimientosCajeros = () => {
             </div>
           </div>
         </div>
-        <ModalInfoCajeros
-          showModal={showModal}
-          closeModal={closeModal}
-          cajero={modalcajero}
-        />
+        {modalcajero && (
+          <ModalInfoCajeros
+            showModal={showModal}
+            closeModal={closeModal}
+            cajero={modalcajero}
+          />
+        )}
       </section>
     </>
   );
