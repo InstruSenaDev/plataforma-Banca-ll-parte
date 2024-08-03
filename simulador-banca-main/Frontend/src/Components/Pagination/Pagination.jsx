@@ -61,7 +61,7 @@ export const Pagination = ({
 
   return (
     <div className="w-full mt-6">
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center ">
         <button
           disabled={currentPage === 1}
           className={`px-4 py-2 mx-1 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-600 ${
@@ -90,20 +90,22 @@ export const Pagination = ({
           </div>
         </button>
 
-        {pageNumbers.map((page, index) => (
-          <button
-            key={index}
-            onClick={() => onSpecifyPage(page)}
-            className={`px-4 py-2 mx-1 transition-colors duration-300 transform rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-emerald-700 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-gray-200 ${
-              page === currentPage
-                ? "bg-emerald-600 text-white"
-                : "bg-white text-gray-700"
-            }`}
-            disabled={page === "..."}
-          >
-            {page}
-          </button>
-        ))}
+        <div className="hidden sm:flex">
+          {pageNumbers.map((page, index) => (
+            <button
+              key={index}
+              onClick={() => onSpecifyPage(page)}
+              className={`px-4 py-2 mx-1 transition-colors duration-300 transform rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-emerald-700 dark:hover:bg-emerald-500 hover:text-white dark:hover:text-gray-200 ${
+                page === currentPage
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-700"
+              }`}
+              disabled={page === "..."}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
 
         <button
           disabled={currentPage >= totalPages}
