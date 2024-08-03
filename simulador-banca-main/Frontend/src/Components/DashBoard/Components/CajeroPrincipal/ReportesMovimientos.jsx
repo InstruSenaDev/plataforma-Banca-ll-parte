@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import userProfile from "../../../../assets/Img/Login/user.png";
 import { Pagination } from "../../../Pagination/Pagination";
 
 export const ReportesMovimientos = () => {
@@ -173,7 +174,8 @@ export const ReportesMovimientos = () => {
                                       <div className="flex items-center gap-x-2">
                                         <img
                                           className="object-cover w-10 h-10 rounded-full"
-                                          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          src={userProfile}
                                           alt=""
                                         />
                                         <div>

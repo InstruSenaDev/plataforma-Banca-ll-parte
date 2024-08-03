@@ -5,6 +5,7 @@ import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJur
 import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
 import { PrincipalPage } from "./Components/PrincipalPage";
 import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
+import userProfile from "../../assets/Img/Login/user.png";
 import { No_Disponible } from "./Components/NoDisponible";
 import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
 import { CrearUsuario } from "./Components/Director/CrearUsuario";
@@ -80,9 +81,8 @@ export const DashboardComponent = () => {
   };
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen); 
+    setSidebarOpen(!sidebarOpen);
   };
-  
 
   const closeSidebar = () => {
     setSidebarOpen(false);
@@ -171,7 +171,9 @@ export const DashboardComponent = () => {
                         <button
                           className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                           onClick={() => {
-                            closeSidebar(); handleBotonClick("PrincipalPage")}}
+                            closeSidebar();
+                            handleBotonClick("PrincipalPage");
+                          }}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +224,9 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
-                                closeSidebar(); handleBotonClick("CrearUsuario")}}
+                                closeSidebar();
+                                handleBotonClick("CrearUsuario");
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +250,7 @@ export const DashboardComponent = () => {
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
                                 closeSidebar();
-                                handleBotonClick("ReportesMovimientos")
+                                handleBotonClick("ReportesMovimientos");
                               }}
                             >
                               <svg
@@ -270,7 +274,9 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
-                                closeSidebar(); handleBotonClick("Boveda")}}
+                                closeSidebar();
+                                handleBotonClick("Boveda");
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +338,9 @@ export const DashboardComponent = () => {
                                 <button
                                   className="flex items-center ml-10 px-2 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x- xl:text-sm 2xl:text-base"
                                   onClick={() => {
-                                    closeSidebar(); handleBotonClick("Historial")}}
+                                    closeSidebar();
+                                    handleBotonClick("Historial");
+                                  }}
                                 >
                                   <span className="mx-1 text-center px-7 ">
                                     Cuentas Aceptadas
@@ -341,7 +349,9 @@ export const DashboardComponent = () => {
                                 <button
                                   className="flex items-center ml-10 px-1 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 xl:text-sm 2xl:text-base"
                                   onClick={() => {
-                                    closeSidebar(); handleBotonClick("HistorialD")}}
+                                    closeSidebar();
+                                    handleBotonClick("HistorialD");
+                                  }}
                                 >
                                   <span className="mx-1 text-center px-7">
                                     Cuentas Denegadas
@@ -400,7 +410,9 @@ export const DashboardComponent = () => {
                                   className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                                   onClick={() => {
                                     closeSidebar();
-                                    handleBotonClick("FormularioPersonaNatural")
+                                    handleBotonClick(
+                                      "FormularioPersonaNatural"
+                                    );
                                   }}
                                 >
                                   <span className="mx-1 text-center px-10">
@@ -413,7 +425,9 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
-                                closeSidebar(); handleBotonClick("Busqueda")}}
+                                closeSidebar();
+                                handleBotonClick("Busqueda");
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -441,7 +455,9 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
-                                closeSidebar(); handleBotonClick("Movimientos")}}
+                                closeSidebar();
+                                handleBotonClick("Movimientos");
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -469,7 +485,9 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
-                                closeSidebar(); handleBotonClick("CrearUsuario")}}
+                                closeSidebar();
+                                handleBotonClick("CrearUsuario");
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -492,7 +510,7 @@ export const DashboardComponent = () => {
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
                                 closeSidebar();
-                                handleBotonClick("ReportesMovimientos")
+                                handleBotonClick("ReportesMovimientos");
                               }}
                             >
                               <svg
@@ -516,7 +534,9 @@ export const DashboardComponent = () => {
                             <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
-                                closeSidebar(); handleBotonClick("Boveda")}}
+                                closeSidebar();
+                                handleBotonClick("Boveda");
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -620,7 +640,8 @@ export const DashboardComponent = () => {
                             <div className="relative">
                               <img
                                 className="object-cover w-10 h-10 rounded-full ring ring-gray-300 dark:ring-gray-600"
-                                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
+                                // src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
+                                src={userProfile}
                                 alt=""
                               />
                               <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 absolute right-0 ring-1 ring-white bottom-0"></span>
