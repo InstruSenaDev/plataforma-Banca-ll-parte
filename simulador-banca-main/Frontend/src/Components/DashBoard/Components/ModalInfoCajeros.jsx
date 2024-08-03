@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-const ModalInfoCajeros = ({ showModal, closeModal, cajeroData }) => {
-  if (!showModal) return null;
-
+const ModalInfoCajeros = ({ showModal, closeModal }) => {
   const [cajeros, setCajeros] = useState([]);
   const [cajero, setCajero] = useState(null);
-  const [selectedCajeroId, setSelectedCajeroId] = useState(null);
 
   const fetchCajeros = async () => {
     try {
@@ -17,9 +14,7 @@ const ModalInfoCajeros = ({ showModal, closeModal, cajeroData }) => {
       const filterCajeros = cajerosData.filter((user) => user.id_rol === 3);
       setCajeros(filterCajeros);
 
-      // Optionally set the first cajero as the default selection
       if (filterCajeros.length > 0) {
-        setSelectedCajeroId(filterCajeros[0].id_empleado);
         setCajero(filterCajeros[0]);
       }
     } catch (error) {
@@ -28,26 +23,14 @@ const ModalInfoCajeros = ({ showModal, closeModal, cajeroData }) => {
   };
 
   useEffect(() => {
-    fetchCajeros();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCajeroId) {
-      const selected = cajeros.find(
-        (cajero) => cajero.id_empleado === selectedCajeroId
-      );
-      setCajero(selected);
+    if (showModal) {
+      fetchCajeros();
     }
-  }, [selectedCajeroId, cajeros]);
+  }, [showModal]);
 
-  const handleCajeroChange = (event) => {
-    setSelectedCajeroId(Number(event.target.value));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Aquí puedes llamar a una función para actualizar el cajero
-    console.log("Form Data:", cajero);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add your form submission logic here
   };
 
   return (
@@ -57,7 +40,7 @@ const ModalInfoCajeros = ({ showModal, closeModal, cajeroData }) => {
           <div className="rounded-lg bg-white shadow-sm w-full max-w-md">
             <div className="flex flex-col space-y-1.5 p-6">
               <div className="flex items-center justify-between">
-                <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
+                <h3 className="whitespace-nowrap text-2xl font-semibold">
                   Cajero
                 </h3>
                 <button
@@ -83,7 +66,6 @@ const ModalInfoCajeros = ({ showModal, closeModal, cajeroData }) => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-              <p className="text-sm text-gray-600">Editar datos</p>
             </div>
 
             <form onSubmit={handleSubmit}>
