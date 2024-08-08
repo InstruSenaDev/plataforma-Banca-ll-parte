@@ -44,9 +44,11 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
+
         if (!responseEmpleado.ok) {
           throw new Error("Network response was not ok");
         }
+
         const responsePrincipal = await fetch(
           `http://localhost:3000/balance_request/${idPrincipal}`,
           {
@@ -61,7 +63,28 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
+
         if (!responsePrincipal.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_movimiento`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: idPrincipal,
+              saldo: amount,
+              tipoMovimiento: 1,
+              empleadoConsing: id_empleado,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
           throw new Error("Network response was not ok");
         }
         toast.success("Consignación realizada correctamente.");

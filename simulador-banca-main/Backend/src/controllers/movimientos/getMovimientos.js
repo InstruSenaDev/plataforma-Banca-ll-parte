@@ -13,6 +13,9 @@ const getMovimientos = async (req, res) => {
       fpn.ip_primernombre AS cliente,
       dc.num_cuenta,
       tm.descripcion AS tipo_movimiento,
+      mov.id_empleado_consing AS consing_em,
+      consing_em.username AS empleado_consing,
+      consing_rol.descripcion AS rol_consing,
       tm.id_tipomov,
       mov.saldo,
       mov.fecha
@@ -23,6 +26,8 @@ const getMovimientos = async (req, res) => {
       LEFT JOIN tipo_movimiento AS tm ON mov.id_tipomov = tm.id_tipomov
       LEFT JOIN empleado AS em ON mov.id_empleado = em.id_empleado
       LEFT JOIN rol ON em.id_rol = rol.id_rol
+      LEFT JOIN empleado AS consing_em ON mov.id_empleado_consing = consing_em.id_empleado
+      LEFT JOIN rol AS consing_rol ON consing_em.id_rol = consing_rol.id_rol
       ORDER BY id_movimiento DESC
     `);
 

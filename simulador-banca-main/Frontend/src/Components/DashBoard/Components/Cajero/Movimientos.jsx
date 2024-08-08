@@ -126,15 +126,15 @@ export const Movimientos = () => {
     const saldoEmpleado = idEmpleadoDetails.saldo;
 
     const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
-    const newBalanceEmploye = saldoEmpleado - parseFloat(amount);
+    const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
 
     // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
     if (estado === "Denegado") {
       toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
     } else if (estado === "Pendiente") {
       toast.error("Error: Esta cuenta no ha sido autorizada por un Director.");
-    } else if (parseFloat(amount) > saldoEmpleado) {
-      toast.error("Error: No tienes saldo suficiente para esta consignación.");
+      // } else if (parseFloat(amount) > saldoEmpleado) {
+      //   toast.error("Error: No tienes saldo suficiente para esta consignación.");
     } else if (parseFloat(amount) <= 0) {
       toast.error("Error: El saldo a consignar no puede ser 0 o menor a 0.");
     } else {
@@ -176,13 +176,14 @@ export const Movimientos = () => {
         }
 
         const responseMovimiento = await fetch(
-          `http://localhost:3000/post_movimiento/${id}`,
+          `http://localhost:3000/post_movimiento`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
+              id: id,
               idEmpleado: idEmpleado,
               saldo: amount,
               tipoMovimiento: 1,
@@ -273,7 +274,7 @@ export const Movimientos = () => {
     const saldoEmpleado = idEmpleadoDetails.saldo;
 
     const newBalanceClient = parseFloat(saldo) - parseFloat(amount);
-    const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
+    const newBalanceEmploye = parseFloat(saldoEmpleado) - parseFloat(amount);
 
     // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
     if (estado === "Denegado") {
@@ -329,13 +330,14 @@ export const Movimientos = () => {
         }
 
         const responseMovimiento = await fetch(
-          `http://localhost:3000/post_movimiento/${id}`,
+          `http://localhost:3000/post_movimiento`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
+              id: id,
               idEmpleado: idEmpleado,
               saldo: amount,
               tipoMovimiento: 2,
@@ -450,79 +452,84 @@ export const Movimientos = () => {
       parseFloat(saldoEmpleado) + parseFloat(saldoPrincipal);
 
     try {
-      // Realiza una solicitud al servidor para actualizar el saldo del cajero
-      const responseCajero = await fetch(
-        `http://localhost:3000/balance_request/${idEmpleado}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            newStatus: "Activo",
-            nuevoSaldo: 0,
-            saldoSolicitado: 0,
-          }),
-        }
-      );
-
-      if (!responseCajero.ok) {
-        throw new Error(
-          "Network response was not ok al actualizar el saldo del cajero"
+      if (parseFloat(saldoEmpleado) === 0 || isNaN(saldoEmpleado)) {
+        return toast.error("No tienes saldo para devolver.");
+      } else {
+        // Realiza una solicitud al servidor para actualizar el saldo del cajero
+        const responseCajero = await fetch(
+          `http://localhost:3000/balance_request/${idEmpleado}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              newStatus: "Activo",
+              nuevoSaldo: 0,
+              saldoSolicitado: 0,
+            }),
+          }
         );
-      }
 
-      // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
-      const responsePrincipal = await fetch(
-        `http://localhost:3000/balance_request/${idPricipal}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            newStatus: "Activo",
-            nuevoSaldo: newBalancePrincipal,
-            saldoSolicitado: 0,
-          }),
+        if (!responseCajero.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cajero"
+          );
         }
-      );
 
-      if (!responsePrincipal.ok) {
-        throw new Error(
-          "Network response was not ok al actualizar el saldo del cajero principal"
+        // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
+        const responsePrincipal = await fetch(
+          `http://localhost:3000/balance_request/${idPricipal}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              newStatus: "Activo",
+              nuevoSaldo: newBalancePrincipal,
+              saldoSolicitado: 0,
+            }),
+          }
         );
-      }
 
-      const responseMovimiento = await fetch(
-        `http://localhost:3000/post_devolver/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idEmpleado: idEmpleado,
-            saldo: saldoEmpleado,
-            tipoMovimiento: 5,
-          }),
+        if (!responsePrincipal.ok) {
+          throw new Error(
+            "Network response was not ok al actualizar el saldo del cajero principal"
+          );
         }
-      );
 
-      if (!responseMovimiento.ok) {
-        throw new Error("Network response was not ok");
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_devolver/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: idEmpleado,
+              saldo: saldoEmpleado,
+              tipoMovimiento: 5,
+              empleadoConsing: idPricipal,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        toast.success("Saldo devuelto y actualizado correctamente.");
+
+        setTimeout(() => {
+          // Actualiza localmente el estado del cliente según sea necesario
+          // Puedes utilizar la función setDatauser para actualizar el estado local
+          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
+          // alert('Autorización exitosa')
+          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+          window.location = "/DashBoardMenu";
+        }, 1500);
       }
-
-      toast.success("Saldo devuelto y actualizado correctamente.");
-
-      setTimeout(() => {
-        // Actualiza localmente el estado del cliente según sea necesario
-        // Puedes utilizar la función setDatauser para actualizar el estado local
-        // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-        // alert('Autorización exitosa')
-        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-        window.location = "/DashBoardMenu";
-      }, 1500);
     } catch (error) {
       console.error("Error al devolver el saldo:", error);
       toast.error("Error al devolver el saldo.");

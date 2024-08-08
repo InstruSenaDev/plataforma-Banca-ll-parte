@@ -201,9 +201,30 @@ export const ReportesMovimientos = () => {
 
                                 <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                   <div className="flex flex-col justify-center items-center gap-x-2">
-                                    {data.cliente ? (
+                                    {data.consing_em ? (
                                       <>
-                                        <h2 className="font-medium text-gray-800 dark:text-white ">
+                                        <div className="flex justify-center w-40">
+                                          <div className="flex items-center gap-x-2">
+                                            <img
+                                              className="object-cover w-10 h-10 rounded-full"
+                                              // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                              src={userProfile}
+                                              alt=""
+                                            />
+                                            <div>
+                                              <h2 className="font-medium text-gray-800 dark:text-white ">
+                                                {data.empleado_consing}
+                                              </h2>
+                                              <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                                {data.rol_consing}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </>
+                                    ) : data.cliente ? (
+                                      <>
+                                        <h2 className="font-medium text-gray-800 dark:text-white">
                                           {data.cliente}
                                         </h2>
                                         <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
