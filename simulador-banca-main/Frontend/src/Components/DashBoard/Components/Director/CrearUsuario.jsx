@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import userProfile from "../../../../assets/Img/Login/user.png";
 import { ModalCreacionU } from "./ModalCreacionU";
 import { Button, Modal } from "flowbite-react";
 import { data } from "autoprefixer";
@@ -59,8 +60,78 @@ export const CrearUsuario = () => {
   const eliminarUsuario = async (userId) => {
     const empleado = await fetchEmpleadoId(userId);
 
+    const empleadoPrincipal = empleadoDetails.filter(
+      (users) => users.id_rol === 4
+    );
+
+    const saldoEmpleado = empleado.saldo;
+    const idPrincipal = empleadoPrincipal[0].id_empleado;
+    const saldoPrincipal = empleadoPrincipal[0].saldo;
+
+    const newBalancePrincipal =
+      parseFloat(saldoEmpleado) + parseFloat(saldoPrincipal);
+
     if (empleado.id_rol === 1) {
       toast.error("Error: No puedes eliminar este usuario.");
+    } else if (empleado.id_rol === 3) {
+      try {
+        const responseEmploye = await fetch(
+          `http://localhost:3000/balance_request/${idPrincipal}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalancePrincipal,
+              newStatus: "Activo",
+              saldoSolicitado: 0,
+            }),
+          }
+        );
+
+        if (!responseEmploye.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_devolver/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: userId,
+              saldo: saldoEmpleado,
+              tipoMovimiento: 5,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const response = await fetch(
+          `http://localhost:3000/delete_user/${userId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          toast.success("Usuario eliminado y saldo actualizado correctamente.");
+
+          setTimeout(() => {
+            setForceUpdate((prev) => !prev);
+          }, 1000);
+        } else {
+          toast.error("Error al eliminar el usuario.");
+        }
+      } catch (error) {
+        console.error("Error en el servidor: ", error);
+      }
     } else {
       try {
         const response = await fetch(
@@ -69,17 +140,19 @@ export const CrearUsuario = () => {
             method: "DELETE",
           }
         );
+
         if (response.ok) {
-          toast.error("Usuario eliminado correctamente");
+          toast.success("Usuario eliminado correctamente.");
+
           setTimeout(() => {
             setForceUpdate((prev) => !prev);
           }, 1000);
         } else {
-          console.error("Error al eliminar usuario");
-          alert("Error al eliminar usuario");
+          console.error("Error al eliminar el usuario.");
+          toast.error("Error al eliminar el usuario.");
         }
       } catch (error) {
-        console.error("Error en el servidor", error);
+        console.error("Error en el servidor: ", error);
       }
     }
   };
@@ -120,7 +193,11 @@ export const CrearUsuario = () => {
   }
 
   useEffect(() => {
-    fetchEmpleados();
+    const interval = setInterval(() => {
+      fetchEmpleados();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [forceUpdate]);
 
   return (
@@ -263,7 +340,8 @@ export const CrearUsuario = () => {
                                     <div className="flex items-center gap-x-2">
                                       <img
                                         className="object-cover w-10 h-10 rounded-full"
-                                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                        // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                        src={userProfile}
                                         alt=""
                                       />
                                       <div>
@@ -444,7 +522,8 @@ export const CrearUsuario = () => {
                                       <div className="flex items-center gap-x-2">
                                         <img
                                           className="object-cover w-10 h-10 rounded-full"
-                                          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          src={userProfile}
                                           alt=""
                                         />
                                         <div>

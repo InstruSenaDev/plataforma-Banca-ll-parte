@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import userProfile from "../../../../assets/Img/Login/user.png";
 import { Pagination } from "../../../Pagination/Pagination";
 
 export const ReportesMovimientos = () => {
@@ -173,16 +174,25 @@ export const ReportesMovimientos = () => {
                                       <div className="flex items-center gap-x-2">
                                         <img
                                           className="object-cover w-10 h-10 rounded-full"
-                                          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                          src={userProfile}
                                           alt=""
                                         />
                                         <div>
-                                          <h2 className="font-medium text-gray-800 dark:text-white ">
-                                            {data.empleado}
-                                          </h2>
-                                          <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            {data.rol}
-                                          </p>
+                                          {data.empleado ? (
+                                            <>
+                                              <h2 className="font-medium text-gray-800 dark:text-white ">
+                                                {data.empleado}
+                                              </h2>
+                                              <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                                {data.rol}
+                                              </p>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <h2>Usuario eliminado</h2>
+                                            </>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -324,6 +334,33 @@ export const ReportesMovimientos = () => {
                                           </span>
 
                                           <h2 className="text-sm font-normal text-orange-500">
+                                            {data.tipo_movimiento}
+                                          </h2>
+                                        </div>
+                                      </>
+                                    )}
+
+                                    {data.id_tipomov === 5 && (
+                                      <>
+                                        <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                          <span className="text-emerald-500">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              fill="none"
+                                              viewBox="0 0 24 24"
+                                              strokeWidth={1.3}
+                                              stroke="currentColor"
+                                              className="size-4"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15"
+                                              />
+                                            </svg>
+                                          </span>
+
+                                          <h2 className="text-sm font-normal text-emerald-500">
                                             {data.tipo_movimiento}
                                           </h2>
                                         </div>
