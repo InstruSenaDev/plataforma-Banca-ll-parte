@@ -65,6 +65,8 @@ export const DashboardComponent = () => {
           const data = await response.json();
           setUserData(data); // Almacenar los datos del usuario en el estado
           setData(userData.ip_primernombre);
+          console.log(userData);
+          
         }
       } catch (error) {
         console.error("Error al obtener información:", error);
@@ -760,16 +762,16 @@ export const DashboardComponent = () => {
                     <div
                       className={`text-gray-800 pt-16 flex justify-center text-4xl `}
                     >
-                      <p>${userData.saldo}</p>
+                      <p>${userData[0].saldo}</p>
                     </div>
                     <div
                       className={`text-gray-800 mt-24 flex flex-col justify-end items-end px-2 `}
                     >
-                      <p>{userData.descripcion}</p>
-                      <p>{userData.num_cuenta}</p>
+                      <p>{userData[0].descripcion}</p>
+                      <p>{userData[0].num_cuenta}</p>
                       <p className="text-lg">
-                        {userData.ip_primernombre} {userData.ip_primerapellido}{" "}
-                        {userData.ip_segundoapellido}
+                        {userData[0].ip_primernombre} {userData.ip_primerapellido}{" "}
+                        {userData[0].ip_segundoapellido}
                       </p>
                     </div>
                   </div>
