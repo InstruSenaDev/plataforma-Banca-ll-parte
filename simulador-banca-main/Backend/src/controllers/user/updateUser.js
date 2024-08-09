@@ -8,11 +8,11 @@ const updateUser = async (req, res) => {
   const updateUser = req.body; // Obtén los nuevos datos del usuario desde el cuerpo de la solicitud
 
   try {
-    const { username, password, saldo } = updateUser; // Ajusta estos nombres según el frontend
+    const { username, password } = updateUser; // Ajusta estos nombres según el frontend
     // Realiza la actualización en la base de datos utilizando el ID
     const updateQuery =
-      "UPDATE usuarios SET username = $1, password = $2, saldo = $3 WHERE id_empleado = $4";
-    const updateValues = [username, password, saldo, userId];
+      "UPDATE empleado SET username = $1, password = $2 WHERE id_empleado = $3";
+    const updateValues = [username, password, userId];
     await pool.query(updateQuery, updateValues);
     res.status(200).json({ message: "Actualización de usuario exitosa" });
   } catch (error) {

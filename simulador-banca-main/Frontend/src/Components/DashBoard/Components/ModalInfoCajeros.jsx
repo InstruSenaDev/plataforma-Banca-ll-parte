@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const ModalInfoCajeros = ({
   openUpdate,
@@ -14,11 +15,41 @@ const ModalInfoCajeros = ({
     }));
   };
 
-  const handleUpdate = () => {
-    const idEmpleado = idEmpleadoDetails.id_empleado;
-    console.log(idEmpleadoDetails);
-    console.log("id: ", idEmpleado);
+  const handleUpdate = async () => {
+    const { id_empleado, username, password } = idEmpleadoDetails;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/update_user/${id_empleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Actualización exitosa");
+        setTimeout(() => {
+          window.location = "/DashBoardMenu";
+        }, 1500);
+      } else {
+        console.error("Error al registrar usuario");
+        toast.error("Error al registrar usuario");
+        // Puedes agregar una notificación de error específica para problemas de red
+        // toast.error("Error de red, por favor inténtalo de nuevo más tarde");
+      }
+    } catch (error) {
+      console.error("Error en el servidor", error);
+    }
   };
+
+  const shouldHideSaldo = [1, 2].includes(idEmpleadoDetails?.id_rol);
 
   const closeUpdate = () => {
     setIdEmpleadoDetails(null);
@@ -32,7 +63,7 @@ const ModalInfoCajeros = ({
             <div className="flex flex-col space-y-1.5 p-6">
               <div className="flex items-center justify-between">
                 <h3 className="whitespace-nowrap text-2xl font-semibold">
-                  Cajero
+                  Actualizar datos
                 </h3>
                 <button
                   type="button"
@@ -57,13 +88,16 @@ const ModalInfoCajeros = ({
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
+              <div className="flex ">
+                <p>Modifica tus datos de usuario</p>
+              </div>
             </div>
 
             <div>
               <div className="px-6 space-y-4">
                 {/* {localCajero && ( */}
                 <div className="space-y-4">
-                  <div className="flex justify-between flex-wrap w-full gap-y-2">
+                  <div className="flex justify-between flex-col w-full gap-y-2">
                     <div className="space-y-2">
                       <label
                         className="text-sm text-gray-600 font-normal leading-none"
@@ -107,7 +141,6 @@ const ModalInfoCajeros = ({
                         id="password"
                         name="password"
                         value={idEmpleadoDetails?.password || ""}
-                        // value={localCajero.password}
                         onChange={handleInputChange}
                         type="text"
                         className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none"
@@ -117,31 +150,46 @@ const ModalInfoCajeros = ({
                     <div className="space-y-2">
                       <label
                         className="text-sm text-gray-600 font-normal leading-none"
-                        htmlFor="saldo"
+                        htmlFor="idRol"
                       >
-                        Saldo
+                        ID Rol
                       </label>
                       <input
-                        id="saldo"
-                        name="saldo"
+                        id="idEmpleado"
                         type="number"
-                        min="0"
-                        step="1000"
                         disabled
-                        value={idEmpleadoDetails?.saldo || ""}
-                        onChange={handleInputChange}
-                        className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none"
+                        value={idEmpleadoDetails?.id_rol || ""}
+                        className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       />
                     </div>
+                    {idEmpleadoDetails?.id_rol === 3 && (
+                      <div className="space-y-2">
+                        <label
+                          className="text-sm text-gray-600 font-normal leading-none"
+                          htmlFor="saldo"
+                        >
+                          Saldo
+                        </label>
+                        <input
+                          id="saldo"
+                          name="saldo"
+                          type="number"
+                          min="0"
+                          step="1000"
+                          disabled
+                          value={idEmpleadoDetails?.saldo || ""}
+                          className="flex h-10 w-full rounded-md border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/* )} */}
 
-                <div className="flex items-center p-6">
+                <div className="flex items-center justify-center p-4 px-4 gap-2">
                   <button
                     className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
                     type="submit"
-                    // disabled={!localCajero}
                     onClick={handleUpdate}
                   >
                     Actualizar
