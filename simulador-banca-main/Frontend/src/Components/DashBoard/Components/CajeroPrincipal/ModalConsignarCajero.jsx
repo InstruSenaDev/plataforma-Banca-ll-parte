@@ -24,6 +24,8 @@ export const ModalConsignarCajero = ({
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
 
+
+
     if (amount <= 0 || isNaN(amount)) {
       return toast.error("Error: El saldo no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {
