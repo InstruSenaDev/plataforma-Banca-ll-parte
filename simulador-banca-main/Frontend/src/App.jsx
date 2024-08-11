@@ -9,8 +9,6 @@ import { AutorizacionCuentas } from "./Components/DashBoard/Components/Director/
 import { ContentCuentaAhorroJuridica } from "./Components/DashBoard/Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
 import { LoaderMenu } from "./Components/Loader/LoaderMenu";
 
-import DashboardPage from "./Pages/DashboardPage";
-
 export default function MyPage() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,7 +37,6 @@ export default function MyPage() {
             element={<AutorizacionCuentas />}
           />
           <Route path="/juridica" element={<ContentCuentaAhorroJuridica />} />
-          <Route path="/Dashboard" element={<DashboardPage />} />
         </Routes>
       )}
     </Router>

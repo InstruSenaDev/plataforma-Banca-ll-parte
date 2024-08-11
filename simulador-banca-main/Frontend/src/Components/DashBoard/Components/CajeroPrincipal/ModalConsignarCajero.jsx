@@ -24,6 +24,8 @@ export const ModalConsignarCajero = ({
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
 
+
+
     if (amount <= 0 || isNaN(amount)) {
       return toast.error("Error: El saldo no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {
@@ -44,9 +46,11 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
+
         if (!responseEmpleado.ok) {
           throw new Error("Network response was not ok");
         }
+
         const responsePrincipal = await fetch(
           `http://localhost:3000/balance_request/${idPrincipal}`,
           {
@@ -61,7 +65,28 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
+
         if (!responsePrincipal.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_movimiento`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idEmpleado: idPrincipal,
+              saldo: amount,
+              tipoMovimiento: 1,
+              empleadoConsing: id_empleado,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
           throw new Error("Network response was not ok");
         }
         toast.success("Consignación realizada correctamente.");

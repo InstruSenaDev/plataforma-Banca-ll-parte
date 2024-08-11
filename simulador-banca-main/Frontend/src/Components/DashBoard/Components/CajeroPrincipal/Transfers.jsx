@@ -207,7 +207,7 @@ const Transfers = () => {
                                   {empleado.username}
                                 </h2>
                                 <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                  Cajero
+                                  Cajeros
                                 </p>
                               </div>
                             </div>
@@ -305,7 +305,7 @@ const Transfers = () => {
                                 </p>
 
                                 <p className="mt-4 text-gray-500 dark:text-gray-400">
-                                  No se encuntran cajeros solicitantes
+                                  No se encuentran cajeros solicitantes
                                 </p>
                               </div>
                             </div>
