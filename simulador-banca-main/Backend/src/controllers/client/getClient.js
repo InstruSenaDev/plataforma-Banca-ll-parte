@@ -8,14 +8,16 @@ const getClient = async (req, res) => {
     // Realizar la consulta SQL para obtener todos los clientes
     const userDetailsQuery = `
       SELECT 
-        c.id_cliente, 
-        fpn.ip_documento, 
-        fpn.ip_primerNombre, 
-        fpn.ip_primerApellido, 
-        fpn.ip_segundoApellido,
-        dc.saldo,
-        dc.num_cuenta,
-        tc.descripcion
+      c.id_cliente,
+      fpn.ip_documento AS documento,
+      fpn.ip_tipodoc,
+      fpn.ip_primerNombre AS nombre,
+      fpn.ip_primerApellido,
+      fpn.ip_segundoApellido,
+      dc.saldo,
+      dc.num_cuenta,
+      tc.descripcion,
+      dc.estado
       FROM cliente AS c
       INNER JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
       INNER JOIN detalle_cuenta AS dc ON c.id_cliente = dc.id_cliente
@@ -23,10 +25,12 @@ const getClient = async (req, res) => {
 
     // Ejecutar la consulta SQL
     const userDetailsResult = await pool.query(userDetailsQuery);
-    
+
     // Verificar si se encontraron detalles de los usuarios
     if (userDetailsResult.rows.length === 0) {
-      return res.status(404).json({ message: "No se encontraron detalles para los usuarios" });
+      return res
+        .status(404)
+        .json({ message: "No se encontraron detalles para los usuarios" });
     }
 
     // Devolver los detalles encontrados en la respuesta
