@@ -267,7 +267,8 @@ export const Inicio = () => {
           className="flex justify-center items-center flex-col gap-x-14 text-center"
           style={{ minHeight: "75vh" }}
         >
-          <div className="w-full flex overflow-hidden border-gray-200 dark:bg-gray-800 flex-col sm:flex sm:items-center sm:justify-between container px-0 lg:px-4 mx-auto mt-6">
+          
+          <div className="w-full flex overflow-hidden border-gray-200 dark:bg-gray-800 flex-col sm:flex sm:items-center sm:justify-between">
             <div className="w-full p-4 max-w-5xl mx-auto">
               <div className="mt-4 ">
                 <div className="flex flex-col-reverse sm:flex-row sm:items-start sm:justify-between  bg-DarkSlate px-4 py-8 rounded">
