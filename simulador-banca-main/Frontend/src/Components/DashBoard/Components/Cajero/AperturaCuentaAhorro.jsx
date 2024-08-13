@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConsgnacionCuentaAhorro from "../Cajero/ConsignacionCuentaAhorro";
 
 const AperturaCuentaAhorro = () => {
@@ -7,6 +7,27 @@ const AperturaCuentaAhorro = () => {
   const openModal = () => setOpenConsignacion(true);
   const closeModal = () => setOpenConsignacion(false);
 
+  const [dataUser, setDataUser] = useState([]);
+
+  const firstCosing = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/firstCosing");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      if (data.result && data.result.rows) {
+        setDataUser(data.result.rows);
+      } else {
+        console.error("Unexpected data structure:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching information:", error);
+    }
+  }
+  useEffect(() => {
+    firstCosing();
+  }, []);
   return (
     <>
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
@@ -76,22 +97,24 @@ const AperturaCuentaAhorro = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                    {dataUser?.map((data) => (
+                        <React.Fragment key={data.id_detalle}>
                       <tr>
                         <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                           <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <h2 className="font-medium text-gray-800 dark:text-white "></h2>
+                            <h2 className="font-medium text-gray-800 dark:text-white ">{data.nombre}</h2>
                           </div>
                         </td>
 
                         <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                           <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <h2 className="text-sm font-normal text-gray-500 dark:text-white "></h2>
+                            <h2 className="text-sm font-normal text-gray-500 dark:text-white ">{data.descripcion}</h2>
                           </div>
                         </td>
 
                         <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                           <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <h2 className="text-sm font-normal text-gray-500 dark:text-white "></h2>
+                            <h2 className="text-sm font-normal text-gray-500 dark:text-white "> {data.num_cuenta}</h2>
                           </div>
                         </td>
 
@@ -119,7 +142,10 @@ const AperturaCuentaAhorro = () => {
                           </div>
                         </td>
                       </tr>
+                      </React.Fragment>
+                      ))}
                     </tbody>
+                    
                   </table>
                 </div>
               </div>

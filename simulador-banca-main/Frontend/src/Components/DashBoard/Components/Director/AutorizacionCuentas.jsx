@@ -27,6 +27,8 @@ export const AutorizacionCuentas = () => {
     console.log(id);
     try {
       // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
+    
+
       fetch(`http://localhost:3000/client_status/${id}`, {
         method: "PUT",
         headers: {

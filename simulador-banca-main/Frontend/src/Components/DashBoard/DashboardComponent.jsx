@@ -124,9 +124,8 @@ export const DashboardComponent = () => {
           <div className="flex h-screen overflow-hidden bg-beige">
             {/* Sidebar */}
             <div
-              className={`${
-                sidebarOpen ? "translate-x-0" : "-translate-x-full"
-              } xl:flex xl:flex-col absolute xl:static z-40 left-0 top-0 xl:translate-x-0 bg-beige h-screen overflow-y-scroll xl:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
+              className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                } xl:flex xl:flex-col absolute xl:static z-40 left-0 top-0 xl:translate-x-0 bg-beige h-screen overflow-y-scroll xl:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
               aria-label="Sidebar"
             >
               <div className="h-full bg-white xl:border-r-2 border-beige">
@@ -498,17 +497,32 @@ export const DashboardComponent = () => {
                             {isOpen && (
                               <div className="mt-2 space-y-2 ">
                                 <button
-                                  className="flex items-center  justify-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  className="flex items-center justify-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                                   onClick={() => {
                                     closeSidebar();
                                     handleBotonClick("AperturaCuentaAhorro");
                                   }}
                                 >
+
                                   <span className="mx-1 text-center text-sm ">
                                     Apertura Cuenta De Ahorros
                                   </span>
                                 </button>
+                                <button
+                                  className="flex items-center justify-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                  onClick={() => {
+                                    closeSidebar();
+                                    handleBotonClick("");
+                                  }}
+                                >
+
+                                  <span className="mx-1 text-center text-sm ">
+                                    Cancelación Cuenta De Ahorros
+                                  </span>
+                                </button>
                               </div>
+                              
+                              
                             )}
 
                             <button
@@ -742,9 +756,8 @@ export const DashboardComponent = () => {
 
               {/* Main content */}
               <main
-                className={`p-4 sm:p-2 lg:p-4 transition-opacity duration-200 ${
-                  sidebarOpen ? "opacity-50" : "opacity-100"
-                }`}
+                className={`p-4 sm:p-2 lg:p-4 transition-opacity duration-200 ${sidebarOpen ? "opacity-50" : "opacity-100"
+                  }`}
               >
                 <div className="border-2 border-gray-300 border-dashed rounded-lg p-2">
                   {contenidoSeleccionado === "FormularioPersonaNatural" && (
@@ -794,9 +807,8 @@ export const DashboardComponent = () => {
             <main className="h-3/4 w-full bg-white flex justify-center items-center">
               {/* Lado principal */}
               <div
-                className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${
-                  flipped ? "flip" : ""
-                }`}
+                className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${flipped ? "flip" : ""
+                  }`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
@@ -807,17 +819,15 @@ export const DashboardComponent = () => {
                   <img className="text-stone-300" src={""} alt="" />
                 </div>
                 <div
-                  className={`h-2/3 flex justify-end items-end ${
-                    flipped ? "hidden" : ""
-                  }`}
+                  className={`h-2/3 flex justify-end items-end ${flipped ? "hidden" : ""
+                    }`}
                 >
                   <img className="w-36 py-5" src={Namelogo} alt="" />
                   <img className="h-32" src={Logo} alt="" />
                 </div>
                 <div
-                  className={`h-12 mt-8 bg-emerald-700 ${
-                    flipped ? "" : "hidden"
-                  }`}
+                  className={`h-12 mt-8 bg-emerald-700 ${flipped ? "" : "hidden"
+                    }`}
                 >
                   {/* Contenido en el reverso de la tarjeta */}
                   <div className="flip-content">
