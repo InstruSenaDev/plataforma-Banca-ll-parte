@@ -106,7 +106,7 @@ export const DashboardComponent = () => {
   };
 
   // console.log(userName);
-  // console.log(userData);
+  console.log(userData);
   // console.log(user);
   // console.log(data);
   // console.log({ contenidoSeleccionado });
@@ -850,10 +850,7 @@ export const DashboardComponent = () => {
                     </div>
 
                     <div className="mx-4">
-                      <div
-                        className="relative flex flex-col min-w-0 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border"
-                        sidenav-card="true"
-                      >
+                      <div className="relative flex flex-col min-w-0 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border">
                         <img
                           className="w-1/1 mx-auto"
                           src="/src/assets/Img/UsoVario/Analytics.svg"

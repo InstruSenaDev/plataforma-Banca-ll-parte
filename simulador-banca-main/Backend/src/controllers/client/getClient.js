@@ -4,27 +4,33 @@ const { CONFIG_BD } = require("../../config/db");
 const pool = new Pool(CONFIG_BD);
 
 const getClient = async (req, res) => {
+  const { userName } = req.params;
   try {
     // Realizar la consulta SQL para obtener todos los clientes
     const userDetailsQuery = `
-      SELECT 
+      SELECT
+      dc.id_detalle,
       c.id_cliente,
-      fpn.ip_documento AS documento,
-      fpn.ip_tipodoc,
       fpn.ip_primerNombre AS nombre,
       fpn.ip_primerApellido,
       fpn.ip_segundoApellido,
-      dc.saldo,
+      fpn.ip_tipodoc,
+      fpn.ip_documento AS documento,
       dc.num_cuenta,
+      dc.saldo,
       tc.descripcion,
-      dc.estado
-      FROM cliente AS c
-      INNER JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
-      INNER JOIN detalle_cuenta AS dc ON c.id_cliente = dc.id_cliente
-      INNER JOIN tipo_cuentas AS tc ON tc.id_tcuenta = dc.id_detalle;`;
+      dc.estado AS estado_cuenta,
+      dc.fecha
+      FROM detalle_cuenta AS dc
+      JOIN cliente AS c ON dc.id_cliente = c.id_cliente
+      JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
+      JOIN tipo_cuentas AS tc ON dc.id_tcuenta = tc.id_tcuenta
+      WHERE fpn.ip_documento = $1`;
 
     // Ejecutar la consulta SQL
-    const userDetailsResult = await pool.query(userDetailsQuery);
+
+    const userValue = [userName];
+    const userDetailsResult = await pool.query(userDetailsQuery, userValue);
 
     // Verificar si se encontraron detalles de los usuarios
     if (userDetailsResult.rows.length === 0) {
