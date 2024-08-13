@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../../context/AuthContext";
 
 export const ModalConsignarCajero = ({
   empleadoDetails,
@@ -9,17 +10,22 @@ export const ModalConsignarCajero = ({
   setIdEmpleadoDetails,
   amountSolicitud,
 }) => {
+  //Login, user context
+  const { user } = useAuth();
+  console.log(user)
+
+  console.log("userr", user.id_empleado)
+  console.log("userr", user.saldo)
+
   const [amount, setAmount] = useState("");
 
-  // Función para realizar la consignación
-  const handleConsign = async () => {
-    const filterEmpleadoPrincipal = empleadoDetails.filter(
-      (users) => users.id_rol === 4
-    );
+   // Función para realizar la consignación
+   const handleConsign = async () => {
+
     const { id_empleado, saldo } = idEmpleadoDetails;
 
-    const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
-    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+    const idPrincipal = user.id_empleado;
+    const saldoPrincipal = user.saldo;
 
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
@@ -96,6 +102,7 @@ export const ModalConsignarCajero = ({
       }
     }
   };
+
 
   const closeConsing = () => {
     setIdEmpleadoDetails(null);

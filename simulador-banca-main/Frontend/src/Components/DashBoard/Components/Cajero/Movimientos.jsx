@@ -34,6 +34,7 @@ export const Movimientos = () => {
   //Login, user context
   const { user } = useAuth();
 
+
   // Funcion para traer un empleado por id.
   const fetchEmpleadoId = async () => {
     try {

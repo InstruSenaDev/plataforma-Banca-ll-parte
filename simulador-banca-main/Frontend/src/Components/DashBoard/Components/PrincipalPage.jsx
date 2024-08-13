@@ -5,6 +5,7 @@ import Transfers from "./CajeroPrincipal/Transfers";
 import Card from "./CajeroPrincipal/Card";
 import MovimientosCajeros from "./Director/MovimientoCajeros";
 import { Movimientos } from "../Components/Cajero/Movimientos";
+import { Inicio } from "./Cajero/Inicio";
 
 export const PrincipalPage = () => {
   const { user } = useAuth();
@@ -55,8 +56,7 @@ export const PrincipalPage = () => {
         <div className="w-full flex justify-start items-center mb-2 lg:mb-0 lg:px-4 lg:pt-4">
           <p className="font-semibold text-2xl">Bienvenido, {user?.username}</p>
         </div>
-        <Movimientos />
-        <Transfers />
+        <Inicio />
       </>
     );
   }
