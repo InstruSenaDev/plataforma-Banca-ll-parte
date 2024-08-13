@@ -25,7 +25,8 @@ const getClient = async (req, res) => {
       JOIN cliente AS c ON dc.id_cliente = c.id_cliente
       JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
       JOIN tipo_cuentas AS tc ON dc.id_tcuenta = tc.id_tcuenta
-      WHERE fpn.ip_documento = $1`;
+      WHERE fpn.ip_documento = $1
+      ORDER BY dc.fecha ASC`;
 
     // Ejecutar la consulta SQL
 
