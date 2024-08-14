@@ -38,11 +38,17 @@ export const ModalConsignarCajero = ({
       console.error("Error fetching user info:", error);
     }
   };
+
   const handleConsign = async () => {
     const { id_empleado, saldo } = idEmpleadoDetails || {};
     
     if (!id_empleado) {
       return toast.error("Error: No se pudo obtener el ID del empleado.");
+    }
+
+    // Verificar si el usuario intenta enviarse dinero a sí mismo
+    if (id_empleado === user.id_empleado) {
+      return toast.error("Error: No puedes enviarte dinero a ti mismo.");
     }
   
     // Obtener el saldo del usuario logueado desde el estado o contexto
@@ -129,7 +135,6 @@ export const ModalConsignarCajero = ({
     }
   };
   
-  
   const closeConsing = () => {
     setIdEmpleadoDetails(null);
     setOpenConsing(false);
@@ -144,7 +149,7 @@ export const ModalConsignarCajero = ({
   useEffect(() => {
     fetchEmpleados();
   }, []);
-
+  
   return (
     <>
       {openConsing && (
