@@ -98,62 +98,102 @@ const AperturaCuentaAhorro = () => {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {dataUser?.map((data) => (
-                        <React.Fragment key={data.id_detalle}>
-                          <tr>
-                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <h2 className="font-medium text-gray-800 dark:text-white ">
-                                  {data.nombre}
-                                </h2>
-                              </div>
-                            </td>
+                    {dataUser.length > 0 ? (
+                      <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                        {dataUser?.map((data) => (
+                          <React.Fragment key={data.id_detalle}>
+                            <tr>
+                              <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                  <h2 className="font-medium text-gray-800 dark:text-white ">
+                                    {data.nombre}
+                                  </h2>
+                                </div>
+                              </td>
 
-                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
-                                  {data.descripcion}
-                                </h2>
-                              </div>
-                            </td>
+                              <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                  <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
+                                    {data.descripcion}
+                                  </h2>
+                                </div>
+                              </td>
 
-                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
-                                  {" "}
-                                  {data.num_cuenta}
-                                </h2>
-                              </div>
-                            </td>
+                              <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                  <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
+                                    {" "}
+                                    {data.num_cuenta}
+                                  </h2>
+                                </div>
+                              </td>
 
-                            <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="inline-flex items-center gap-x-2 px-3 py-1 text-gray-500 dark:text-gray-400">
-                                <button
-                                  className="text-gray-500 transition-colors duration-200 dark:hover:text-bg-emerald-500 dark:text-gray-300 hover:text-red-600 focus:outline-none"
-                                  onClick={openModal}
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="size-6"
+                              <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                                <div className="inline-flex items-center gap-x-2 px-3 py-1 text-gray-500 dark:text-gray-400">
+                                  <button
+                                    className="text-gray-500 transition-colors duration-200 dark:hover:text-bg-emerald-500 dark:text-gray-300 hover:text-red-600 focus:outline-none"
+                                    onClick={openModal}
                                   >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
-                                    />
-                                  </svg>
-                                </button>
-                              </div>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="size-5"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+                                      />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    ) : (
+                      <>
+                        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                          <tr>
+                            <td
+                              colSpan="4"
+                              className="px-6 py-4 text-center text-gray-700 dark:text-gray-400"
+                            >
+                              <section className="bg-white dark:bg-gray-900">
+                                <div className="container flex items-center min-h-5/6 px-6 py-12 mx-auto">
+                                  <div className="flex flex-col items-center max-w-sm mx-auto text-center">
+                                    <p className="p-2 text-sm font-medium text-blue-500 bg-lightgreen dark:bg-gray-800 inline-flex items-center rounded-full">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="2"
+                                        stroke="green"
+                                        className="w-4 h-4"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                                        />
+                                      </svg>
+                                    </p>
+
+                                    <p className="mt-4 text-gray-500 dark:text-gray-400">
+                                      No se encuentran cajeros solicitantes
+                                    </p>
+                                  </div>
+                                </div>
+                              </section>
                             </td>
                           </tr>
-                        </React.Fragment>
-                      ))}
-                    </tbody>
+                        </tbody>
+                      </>
+                    )}
                   </table>
                 </div>
               </div>
