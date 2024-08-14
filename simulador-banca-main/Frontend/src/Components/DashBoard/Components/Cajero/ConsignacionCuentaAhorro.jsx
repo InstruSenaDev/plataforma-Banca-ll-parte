@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
   const [accountNumber, setAccountNumber] = useState("");
@@ -10,9 +10,6 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
 
   const [dataUser, setDataUser] = useState();
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
-  const [empleadoDetails, setEmpleadoDetails] = useState("");
-  const [bovedaDetails, setBovedaDetails] = useState("");
-
 
   // Funciones Consignar -----------------------------------------------------------------------------------------------------------------------------
   const handleAccountNumberChange = (event) => {
@@ -58,100 +55,173 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
     }
   };
 
-  const handleConsign = async () => {
-    const id = dataUser.id_detalle;
-    const { saldo, estado } = dataUser;
+  // const handleConsign = async () => {
+  //   const id = dataUser.id_detalle;
+  //   const { saldo, estado } = dataUser;
 
-    const idEmpleado = idEmpleadoDetails.id_empleado;
-    const saldoEmpleado = idEmpleadoDetails.saldo;
+  //   const idEmpleado = idEmpleadoDetails.id_empleado;
+  //   const saldoEmpleado = idEmpleadoDetails.saldo;
 
-    const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
-    const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
+  //   const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
+  //   const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
 
-    // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
-    if (estado === "Denegado") {
-      toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
-    } else if (estado === "Pendiente") {
-      toast.error("Error: Esta cuenta no ha sido autorizada por un Director.");
-      // } else if (parseFloat(amount) > saldoEmpleado) {
-      //   toast.error("Error: No tienes saldo suficiente para esta consignación.");
-    } else if (parseFloat(amount) <= 0) {
-      toast.error("Error: El saldo a consignar no puede ser 0 o menor a 0.");
-    } else {
-      try {
-        // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-        const responseClient = await fetch(
-          `http://localhost:3000/update_balance/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              nuevoSaldo: newBalanceClient,
-            }),
-          }
-        );
-        if (!responseClient.ok) {
-          throw new Error("Network response was not ok");
+  //   // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
+  //   if (estado === "Denegado") {
+  //     toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
+  //   } else if (estado === "Pendiente") {
+  //     toast.error("Error: Esta cuenta no ha sido autorizada por un Director.");
+  //     // } else if (parseFloat(amount) > saldoEmpleado) {
+  //     //   toast.error("Error: No tienes saldo suficiente para esta consignación.");
+  //   } else if (parseFloat(amount) <= 0) {
+  //     toast.error("Error: El saldo a consignar no puede ser 0 o menor a 0.");
+  //   } else {
+  //     try {
+  //       // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
+  //       const responseClient = await fetch(
+  //         `http://localhost:3000/update_balance/${id}`,
+  //         {
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             nuevoSaldo: newBalanceClient,
+  //           }),
+  //         }
+  //       );
+  //       if (!responseClient.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+
+  //       const responseEmploye = await fetch(
+  //         `http://localhost:3000/balance_request/${idEmpleado}`,
+  //         {
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             nuevoSaldo: newBalanceEmploye,
+  //             newStatus: "Activo",
+  //             saldoSolicitado: 0,
+  //           }),
+  //         }
+  //       );
+
+  //       if (!responseEmploye.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+
+  //       const responseMovimiento = await fetch(
+  //         `http://localhost:3000/post_movimiento`,
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             id: id,
+  //             idEmpleado: idEmpleado,
+  //             saldo: amount,
+  //             tipoMovimiento: 1,
+  //           }),
+  //         }
+  //       );
+
+  //       if (!responseMovimiento.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+
+  //       const data = await responseClient.json();
+  //       console.log(data.message);
+  //       toast.success("Saldo consignado correctamente.");
+
+  //       setTimeout(() => {
+  //         // Actualiza localmente el estado del cliente según sea necesario
+  //         // Puedes utilizar la función setDataUser para actualizar el estado local
+  //         // Ejemplo: setDataUser(prevData => [...prevData, data.updatedClient]);
+  //         // alert('Autorización exitosa')
+  //         // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+  //         window.location = "/DashBoardMenu";
+  //       }, 1500); // 2000 milisegundos = 2 segundos
+  //     } catch (error) {
+  //       console.error("Error general:", error);
+  //     }
+  //   }
+  const handleConsignar = async (id) => {
+    const { saldo } = dataUser;
+    const saldoAsNumber = parseFloat(saldo);
+    const amountAsNumber = parseFloat(amount);
+
+    // Realizar la suma
+    const newBalanceClient = saldoAsNumber + amountAsNumber;
+
+    try {
+      // Actualizar el saldo en la base de datos del cliente
+      const responseClient = await fetch(
+        `http://localhost:3000/update_balance/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nuevoSaldo: newBalanceClient,
+          }),
         }
+      );
 
-        const responseEmploye = await fetch(
-          `http://localhost:3000/balance_request/${idEmpleado}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              nuevoSaldo: newBalanceEmploye,
-              newStatus: "Activo",
-              saldoSolicitado: 0,
-            }),
-          }
-        );
-
-        if (!responseEmploye.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const responseMovimiento = await fetch(
-          `http://localhost:3000/post_movimiento`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id: id,
-              idEmpleado: idEmpleado,
-              saldo: amount,
-              tipoMovimiento: 1,
-            }),
-          }
-        );
-
-        if (!responseMovimiento.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await responseClient.json();
-        console.log(data.message);
-        toast.success("Saldo consignado correctamente.");
-
-        setTimeout(() => {
-          // Actualiza localmente el estado del cliente según sea necesario
-          // Puedes utilizar la función setDatauser para actualizar el estado local
-          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-          // alert('Autorización exitosa')
-          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-          window.location = "/DashBoardMenu";
-        }, 1500); // 2000 milisegundos = 2 segundos
-      } catch (error) {
-        console.error("Error general:", error);
+      if (!responseClient.ok) {
+        throw new Error("Network response was not ok");
       }
+
+      // Cambiar el estado del cliente a "Autorizado"
+      const responseStatus = await fetch(
+        `http://localhost:3000/client_status/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nuevoEstado: "Autorizado",
+          }),
+        }
+      );
+
+      const responseMovimiento = await fetch(
+        `http://localhost:3000/post_movimiento`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: id,
+            saldo: amount,
+            tipoMovimiento: 1,
+          }),
+        }
+      );
+
+      if (!responseMovimiento.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      if (!responseStatus.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      toast.success("Consignación exitosa");
+      setTimeout(() => {
+        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error general:", error);
     }
   };
+
   return (
     <>
       {openConsignacion && (
@@ -203,25 +273,23 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                     value={accountNumber}
                     onChange={handleAccountNumberChange}
                     required
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none ${!isAccountNumberFilled
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
+                      !isAccountNumberFilled
                         ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
                         : ""
-                      }`}
+                    }`}
                   />
                 </div>
                 {isAccountNumberFilled && (
                   <div className="flex items-center justify-end  ">
-                  <button
-                    onClick={() => handleConsultClick()}
-                    className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
-                 ${isFormDisabled
-                        ? ""
-                        : ""
-                      }`}
-                    disabled={isFormDisabled}
-                  >
-                    Consultar
-                  </button>
+                    <button
+                      onClick={() => handleConsultClick()}
+                      className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
+                 ${isFormDisabled ? "" : ""}`}
+                      disabled={isFormDisabled}
+                    >
+                      Consultar
+                    </button>
                   </div>
                 )}
 
@@ -236,17 +304,14 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                     id="accountOwner"
                     type="text"
                     placeholder="Nombre del dueño"
-
                     value={accountOwner}
-                    onChange={(event) =>
-                      setAccountOwner(event.target.value)
-                    }
-                    className={`flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${isFormDisabled || !isAccountNumberFilled
-                        ? ""
-                        : ""
-                      }`}
+                    onChange={(event) => setAccountOwner(event.target.value)}
+                    className={`flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                      isFormDisabled || !isAccountNumberFilled ? "" : ""
+                    }`}
                     readOnly
-                    disabled={!isAccountNumberFilled} />
+                    disabled={!isAccountNumberFilled}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label
@@ -264,25 +329,18 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                     placeholder="Ingrese saldo a consignar"
                     value={amount}
                     onChange={(event) => setAmount(event.target.value)}
-                    className={`flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${isFormDisabled || !isAccountNumberFilled
-                        ? ""
-                        : ""
-                      }`} />
+                    className={`flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                      isFormDisabled || !isAccountNumberFilled ? "" : ""
+                    }`}
+                  />
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-end p-4 px-4 gap-2">
               <button
-              onClick={() => handleConsign(dataUser)}
-              className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
-                  ${
-                isFormDisabled || !isAccountNumberFilled
-                  ? ""
-                  : ""
-              }`}
-              disabled={isFormDisabled || !isAccountNumberFilled}
-            >
-              
+                onClick={() => handleConsignar(dataUser.id_detalle)}
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
+              >
                 Consignar
               </button>
             </div>

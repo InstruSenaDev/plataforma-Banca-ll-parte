@@ -11,11 +11,12 @@ const AperturaCuentaAhorro = () => {
 
   const firstCosing = async () => {
     try {
-      const response = await fetch("http://localhost:3000/firstCosing");
+      const response = await fetch("http://localhost:3000/firstConsing");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+      console.log(data);
       if (data.result && data.result.rows) {
         setDataUser(data.result.rows);
       } else {
@@ -24,7 +25,8 @@ const AperturaCuentaAhorro = () => {
     } catch (error) {
       console.error("Error fetching information:", error);
     }
-  }
+  };
+
   useEffect(() => {
     firstCosing();
   }, []);
@@ -97,55 +99,61 @@ const AperturaCuentaAhorro = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {dataUser?.map((data) => (
+                      {dataUser?.map((data) => (
                         <React.Fragment key={data.id_detalle}>
-                      <tr>
-                        <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <h2 className="font-medium text-gray-800 dark:text-white ">{data.nombre}</h2>
-                          </div>
-                        </td>
+                          <tr>
+                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <h2 className="font-medium text-gray-800 dark:text-white ">
+                                  {data.nombre}
+                                </h2>
+                              </div>
+                            </td>
 
-                        <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <h2 className="text-sm font-normal text-gray-500 dark:text-white ">{data.descripcion}</h2>
-                          </div>
-                        </td>
+                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
+                                  {data.descripcion}
+                                </h2>
+                              </div>
+                            </td>
 
-                        <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <h2 className="text-sm font-normal text-gray-500 dark:text-white "> {data.num_cuenta}</h2>
-                          </div>
-                        </td>
+                            <td className="px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <h2 className="text-sm font-normal text-gray-500 dark:text-white ">
+                                  {" "}
+                                  {data.num_cuenta}
+                                </h2>
+                              </div>
+                            </td>
 
-                        <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          <div className="inline-flex items-center gap-x-2 px-3 py-1 text-gray-500 dark:text-gray-400">
-                            <button
-                              className="text-gray-500 transition-colors duration-200 dark:hover:text-bg-emerald-500 dark:text-gray-300 hover:text-red-600 focus:outline-none"
-                              onClick={openModal}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
-                                />
-                              </svg>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      </React.Fragment>
+                            <td className="flex justify-center px-8 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="inline-flex items-center gap-x-2 px-3 py-1 text-gray-500 dark:text-gray-400">
+                                <button
+                                  className="text-gray-500 transition-colors duration-200 dark:hover:text-bg-emerald-500 dark:text-gray-300 hover:text-red-600 focus:outline-none"
+                                  onClick={openModal}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-6"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </React.Fragment>
                       ))}
                     </tbody>
-                    
                   </table>
                 </div>
               </div>
