@@ -4,7 +4,6 @@ import Logo from "../../assets/Img/Logos/ClarBank LogoOnly.svg";
 import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJuridica/ContentCuentaAhorroJuridica";
 import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
 import { PrincipalPage } from "./Components/PrincipalPage";
-import Namelogo from "../../assets/Img/Logos/ClarBank Name.svg";
 import userProfile from "../../assets/Img/Login/user.png";
 import { No_Disponible } from "./Components/NoDisponible";
 import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
@@ -12,38 +11,30 @@ import { CrearUsuario } from "./Components/Director/CrearUsuario";
 
 import { useAuth } from "../../context/AuthContext";
 import { Reportes } from "./Components/Director/Reportes";
-import { Sidebar } from "flowbite-react";
 import { NavLink } from "react-router-dom";
 import { Dropdown } from "flowbite-react";
-import {
-  HiShoppingCart,
-  HiOutlineViewList,
-  HiUser,
-  HiClipboard,
-  HiUserCircle,
-  HiUserGroup,
-} from "react-icons/hi";
-import ChipCard from "../../assets/Img/Client/ChipCard.svg";
 import { Historial } from "./Components/Director/Historial";
 import { HistorialD } from "./Components/Director/HistorialD";
 import { BusquedaC } from "./Components/BusquedaC";
 import { Movimientos } from "./Components/Cajero/Movimientos";
 import { ReportesMovimientos } from "./Components/CajeroPrincipal/ReportesMovimientos";
 import Boveda from "./Components/CajeroPrincipal/Boveda";
-import Transfers from '/src/Components/DashBoard/Components/CajeroPrincipal/Transfers.jsx';
-
-
+import { ClientView } from "./Components/Cliente/ClientView";
+import { AllTarjets } from "./Components/Cliente/AllTarjets";
+import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userName, setUserName] = useState(null);
-  const [userData, setUserData] = useState(null); // Variable de estado para almacenar el nombre de usuario
-  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState([]); // Variable de estado para almacenar el nombre de usuario
+  const [data, setData] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [contenidoSeleccionado, setContenidoSeleccionado] =
     useState("PrincipalPage");
+
+  const [contenidoCliente, setContenidoCliente] = useState("ClientView");
 
   const { user, isLoggedIn, logout } = useAuth();
 
@@ -65,11 +56,9 @@ export const DashboardComponent = () => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
-          const data = await response.json();
-          setUserData(data); // Almacenar los datos del usuario en el estado
-          setData(userData.ip_primernombre);
-          console.log(userData);
-          
+          const dataFetch = await response.json();
+          setUserData(dataFetch); // Almacenar los datos del usuario en el estado
+          setData(dataFetch[0]);
         }
       } catch (error) {
         console.error("Error al obtener información:", error);
@@ -110,13 +99,18 @@ export const DashboardComponent = () => {
     setContenidoSeleccionado(contenido);
   };
 
+  const handleClient = (contenido) => {
+    setContenidoCliente(contenido);
+  };
+
   const handlelogout = () => {
     logout();
   };
 
   // console.log(userName);
-  // console.log(userData);
+  console.log(userData);
   // console.log(user);
+  // console.log(data);
   // console.log({ contenidoSeleccionado });
 
   return (
@@ -729,14 +723,299 @@ export const DashboardComponent = () => {
           </div>
         </>
       )}
+
       {isLoggedIn && user.id_rol === 5 && userData && (
         <>
-          <section className="w-screen h-screen  flex justify-center items-center flex-col">
+          <div className="flex h-screen overflow-hidden bg-beige">
+            {/* Sidebar */}
+            <div
+              className={`${
+                sidebarOpen ? "translate-x-0" : "-translate-x-full"
+              } xl:flex xl:flex-col absolute xl:static z-40 left-0 top-0 xl:translate-x-0 bg-beige h-screen overflow-y-scroll xl:overflow-y-auto no-scrollbar w-80 shrink-0 transition-all duration-200 ease-in-out transform`}
+              aria-label="Sidebar"
+            >
+              <div className="h-full bg-white xl:border-r-2 border-beige">
+                {/* Sidebar header */}
+                <div className="flex flex-col justify-between h-full py-4">
+                  {/* Close sidebar (only movil) */}
+                  <button
+                    className="xl:hidden text-slate-500 hover:text-slate-400 px-2"
+                    aria-controls="sidebar"
+                    onClick={toggleSidebar}
+                  >
+                    <span className="sr-only">Close sidebar</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                      />
+                    </svg>
+                  </button>
+
+                  <div className="flex flex-col justify-between w-full h-full">
+                    {/* Logo */}
+                    <NavLink
+                      to="/DashboardMenu"
+                      className="flex justify-center items-center h-20 my-6"
+                    >
+                      <img
+                        src={Logo}
+                        alt="ClarBank"
+                        className="inline h-full max-w-full transition-all duration-200"
+                      />
+                    </NavLink>
+
+                    <div className="items-center block w-full max-h-screen overflow-auto h-sidenav grow basis-full px-6">
+                      <hr className="border-gray-200 dark:border-gray-700 mb-6" />
+                      <ul className="flex flex-col space-y-1 pl-0 mb-0">
+                        <button
+                          className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                          onClick={() => {
+                            closeSidebar();
+                            handleClient("ClientView");
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.4}
+                            stroke="currentColor"
+                            className="size-5 xl:size-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+                            />
+                          </svg>
+
+                          <span className="mx-1">Inicio</span>
+                        </button>
+
+                        <button
+                          className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                          onClick={() => {
+                            closeSidebar();
+                            handleClient("ClientTransfers");
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.4}
+                            stroke="currentColor"
+                            className="size-5 xl:size-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
+                            />
+                          </svg>
+
+                          <span className="mx-1">Transferencias</span>
+                        </button>
+
+                        <button
+                          className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                          onClick={() => {
+                            closeSidebar();
+                            handleClient("ClientTarjet");
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.4}
+                            stroke="currentColor"
+                            className="size-5 xl:size-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+                            />
+                          </svg>
+
+                          <span className="mx-1">Tus tarjetas</span>
+                        </button>
+                      </ul>
+                      <hr className="border-gray-200 dark:border-gray-700 mt-6" />
+                    </div>
+
+                    <div className="mx-4">
+                      <div className="relative flex flex-col min-w-0 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border">
+                        <img
+                          className="w-1/1 mx-auto"
+                          src="/src/assets/Img/UsoVario/Analytics.svg"
+                          alt="sidebar illustrations"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {sidebarOpen && (
+              <div
+                className="fixed inset-0 bg-black opacity-25 z-30 md:hidden"
+                onClick={toggleSidebar}
+              ></div>
+            )}
+
+            {/* Content area */}
+            <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+              {/*  Site header */}
+              <header className="bg-white sticky top-0 border-b border-gray">
+                <div className="px-4 sm:px-6 lg:px-8">
+                  <div className="flex items-center justify-between h-16 -mb-px">
+                    {/* Header: Left side */}
+                    <div className="flex">
+                      {/* Hamburger button */}
+                      <button
+                        className="text-slate-500 hover:text-slate-600 xl:hidden"
+                        aria-controls="sidebar"
+                        onClick={toggleSidebar}
+                      >
+                        <span className="sr-only">Open sidebar</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Botón para configuraciones */}
+                    <Dropdown
+                      arrowIcon={false}
+                      inline
+                      label={
+                        <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
+                          <div className="flex flex-col justify-end ps-8 my-0">
+                            <p className="flex items-center justify-end text-sm font-semibold text-gray-700 dark:text-gray-200">
+                              {data?.nombre}
+                            </p>
+                            <p className="flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
+                              {data?.ip_tipodoc + " " + data?.documento}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-x-6">
+                            <div className="relative">
+                              <img
+                                className="object-cover w-10 h-10 rounded-full ring ring-gray-300 dark:ring-gray-600"
+                                // src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
+                                src={userProfile}
+                                alt=""
+                              />
+                              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 absolute right-0 ring-1 ring-white bottom-0"></span>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <Dropdown.Header>
+                        <span className="block text-sm">
+                          {data?.nombre +
+                            " " +
+                            data?.ip_primerapellido +
+                            " " +
+                            data?.ip_segundoapellido}
+                        </span>
+
+                        <span className="block truncate text-sm font-medium">
+                          {data?.ip_tipodoc + " " + data?.documento}
+                        </span>
+                      </Dropdown.Header>
+                      <Dropdown.Item>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.4}
+                          stroke="currentColor"
+                          className="size-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                          />
+                        </svg>
+                        <p className="ml-2" onClick={handlelogout}>
+                          Cerrar Sesión
+                        </p>
+                      </Dropdown.Item>
+                    </Dropdown>
+                  </div>
+                </div>
+              </header>
+
+              {/* Main content */}
+              <main
+                className={`p-4 sm:p-2 lg:p-4 transition-opacity duration-200 ${
+                  sidebarOpen ? "opacity-50" : "opacity-100"
+                }`}
+              >
+                <div className="border-2 border-gray-300 border-dashed rounded-lg p-4">
+                  {contenidoCliente === "ClientView" && (
+                    <ClientView
+                      user={user}
+                      isLoggedIn={isLoggedIn}
+                      userName={userName}
+                      setUserName={setUserData}
+                      userData={userData}
+                      setUserData={setUserData}
+                      contenidoCliente={contenidoCliente}
+                    />
+                  )}
+
+                  {contenidoCliente === "ClientTransfers" && (
+                    <ClientMovimientos
+                      userData={userData}
+                      contenidoCliente={contenidoCliente}
+                    />
+                  )}
+
+                  {contenidoCliente === "ClientTarjet" && (
+                    <AllTarjets
+                      userData={userData}
+                      contenidoCliente={contenidoCliente}
+                    />
+                  )}
+
+                  {/* Renderiza otros contenidos según sea necesario */}
+                </div>
+              </main>
+            </div>
+          </div>
+          {/* <section className="w-screen h-screen  flex justify-center items-center flex-col">
             <header>
               <span className="text-3xl font-bold">Módulo Cliente</span>
             </header>
             <main className="h-3/4 w-full bg-white flex justify-center items-center">
-              {/* Lado principal */}
+              Lado principal
               <div
                 className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${
                   flipped ? "flip" : ""
@@ -763,7 +1042,7 @@ export const DashboardComponent = () => {
                     flipped ? "" : "hidden"
                   }`}
                 >
-                  {/* Contenido en el reverso de la tarjeta */}
+                  Contenido en el reverso de la tarjeta
                   <div className="flip-content">
                     <div
                       className={`text-gray-800 pt-16 flex justify-center text-4xl `}
@@ -776,7 +1055,8 @@ export const DashboardComponent = () => {
                       <p>{userData[0].descripcion}</p>
                       <p>{userData[0].num_cuenta}</p>
                       <p className="text-lg">
-                        {userData[0].ip_primernombre} {userData.ip_primerapellido}{" "}
+                        {userData[0].ip_primernombre}{" "}
+                        {userData.ip_primerapellido}{" "}
                         {userData[0].ip_segundoapellido}
                       </p>
                     </div>
@@ -810,7 +1090,7 @@ export const DashboardComponent = () => {
                 <Dropdown.Item onClick={handlelogout}>Salir</Dropdown.Item>
               </Dropdown>
             </div>
-          </section>
+          </section> */}
         </>
       )}
     </>
