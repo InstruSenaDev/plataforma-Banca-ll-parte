@@ -12,6 +12,7 @@ export const ClientView = ({
   setUserName,
   userData,
   setUserData,
+  contenidoCliente,
 }) => {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -97,6 +98,7 @@ export const ClientView = ({
 
               <AllTarjets
                 userData={userData}
+                contenidoCliente={contenidoCliente}
                 onSelectAccount={setSelectedAccount}
               />
             </div>

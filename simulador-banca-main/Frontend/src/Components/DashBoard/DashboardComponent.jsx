@@ -20,6 +20,8 @@ import { Movimientos } from "./Components/Cajero/Movimientos";
 import { ReportesMovimientos } from "./Components/CajeroPrincipal/ReportesMovimientos";
 import Boveda from "./Components/CajeroPrincipal/Boveda";
 import { ClientView } from "./Components/Cliente/ClientView";
+import { AllTarjets } from "./Components/Cliente/AllTarjets";
+import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -800,7 +802,7 @@ export const DashboardComponent = () => {
                           className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                           onClick={() => {
                             closeSidebar();
-                            handleClient("");
+                            handleClient("ClientTransfers");
                           }}
                         >
                           <svg
@@ -825,7 +827,7 @@ export const DashboardComponent = () => {
                           className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                           onClick={() => {
                             closeSidebar();
-                            handleClient("");
+                            handleClient("ClientTarjet");
                           }}
                         >
                           <svg
@@ -982,6 +984,21 @@ export const DashboardComponent = () => {
                       setUserName={setUserData}
                       userData={userData}
                       setUserData={setUserData}
+                      contenidoCliente={contenidoCliente}
+                    />
+                  )}
+
+                  {contenidoCliente === "ClientTransfers" && (
+                    <ClientMovimientos
+                      userData={userData}
+                      contenidoCliente={contenidoCliente}
+                    />
+                  )}
+
+                  {contenidoCliente === "ClientTarjet" && (
+                    <AllTarjets
+                      userData={userData}
+                      contenidoCliente={contenidoCliente}
                     />
                   )}
 
