@@ -6,16 +6,18 @@ import { ClientMovimientos } from "./ClientMovimientos";
 import { AllTarjets } from "./AllTarjets";
 
 export const ClientView = ({
-  user,
-  isLoggedIn,
-  userName,
-  setUserName,
   userData,
-  setUserData,
   contenidoCliente,
+  setContenidoCliente,
 }) => {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [allMovimientos, setAllMovimientos] = useState([]);
+
+  const handleSetAllMovimientos = (movimientos) => {
+    setAllMovimientos(movimientos);
+  };
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -103,7 +105,12 @@ export const ClientView = ({
               />
             </div>
 
-            <ClientMovimientos />
+            <ClientMovimientos
+              userData={userData}
+              contenidoCliente={contenidoCliente}
+              setAllMovimientos={handleSetAllMovimientos}
+              setContenidoCliente={setContenidoCliente}
+            />
           </div>
         )}
       </section>

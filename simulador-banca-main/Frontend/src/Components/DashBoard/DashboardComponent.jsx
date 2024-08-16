@@ -108,7 +108,7 @@ export const DashboardComponent = () => {
   };
 
   // console.log(userName);
-  console.log(userData);
+  // console.log(userData);
   // console.log(user);
   // console.log(data);
   // console.log({ contenidoSeleccionado });
@@ -985,6 +985,7 @@ export const DashboardComponent = () => {
                       userData={userData}
                       setUserData={setUserData}
                       contenidoCliente={contenidoCliente}
+                      setContenidoCliente={setContenidoCliente}
                     />
                   )}
 
@@ -992,6 +993,7 @@ export const DashboardComponent = () => {
                     <ClientMovimientos
                       userData={userData}
                       contenidoCliente={contenidoCliente}
+                      setContenidoCliente={setContenidoCliente}
                     />
                   )}
 
