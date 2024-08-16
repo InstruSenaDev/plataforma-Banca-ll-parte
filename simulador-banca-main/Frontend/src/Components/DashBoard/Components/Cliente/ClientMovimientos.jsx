@@ -27,6 +27,8 @@ export const ClientMovimientos = ({
       if (response.ok) {
         const data = await response.json();
         setAllMovimientosLocal(data);
+      } else if (response.status === 404) {
+        console.log("No se encontro información");
       } else {
         console.error("Error fetching user info:", response.status);
       }
@@ -84,7 +86,7 @@ export const ClientMovimientos = ({
       {contenidoCliente === "ClientTransfers" && (
         <section
           className="container p-4 mx-auto flex flex-col"
-          style={{ minHeight: "87vh" }}
+          style={{ minHeight: "84vh" }}
         >
           <div className="flex flex-col justify-center items-between flex-1">
             <div className="flex justify-between items-center gap-x-3">
@@ -292,111 +294,120 @@ export const ClientMovimientos = ({
               <h1 className="text-xl font-semibold">Tus movimientos</h1>
 
               <div className="flex flex-col justify-between">
-                {allMovimientosLocal?.slice(0, 9).map((data) => (
-                  <React.Fragment key={data.id_movimiento}>
-                    <div className="flex w-full border-b border-gray-200 py-3">
-                      <div className="w-full inline-flex justify-start items-center gap-x-3">
-                        <div className="flex justify-start w-48">
-                          <div className="flex items-center gap-x-2">
-                            <img
-                              className="object-cover w-10 h-10 rounded-full"
-                              // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                              src={userProfile}
-                              alt=""
-                            />
-                            <div>
-                              {data.empleado ? (
-                                <>
-                                  <h2 className="font-medium text-gray-800 dark:text-white ">
-                                    {data.empleado}
-                                  </h2>
-                                  <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {data.rol}
-                                  </p>
-                                </>
-                              ) : (
-                                <>
-                                  <h2>Usuario eliminado</h2>
-                                </>
-                              )}
+                {allMovimientosLocal && allMovimientosLocal.length > 0 ? (
+                  allMovimientosLocal.slice(0, 9).map((data) => (
+                    <React.Fragment key={data.id_movimiento}>
+                      <div className="flex w-full border-b border-gray-200 py-3">
+                        <div className="w-full inline-flex justify-start items-center gap-x-3">
+                          <div className="flex justify-start w-48">
+                            <div className="flex items-center gap-x-2">
+                              <img
+                                className="object-cover w-10 h-10 rounded-full"
+                                src={userProfile}
+                                alt=""
+                              />
+                              <div>
+                                {data.empleado ? (
+                                  <>
+                                    <h2 className="font-medium text-gray-800 dark:text-white ">
+                                      {data.empleado}
+                                    </h2>
+                                    <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                      {data.rol}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <h2>Usuario eliminado</h2>
+                                  </>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex flex-col justify-center items-center">
-                        <div className="w-full inline-flex justify-center items-center gap-x-3">
-                          <span>{formatSaldo(data.saldo)}</span>
+                        <div className="flex flex-col justify-center items-center">
+                          <div className="w-full inline-flex justify-center items-center gap-x-3">
+                            <span>{formatSaldo(data.saldo)}</span>
+                          </div>
+
+                          <div className="w-full inline-flex justify-center items-center">
+                            {data.id_tipomov === 1 && (
+                              <>
+                                <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                                  <span className="text-emerald-500">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.3}
+                                      stroke="currentColor"
+                                      className="size-4"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 4.5v15m7.5-7.5h-15"
+                                      />
+                                    </svg>
+                                  </span>
+
+                                  <h2 className="text-sm font-normal text-emerald-500">
+                                    {data.tipo_movimiento}
+                                  </h2>
+                                </div>
+                              </>
+                            )}
+
+                            {data.id_tipomov === 2 && (
+                              <>
+                                <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
+                                  <span className="text-red-500">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.5}
+                                      stroke="currentColor"
+                                      className="size-4"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M5 12h14"
+                                      />
+                                    </svg>
+                                  </span>
+
+                                  <h2 className="text-sm font-normal text-red-500">
+                                    {data.tipo_movimiento}
+                                  </h2>
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
-
-                        <div className="w-full inline-flex justify-center items-center">
-                          {data.id_tipomov === 1 && (
-                            <>
-                              <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                <span className="text-emerald-500">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.3}
-                                    stroke="currentColor"
-                                    className="size-4"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M12 4.5v15m7.5-7.5h-15"
-                                    />
-                                  </svg>
-                                </span>
-
-                                <h2 className="text-sm font-normal text-emerald-500">
-                                  {data.tipo_movimiento}
-                                </h2>
-                              </div>
-                            </>
-                          )}
-
-                          {data.id_tipomov === 2 && (
-                            <>
-                              <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
-                                <span className="text-red-500">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="size-4"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M5 12h14"
-                                    />
-                                  </svg>
-                                </span>
-
-                                <h2 className="text-sm font-normal text-red-500">
-                                  {data.tipo_movimiento}
-                                </h2>
-                              </div>
-                            </>
-                          )}
-                        </div>
                       </div>
-                    </div>
-                  </React.Fragment>
-                ))}
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500 mt-4">
+                    No hay movimientos recientes
+                  </p>
+                )}
 
-                <div className="flex justify-center items-center mt-4">
-                  <button
-                    className="text-DarkSlate hover:underline hover:decoration-solid"
-                    onClick={() => handleClient("ClientTransfers")}
-                  >
-                    Ver todo
-                  </button>
-                </div>
+                {allMovimientosLocal && allMovimientosLocal.length > 0 ? (
+                  <div className="flex justify-center items-center mt-4">
+                    <button
+                      className="text-DarkSlate hover:underline hover:decoration-solid"
+                      onClick={() => handleClient("ClientTransfers")}
+                    >
+                      Ver todo
+                    </button>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </section>
