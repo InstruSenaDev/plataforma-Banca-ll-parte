@@ -443,27 +443,29 @@ export const Movimientos = () => {
     const filterEmpleadoPrincipal = empleadoDetails.filter(
       (users) => users.id_rol === 4
     );
-  
+
     const idEmpleado = idEmpleadoDetails.id_empleado;
     const saldoEmpleado = parseFloat(idEmpleadoDetails.saldo);
     const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
     const saldoPrincipal = parseFloat(filterEmpleadoPrincipal[0].saldo);
-  
+
     // Convertir el monto ingresado a un número flotante
     const amountToReturn = parseFloat(amount);
-  
+
     // Validaciones
     if (isNaN(amountToReturn) || amountToReturn <= 0) {
       return toast.error("Por favor, ingrese un monto válido.");
     }
-  
+
     if (amountToReturn > saldoEmpleado) {
-      return toast.error("No tienes suficiente saldo para devolver esa cantidad.");
+      return toast.error(
+        "No tienes suficiente saldo para devolver esa cantidad."
+      );
     }
-  
+
     const newSaldoEmpleado = saldoEmpleado - amountToReturn;
     const newSaldoPrincipal = saldoPrincipal + amountToReturn;
-  
+
     try {
       // Actualiza el saldo del cajero
       const responseCajero = await fetch(
@@ -480,13 +482,13 @@ export const Movimientos = () => {
           }),
         }
       );
-  
+
       if (!responseCajero.ok) {
         throw new Error(
           "Network response was not ok al actualizar el saldo del cajero"
         );
       }
-  
+
       // Actualiza el saldo del cajero principal (bóveda)
       const responsePrincipal = await fetch(
         `http://localhost:3000/balance_request/${idPrincipal}`,
@@ -502,13 +504,13 @@ export const Movimientos = () => {
           }),
         }
       );
-  
+
       if (!responsePrincipal.ok) {
         throw new Error(
           "Network response was not ok al actualizar el saldo del cajero principal"
         );
       }
-  
+
       // Registrar el movimiento en el historial
       const responseMovimiento = await fetch(
         `http://localhost:3000/post_devolver/`,
@@ -525,13 +527,15 @@ export const Movimientos = () => {
           }),
         }
       );
-  
+
       if (!responseMovimiento.ok) {
-        throw new Error("Network response was not ok al registrar el movimiento");
+        throw new Error(
+          "Network response was not ok al registrar el movimiento"
+        );
       }
-  
+
       toast.success("Saldo devuelto y actualizado correctamente.");
-  
+
       setTimeout(() => {
         window.location = "/DashBoardMenu";
       }, 1500);
@@ -539,7 +543,7 @@ export const Movimientos = () => {
       console.error("Error al devolver el saldo:", error);
       toast.error("Error al devolver el saldo.");
     }
-  };  
+  };
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -610,46 +614,46 @@ export const Movimientos = () => {
                       <p>Entregar saldo</p>
                     </button>
                     <Modal
-                            className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                            show={openModal3}
-                            size="md"
-                            onClose={() => setOpenModal3(false)}
-                            popup
-                          >
-                            <Modal.Header>
-                              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                Entrega de Saldo
-                              </span>
-                            </Modal.Header>
-                            <Modal.Body className="px-5 pt-2 pb-5">
-                              <div className="space-y-6">
-                                <div>
-                                  <label
-                                    htmlFor="amount"
-                                    className="font-medium text-gray-700 dark:text-white"
-                                  >
-                                    Monto a entregar:
-                                  </label>
-                                  <input
-                                    id="amount"
-                                    type="number"
-                                    placeholder="Monto a consignar"
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    className={`w-full px-3 py-2 border rounded-md focus:outline-none`}
-                                  />
-                                </div>
-                                <div className="w-full">
-                                  <button
-                                     onClick={handleDevolverSaldo}
-                                    className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
-                                  >
-                                    Enviar
-                                  </button>
-                                </div>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
+                      className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                      show={openModal3}
+                      size="md"
+                      onClose={() => setOpenModal3(false)}
+                      popup
+                    >
+                      <Modal.Header>
+                        <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                          Entrega de Saldo
+                        </span>
+                      </Modal.Header>
+                      <Modal.Body className="px-5 pt-2 pb-5">
+                        <div className="space-y-6">
+                          <div>
+                            <label
+                              htmlFor="amount"
+                              className="font-medium text-gray-700 dark:text-white"
+                            >
+                              Monto a entregar:
+                            </label>
+                            <input
+                              id="amount"
+                              type="number"
+                              placeholder="Monto a consignar"
+                              value={amount}
+                              onChange={(e) => setAmount(e.target.value)}
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none`}
+                            />
+                          </div>
+                          <div className="w-full">
+                            <button
+                              onClick={handleDevolverSaldo}
+                              className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
+                            >
+                              Enviar
+                            </button>
+                          </div>
+                        </div>
+                      </Modal.Body>
+                    </Modal>
                     {idEmpleadoDetails.estado === "Solicitud" && (
                       <button
                         className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
