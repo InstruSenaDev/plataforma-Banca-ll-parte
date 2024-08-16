@@ -2,34 +2,34 @@ import React, { useEffect, useState } from "react";
 import { ModalBusqueda } from "./ModalBusqueda";
 
 export const BusquedaC = () => {
-  const [datauser, setdatauser] = useState([]);
+  const [datauser, setDatauser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
   const [showModal, setShowModal] = useState(false); // Para controlar la visibilidad del modal
 
   useEffect(() => {
-    const fecthData = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:3000/get_search");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setdatauser(data);
+        setDatauser(data);
       } catch (error) {
-        console.error("error al encontrar informacion");
+        console.error("error al encontrar informacion", error);
       }
     };
-    fecthData();
+    fetchData();
   }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredData = datauser.filter((data) =>
-    data.ip_documento.includes(searchTerm)
-  );
+  const filteredData = datauser?.filter(item => 
+    item?.ip_documento?.includes(searchTerm) ?? false
+  ) || [];
 
   const openModal = (data) => {
     setModalData(data);
@@ -40,9 +40,7 @@ export const BusquedaC = () => {
     setModalData(null); // Limpiar modalData
     setShowModal(false);
   };
-
-  console.log(datauser);
-
+  
   return (
     <>
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>

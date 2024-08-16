@@ -24,6 +24,7 @@ import AperturaCuentaAhorro from "./Components/Cajero/AperturaCuentaAhorro";
 import { ClientView } from "./Components/Cliente/ClientView";
 import { AllTarjets } from "./Components/Cliente/AllTarjets";
 import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
+import { Cancelación } from "./Components/Cajero/Cancelación";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,6 +59,10 @@ export const DashboardComponent = () => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
+          const data = await response.json();
+          setUserData(data); // Almacenar los datos del usuario en el estado
+          setData(userData.ip_primernombre);
+          console.log(userData);
           const dataFetch = await response.json();
           setUserData(dataFetch); // Almacenar los datos del usuario en el estado
           setData(dataFetch[0]);
@@ -510,7 +515,7 @@ export const DashboardComponent = () => {
                                   className="flex items-start justify-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                                   onClick={() => {
                                     closeSidebar();
-                                    handleBotonClick("");
+                                    handleBotonClick("Cancelación");
                                   }}
                                 >
                                   <span className="mx-1 text-center text-sm ">
@@ -519,31 +524,6 @@ export const DashboardComponent = () => {
                                 </button>
                               </div>
                             )}
-
-                            <button
-                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                              onClick={() => {
-                                closeSidebar();
-                                handleBotonClick("Transfers");
-                              }}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-5 xl:size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
-                                />
-                              </svg>
-
-                              <span className="mx-1">Cajeros solicitantes</span>
-                            </button>
                           </>
                         )}
 
@@ -783,6 +763,7 @@ export const DashboardComponent = () => {
                   )}
                   {contenidoSeleccionado === "Boveda" && <Boveda />}
                   {contenidoSeleccionado === "Transfers" && <Transfers />}
+                  {contenidoSeleccionado === "Cancelación" && <Cancelación />}
                   {contenidoSeleccionado === "AperturaCuentaAhorro" && (
                     <AperturaCuentaAhorro />
                   )}
@@ -1128,6 +1109,8 @@ export const DashboardComponent = () => {
                       <p>{userData[0].descripcion}</p>
                       <p>{userData[0].num_cuenta}</p>
                       <p className="text-lg">
+                        {userData[0].ip_primernombre}{" "}
+                        {userData.ip_primerapellido}{" "}
                         {userData[0].ip_primernombre}{" "}
                         {userData.ip_primerapellido}{" "}
                         {userData[0].ip_segundoapellido}

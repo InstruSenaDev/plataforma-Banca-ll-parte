@@ -3,33 +3,64 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../../context/AuthContext";
 
 export const ModalConsignarCajero = ({
-  empleadoDetails,
   openConsing,
   setOpenConsing,
   idEmpleadoDetails,
   setIdEmpleadoDetails,
   amountSolicitud,
 }) => {
-  //Login, user context
   const { user } = useAuth();
-  console.log(user)
-
-  console.log("userr", user.id_empleado)
-  console.log("userr", user.saldo)
-
   const [amount, setAmount] = useState("");
+  const [empleadoDetails, setEmpleadoDetails] = useState([]);
 
-   // Función para realizar la consignación
-   const handleConsign = async () => {
+  // Trae todos los empleados
+  const fetchEmpleados = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/get_users");
+      if (response.ok) {
+        const userData = await response.json();
+        setEmpleadoDetails(userData);
+  
+        // Filtrar el empleado logueado
+        const empleadoPrincipal = userData.find(
+          (empleado) => empleado.id_empleado === user.id_empleado
+        );
+  
+        if (empleadoPrincipal) {
+          setIdEmpleadoDetails(empleadoPrincipal);
+        } else {
+          console.error("Logged-in employee not found in the list");
+        }
+      } else {
+        console.error("Error fetching user info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
 
-    const { id_empleado, saldo } = idEmpleadoDetails;
+  const handleConsign = async () => {
+    const { id_empleado, saldo } = idEmpleadoDetails || {};
+    
+    if (!id_empleado) {
+      return toast.error("Error: No se pudo obtener el ID del empleado.");
+    }
 
-    const idPrincipal = user.id_empleado;
-    const saldoPrincipal = user.saldo;
+    // Verificar si el usuario intenta enviarse dinero a sí mismo
+    if (id_empleado === user.id_empleado) {
+      return toast.error("Error: No puedes enviarte dinero a ti mismo.");
+    }
+  
+    // Obtener el saldo del usuario logueado desde el estado o contexto
+    const saldoPrincipal = empleadoDetails.find(
+      (empleado) => empleado.id_empleado === user.id_empleado
+    )?.saldo;
+    
+    console.log("Saldo del empleado logueado:", saldoPrincipal);
 
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
-
+  
     if (amount <= 0 || isNaN(amount)) {
       return toast.error("Error: El saldo no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {
@@ -50,13 +81,13 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
-
+  
         if (!responseEmpleado.ok) {
           throw new Error("Network response was not ok");
         }
-
+  
         const responsePrincipal = await fetch(
-          `http://localhost:3000/balance_request/${idPrincipal}`,
+          `http://localhost:3000/balance_request/${user.id_empleado}`,
           {
             method: "PUT",
             headers: {
@@ -69,11 +100,11 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
-
+  
         if (!responsePrincipal.ok) {
           throw new Error("Network response was not ok");
         }
-
+  
         const responseMovimiento = await fetch(
           `http://localhost:3000/post_movimiento`,
           {
@@ -82,17 +113,18 @@ export const ModalConsignarCajero = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              idEmpleado: idPrincipal,
+              idEmpleado: user.id_empleado,
               saldo: amount,
               tipoMovimiento: 1,
               empleadoConsing: id_empleado,
             }),
           }
         );
-
+  
         if (!responseMovimiento.ok) {
           throw new Error("Network response was not ok");
         }
+  
         toast.success("Consignación realizada correctamente.");
         setTimeout(() => {
           window.location = "/DashBoardMenu";
@@ -102,20 +134,22 @@ export const ModalConsignarCajero = ({
       }
     }
   };
-
-
+  
   const closeConsing = () => {
     setIdEmpleadoDetails(null);
     setOpenConsing(false);
   };
 
-  // useEffect para actualizar el saldo inicial si amountSolicitud tiene algún saldo
   useEffect(() => {
     if (amountSolicitud) {
       setAmount(amountSolicitud);
     }
   }, [amountSolicitud]);
 
+  useEffect(() => {
+    fetchEmpleados();
+  }, []);
+  
   return (
     <>
       {openConsing && (
