@@ -8,6 +8,7 @@ import { Button, Modal } from "flowbite-react";
 import { data } from "autoprefixer";
 import { useAuth } from "../../../../context/AuthContext";
 import { ModalConsignarCajero } from "../CajeroPrincipal/ModalConsignarCajero";
+import ModalInfoCajeros from "../ModalInfoCajeros";
 
 export const CrearUsuario = () => {
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
@@ -18,7 +19,7 @@ export const CrearUsuario = () => {
   const [showModal, setShowModal] = useState(false);
   const [openModal1, setOpenModal] = useState(false);
   const [openConsing, setOpenConsing] = useState(false);
-
+  const [openUpdate, setOpenUpdate] = useState(false);
   const { user } = useAuth();
 
   // Funcion para traer todos los empleados.
@@ -186,6 +187,10 @@ export const CrearUsuario = () => {
     setModalData(null);
     setShowModal(false);
   };
+  const openModalCajero = (idEmpleado) => {
+    fetchEmpleadoId(idEmpleado);
+    setOpenUpdate(!openUpdate);
+  };
 
   function onCloseModal() {
     setOpenModal(false);
@@ -236,7 +241,7 @@ export const CrearUsuario = () => {
 
           {user?.id_rol === 1 && (
             <button
-              class="flex gap-x-1 items-center px-4 py-2 font-normal text-white transition-colors duration-300 bg-green-500 rounded-lg hover:bg-green"
+              className="flex gap-x-1 items-center px-4 py-2 font-normal text-white transition-colors duration-300 bg-green-500 rounded-lg hover:bg-green"
               onClick={() => openModal(empleadoDetails)}
             >
               <svg
@@ -254,7 +259,7 @@ export const CrearUsuario = () => {
                 />
               </svg>
 
-              <span class="mx-1">Crear usuario</span>
+              <span className="mx-1">Crear usuario</span>
             </button>
           )}
         </div>
@@ -401,9 +406,9 @@ export const CrearUsuario = () => {
 
                                   <button
                                     className="text-gray-500 transition-colors duration-200 dark:hover:text-amber-500 dark:text-gray-300 hover:text-amber-500 focus:outline-none"
-                                    // onClick={() =>
-                                    //   eliminarUsuario(date.id_empleado)
-                                    // }
+                                    onClick={() =>
+                                      openModalCajero(date.id_empleado)
+                                    }
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -594,6 +599,13 @@ export const CrearUsuario = () => {
             </div>
           </div>
         </div>
+
+        <ModalInfoCajeros
+          openUpdate={openUpdate}
+          setOpenUpdate={setOpenUpdate}
+          idEmpleadoDetails={idEmpleadoDetails}
+          setIdEmpleadoDetails={setIdEmpleadoDetails}
+        />
 
         <ModalCreacionU
           setShowModal={setShowModal}

@@ -26,12 +26,14 @@ export const Movimientos = () => {
   const [email, setEmail] = useState("");
 
   const [openModal2, setOpenModal2] = useState(false);
+  const [openModal3, setOpenModal3] = useState(false);
 
   const [openModal1, setOpenModal1] = useState(false);
   const [email1, setEmail1] = useState("");
 
   //Login, user context
   const { user } = useAuth();
+
 
   // Funcion para traer un empleado por id.
   const fetchEmpleadoId = async () => {
@@ -437,99 +439,106 @@ export const Movimientos = () => {
 
   // Funcion para devolver saldo total del cajero al cajero principal
   const handleDevolverSaldo = async () => {
-    // Funcion para filtrar usuarios con rol de cajero principal
+    // Filtra el empleado con rol de cajero principal
     const filterEmpleadoPrincipal = empleadoDetails.filter(
       (users) => users.id_rol === 4
     );
 
     const idEmpleado = idEmpleadoDetails.id_empleado;
-    const saldoEmpleado = idEmpleadoDetails.saldo;
+    const saldoEmpleado = parseFloat(idEmpleadoDetails.saldo);
+    const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
+    const saldoPrincipal = parseFloat(filterEmpleadoPrincipal[0].saldo);
 
-    const idPricipal = filterEmpleadoPrincipal[0].id_empleado;
-    const saldoPrincipal = filterEmpleadoPrincipal[0].saldo;
+    // Convertir el monto ingresado a un número flotante
+    const amountToReturn = parseFloat(amount);
 
-    const newBalancePrincipal =
-      parseFloat(saldoEmpleado) + parseFloat(saldoPrincipal);
+    // Validaciones
+    if (isNaN(amountToReturn) || amountToReturn <= 0) {
+      return toast.error("Por favor, ingrese un monto válido.");
+    }
+
+    if (amountToReturn > saldoEmpleado) {
+      return toast.error(
+        "No tienes suficiente saldo para devolver esa cantidad."
+      );
+    }
+
+    const newSaldoEmpleado = saldoEmpleado - amountToReturn;
+    const newSaldoPrincipal = saldoPrincipal + amountToReturn;
 
     try {
-      if (parseFloat(saldoEmpleado) === 0 || isNaN(saldoEmpleado)) {
-        return toast.error("No tienes saldo para devolver.");
-      } else {
-        // Realiza una solicitud al servidor para actualizar el saldo del cajero
-        const responseCajero = await fetch(
-          `http://localhost:3000/balance_request/${idEmpleado}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              newStatus: "Activo",
-              nuevoSaldo: 0,
-              saldoSolicitado: 0,
-            }),
-          }
-        );
-
-        if (!responseCajero.ok) {
-          throw new Error(
-            "Network response was not ok al actualizar el saldo del cajero"
-          );
+      // Actualiza el saldo del cajero
+      const responseCajero = await fetch(
+        `http://localhost:3000/balance_request/${idEmpleado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newStatus: "Activo",
+            nuevoSaldo: newSaldoEmpleado,
+            saldoSolicitado: 0,
+          }),
         }
+      );
 
-        // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
-        const responsePrincipal = await fetch(
-          `http://localhost:3000/balance_request/${idPricipal}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              newStatus: "Activo",
-              nuevoSaldo: newBalancePrincipal,
-              saldoSolicitado: 0,
-            }),
-          }
+      if (!responseCajero.ok) {
+        throw new Error(
+          "Network response was not ok al actualizar el saldo del cajero"
         );
-
-        if (!responsePrincipal.ok) {
-          throw new Error(
-            "Network response was not ok al actualizar el saldo del cajero principal"
-          );
-        }
-
-        const responseMovimiento = await fetch(
-          `http://localhost:3000/post_devolver/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              idEmpleado: idEmpleado,
-              saldo: saldoEmpleado,
-              tipoMovimiento: 5,
-              empleadoConsing: idPricipal,
-            }),
-          }
-        );
-
-        if (!responseMovimiento.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        toast.success("Saldo devuelto y actualizado correctamente.");
-
-        setTimeout(() => {
-          // Actualiza localmente el estado del cliente según sea necesario
-          // Puedes utilizar la función setDatauser para actualizar el estado local
-          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-          // alert('Autorización exitosa')
-          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-          window.location = "/DashBoardMenu";
-        }, 1500);
       }
+
+      // Actualiza el saldo del cajero principal (bóveda)
+      const responsePrincipal = await fetch(
+        `http://localhost:3000/balance_request/${idPrincipal}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newStatus: "Activo",
+            nuevoSaldo: newSaldoPrincipal,
+            saldoSolicitado: 0,
+          }),
+        }
+      );
+
+      if (!responsePrincipal.ok) {
+        throw new Error(
+          "Network response was not ok al actualizar el saldo del cajero principal"
+        );
+      }
+
+      // Registrar el movimiento en el historial
+      const responseMovimiento = await fetch(
+        `http://localhost:3000/post_devolver/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idEmpleado: idEmpleado,
+            saldo: amountToReturn,
+            tipoMovimiento: 5,
+            empleadoConsing: idPrincipal,
+          }),
+        }
+      );
+
+      if (!responseMovimiento.ok) {
+        throw new Error(
+          "Network response was not ok al registrar el movimiento"
+        );
+      }
+
+      toast.success("Saldo devuelto y actualizado correctamente.");
+
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
     } catch (error) {
       console.error("Error al devolver el saldo:", error);
       toast.error("Error al devolver el saldo.");
@@ -585,7 +594,7 @@ export const Movimientos = () => {
                   <div className="   grid gap-x-4 gap-y-4 mt-4 sm:flex sm:items-start sm:justify-between ">
                     <button
                       className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
-                      onClick={handleDevolverSaldo}
+                      onClick={() => setOpenModal3(true)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -602,8 +611,49 @@ export const Movimientos = () => {
                         />
                       </svg>
 
-                      <p>Devolver saldo</p>
+                      <p>Entregar saldo</p>
                     </button>
+                    <Modal
+                      className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                      show={openModal3}
+                      size="md"
+                      onClose={() => setOpenModal3(false)}
+                      popup
+                    >
+                      <Modal.Header>
+                        <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                          Entrega de Saldo
+                        </span>
+                      </Modal.Header>
+                      <Modal.Body className="px-5 pt-2 pb-5">
+                        <div className="space-y-6">
+                          <div>
+                            <label
+                              htmlFor="amount"
+                              className="font-medium text-gray-700 dark:text-white"
+                            >
+                              Monto a entregar:
+                            </label>
+                            <input
+                              id="amount"
+                              type="number"
+                              placeholder="Monto a consignar"
+                              value={amount}
+                              onChange={(e) => setAmount(e.target.value)}
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none`}
+                            />
+                          </div>
+                          <div className="w-full">
+                            <button
+                              onClick={handleDevolverSaldo}
+                              className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
+                            >
+                              Enviar
+                            </button>
+                          </div>
+                        </div>
+                      </Modal.Body>
+                    </Modal>
                     {idEmpleadoDetails.estado === "Solicitud" && (
                       <button
                         className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
