@@ -107,8 +107,110 @@ export const BusquedaC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col mt-6">
-            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="flex flex-row-reverse gap-4 mt-6">
+            {searchTerm !== "" && (
+              <>
+                <div className="w-3/4 bg-white rounded-md p-4">
+                  <div>
+                    <div className="flex justify-between items-center">
+                      <h1 className="text-lg font-medium text-gray-800">
+                        Detalle del Cliente
+                      </h1>
+
+                      <button className="flex justify-center items-center text-gray-400 transition hover:text-amber-500">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col border border-gray-300 rounded-md p-2 text-gray-500 mt-2">
+                      <span>Nombres: </span>
+                      <span>Apellidos: </span>
+                      <span>Nº Documento: </span>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <h1 className="text-lg font-medium text-gray-800">
+                      Productos del cliente
+                    </h1>
+
+                    <div>
+                      <div class="w-full overflow-auto">
+                        <table class="w-full caption-bottom text-sm">
+                          <thead class="border-b">
+                            <tr class="border-b hover:bg-gray-50">
+                              <th class="py-2.5 px-4 font-semibold text-gray-600">
+                                Nº Cuenta
+                              </th>
+                              <th class="py-2.5 px-4 font-semibold text-gray-600">
+                                Balance
+                              </th>
+                              <th class="py-2.5 px-4 font-semibold text-gray-600">
+                                Tipo de Cuenta
+                              </th>
+                              <th class="py-2.5 px-4 font-semibold text-gray-600">
+                                Transferencias
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody class="border-0">
+                            <tr class="border-b hover:bg-gray-50">
+                              <td class="py-2.5 px-4 flex justify-center items-center font-normal text-black">
+                                123456789
+                              </td>
+                              <td class="py-2.5 px-4 flex justify-center items-center font-semibold text-black">
+                                $5,000.00
+                              </td>
+                              <td class="py-2.5 px-4 flex justify-center items-center font-normal text-gray-500">
+                                Checking
+                              </td>
+                              <td class="py-2.5 px-4 flex justify-center items-center font-normal">
+                                <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary underline-offset-4 hover:underline h-9 rounded-md px-3">
+                                  View Transactions
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center mt-2">
+                    <button className="flex justify-center items-center gap-2 bg-emerald-600 py-2 px-4 rounded text-white font-semibold hover:bg-green-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                        />
+                      </svg>
+
+                      <span>Crear Producto</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+            <div className="w-full -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                   <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -161,8 +263,8 @@ export const BusquedaC = () => {
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                       {searchTerm !== "" &&
                         filteredData?.map((data) => (
-                          <>
-                            <tr key={data.id_cliente}>
+                          <React.Fragment key={data.id_cliente}>
+                            <tr>
                               <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{data.ip_documento}</span>
@@ -202,7 +304,7 @@ export const BusquedaC = () => {
                                 </div>
                               </td>
                             </tr>
-                          </>
+                          </React.Fragment>
                         ))}
                     </tbody>
                   </table>
