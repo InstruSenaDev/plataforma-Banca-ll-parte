@@ -1,29 +1,56 @@
 import React, { useEffect, useState } from "react";
 import { ModalBusqueda } from "./ModalBusqueda";
+import { ModalInfoCliente } from "./ModalInfoCliente";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [accounts, setAccounts] = useState([]);
   const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
   const [showModal, setShowModal] = useState(false); // Para controlar la visibilidad del modal
+  const [showInfo, setShowInfo] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/get_search");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setDataUser(data);
+    } catch (error) {
+      console.error("error al encontrar informacion", error);
+    }
+  };
+
+  const getAccounts = async (documento) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_client/${documento}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setAccounts(data);
+    } catch (error) {
+      console.error("error al encontrar informacion", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/get_search");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setDataUser(data);
-      } catch (error) {
-        console.error("error al encontrar informacion", error);
-      }
-    };
     fetchData();
   }, []);
 
-  // Función para formatear la fecha en "dd/mm/yyyy hh:mm:ss a.m./p.m.".
+  useEffect(() => {
+    const documento =
+      filteredData.length > 0 ? filteredData[0].ip_documento : null;
+    if (documento) {
+      getAccounts(documento);
+    }
+  }, [searchTerm, dataUser]); // Llamamos a getAccounts cuando searchTerm o dataUser cambia
+
   const formatFecha = (fecha) => {
     const date = new Date(fecha);
 
@@ -49,7 +76,9 @@ export const BusquedaC = () => {
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
     ) || [];
 
-  console.log(filteredData);
+  const openInfo = () => {
+    setShowInfo(true);
+  };
 
   const openModal = (data) => {
     setModalData(data);
@@ -78,8 +107,8 @@ export const BusquedaC = () => {
             </div>
 
             <div className="w-80">
-              <div class="flex items-center">
-                <span class="absolute">
+              <div className="flex items-center">
+                <span className="absolute">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -107,110 +136,8 @@ export const BusquedaC = () => {
             </div>
           </div>
 
-          <div className="flex flex-row-reverse gap-4 mt-6">
-            {searchTerm !== "" && (
-              <>
-                <div className="w-3/4 bg-white rounded-md p-4">
-                  <div>
-                    <div className="flex justify-between items-center">
-                      <h1 className="text-lg font-medium text-gray-800">
-                        Detalle del Cliente
-                      </h1>
-
-                      <button className="flex justify-center items-center text-gray-400 transition hover:text-amber-500">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <div className="flex flex-col border border-gray-300 rounded-md p-2 text-gray-500 mt-2">
-                      <span>Nombres: </span>
-                      <span>Apellidos: </span>
-                      <span>Nº Documento: </span>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <h1 className="text-lg font-medium text-gray-800">
-                      Productos del cliente
-                    </h1>
-
-                    <div>
-                      <div class="w-full overflow-auto">
-                        <table class="w-full caption-bottom text-sm">
-                          <thead class="border-b">
-                            <tr class="border-b hover:bg-gray-50">
-                              <th class="py-2.5 px-4 font-semibold text-gray-600">
-                                Nº Cuenta
-                              </th>
-                              <th class="py-2.5 px-4 font-semibold text-gray-600">
-                                Balance
-                              </th>
-                              <th class="py-2.5 px-4 font-semibold text-gray-600">
-                                Tipo de Cuenta
-                              </th>
-                              <th class="py-2.5 px-4 font-semibold text-gray-600">
-                                Transferencias
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody class="border-0">
-                            <tr class="border-b hover:bg-gray-50">
-                              <td class="py-2.5 px-4 flex justify-center items-center font-normal text-black">
-                                123456789
-                              </td>
-                              <td class="py-2.5 px-4 flex justify-center items-center font-semibold text-black">
-                                $5,000.00
-                              </td>
-                              <td class="py-2.5 px-4 flex justify-center items-center font-normal text-gray-500">
-                                Checking
-                              </td>
-                              <td class="py-2.5 px-4 flex justify-center items-center font-normal">
-                                <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary underline-offset-4 hover:underline h-9 rounded-md px-3">
-                                  View Transactions
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center mt-2">
-                    <button className="flex justify-center items-center gap-2 bg-emerald-600 py-2 px-4 rounded text-white font-semibold hover:bg-green-600">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                        />
-                      </svg>
-
-                      <span>Crear Producto</span>
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-            <div className="w-full -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="flex flex-col mt-6">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                   <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -242,20 +169,19 @@ export const BusquedaC = () => {
                         >
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span>Fecha y Hora</span>
+                              <span>Fecha Creación</span>
                             </button>
                           </div>
                         </th>
+
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                          className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                         >
-                          <div className="flex justify-center items-center gap-x-3">
-                            <div className="flex justify-center items-center gap-x-3">
-                              <button>
-                                <span> Acción</span>
-                              </button>
-                            </div>
+                          <div className="flex justify-center items-center gap-x-2">
+                            <button>
+                              <span>Acción</span>
+                            </button>
                           </div>
                         </th>
                       </tr>
@@ -283,8 +209,8 @@ export const BusquedaC = () => {
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <button
-                                    onClick={() => openModal(data)}
-                                    className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
+                                    onClick={() => openInfo()}
+                                    className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -297,7 +223,12 @@ export const BusquedaC = () => {
                                       <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
-                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                                      />
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                                       />
                                     </svg>
                                   </button>
@@ -310,10 +241,14 @@ export const BusquedaC = () => {
                   </table>
                 </div>
 
-                <ModalBusqueda
-                  data={modalData}
-                  closeModal={closeModal}
-                  showModal={showModal}
+                <ModalInfoCliente
+                  accounts={accounts}
+                  filteredData={filteredData}
+                  showInfo={showInfo}
+                  setShowInfo={setShowInfo}
+                  modalData={modalData}
+                  setModalData={setModalData}
+                  setShowModal={setShowModal}
                 />
               </div>
             </div>
