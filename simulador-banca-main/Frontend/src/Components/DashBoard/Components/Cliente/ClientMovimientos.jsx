@@ -287,7 +287,7 @@ export const ClientMovimientos = ({
 
       {contenidoCliente === "ClientView" && (
         <>
-          <section className="w-1/3">
+          <section className="w-full md:flex-auto md:w-0">
             <div className="bg-white flex flex-col justify-between flex-1 rounded p-4">
               <h1 className="text-xl font-semibold">Tus movimientos</h1>
 

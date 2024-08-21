@@ -24,25 +24,29 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                       <li>
                         <div className="flex flex-row justify-between items-center">
                           <div className="flex flex-row justify-center items-center">
-                            <img src={CreditCard} className="h-20" />
+                            <img src={CreditCard} className="h-16 sm:h-20" />
                             <div className="py-6 px-8 flex flex-col gap-4">
-                              <div className="flex flex-col items-start justify-center text-muted-foreground text-lg text-black">
-                                <div>{data.num_cuenta}</div>
-                                <div>{data.descripcion}</div>
+                              <div className="flex flex-col items-start justify-center   font-semibold leading-normal text-black">
+                                <div className="text-normal sm:text-lg md:text-xl">
+                                  {data.num_cuenta}
+                                </div>
+                                <div className="text-xs sm:text-xs">
+                                  {data.descripcion}
+                                </div>
                               </div>
                             </div>
                           </div>
                           <div className="flex flex-col justify-center items-end gap-4">
                             <div className="flex flex-col justify-center items-center gap-4">
                               <div className="flex justify-center items-center px-3 py-2 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                <span className="text-emerald-500">
+                                <span className="text-emerald-500 text-xs sm:text-sm md:text-base">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     strokeWidth={1.5}
                                     stroke="currentColor"
-                                    className="size-5"
+                                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                                   >
                                     <path
                                       strokeLinecap="round"
@@ -51,14 +55,13 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                                     />
                                   </svg>
                                 </span>
-
-                                <h2 className="text-md font-normal text-emerald-500">
+                                <h2 className="text-xs sm:text-sm md:text-md font-normal text-emerald-500">
                                   Activa
                                 </h2>
                               </div>
 
                               <button
-                                className="border-solid border border-DarkSlate px-4 py-2 rounded-lg text-DarkSlate hover:bg-DarkSlate hover:text-white transition"
+                                className="border-solid border border-DarkSlate px-2 py-1 text-sm rounded-md text-DarkSlate hover:bg-DarkSlate hover:text-white transition sm:px-4 sm:py-2 sm:text-base sm:rounded-lg"
                                 onClick={() => onSelectAccount(data)}
                               >
                                 Seleccionar
@@ -77,11 +80,15 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                     <li>
                       <div className="flex flex-row justify-between items-center">
                         <div className="flex flex-row justify-center items-center">
-                          <img src={CreditCard} className="h-20" />
+                          <img src={CreditCard} className="h-16 sm:h-20" />
                           <div className="py-6 px-8 flex flex-col gap-4">
-                            <div className="flex flex-col items-start justify-center text-muted-foreground text-lg text-black">
-                              <div>{data.num_cuenta}</div>
-                              <div>{data.descripcion}</div>
+                            <div className="flex flex-col items-start justify-center   font-semibold leading-normal text-black">
+                              <div className="text-normal sm:text-lg md:text-xl">
+                                {data.num_cuenta}
+                              </div>
+                              <div className="text-xs sm:text-xs">
+                                {data.descripcion}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -89,14 +96,14 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                           {data.estado_cuenta === "Autorizado" && (
                             <div className="flex flex-col justify-center items-center gap-4">
                               <div className="flex justify-center items-center px-3 py-2 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                <span className="text-emerald-500">
+                                <span className="text-emerald-500 text-xs sm:text-sm md:text-base">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     strokeWidth={1.5}
                                     stroke="currentColor"
-                                    className="size-5"
+                                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                                   >
                                     <path
                                       strokeLinecap="round"
@@ -106,13 +113,13 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                                   </svg>
                                 </span>
 
-                                <h2 className="text-md font-normal text-emerald-500">
+                                <h2 className="text-xs sm:text-sm md:text-md font-normal text-emerald-500">
                                   Activa
                                 </h2>
                               </div>
 
                               <button
-                                className="border-solid border border-DarkSlate px-4 py-2 rounded-lg text-DarkSlate hover:bg-DarkSlate hover:text-white transition"
+                                className="border-solid border border-DarkSlate px-2 py-1 text-sm rounded-md text-DarkSlate hover:bg-DarkSlate hover:text-white transition sm:px-4 sm:py-2 sm:text-base sm:rounded-lg"
                                 onClick={() => onSelectAccount(data)}
                               >
                                 Seleccionar
