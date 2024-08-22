@@ -141,8 +141,9 @@ const Consignar = () => {
   };
   
   return (
+    <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
     <div className="flex justify-center items-center flex-col p-6">
-      <h1 className="font-semibold text-2xl mb-4">Consignar</h1>
+      <h1 className="font-semibold text-2xl mb-4">Consignacion a cuentas de clientes</h1>
       <div className="w-full max-w-md">
         <div className="mb-4">
           <label htmlFor="accountNumber" className="font-medium text-gray-700">Número de cuenta de ahorro:</label>
@@ -158,7 +159,7 @@ const Consignar = () => {
           <button
             onClick={handleConsultClick}
             disabled={isLoading}
-            className={`mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-all ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {isLoading ? "Cargando..." : "Consultar"}
           </button>
@@ -197,6 +198,7 @@ const Consignar = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 
