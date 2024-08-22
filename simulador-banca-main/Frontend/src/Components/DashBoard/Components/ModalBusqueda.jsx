@@ -69,20 +69,20 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
     <>
       {showModal && (
         <div
-          class="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
           key={data.id_cliente}
         >
-          <div class="relative p-4 w-auto h-auto">
-            <div class="bg-white rounded-lg">
-              <div class="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
+          <div className="relative p-4 w-4/5 h-auto">
+            <div className="bg-white rounded-lg">
+              <div className="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
                 <button
                   type="button"
                   onClick={closeModal}
-                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-4 h-4 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm w-4 h-4 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-hide="default-modal"
                 >
                   <svg
-                    class="w-3 h-3"
+                    className="w-3 h-3"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -96,22 +96,24 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                       d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                     />
                   </svg>
-                  <span class="sr-only">Close modal</span>
+                  <span className="sr-only">Close modal</span>
                 </button>
               </div>
 
               <form action="" onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex gap-3 items-center justify-center flex-col bg-white    ">
+                <div className="flex gap-3 items-center justify-center flex-col bg-white">
                   <h1 className="  w-2/4 text-black text-2xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                     Información del Cliente
                   </h1>
                   <div
-                    className="w-12/12   flex justify-center items-center "
+                    className="w-12/12 flex justify-center items-center "
                     style={{ minHeight: "55vh" }}
                   >
-                    <div className="grid  justify-center gap-6 p-5 lg:grid-cols-4">
+                    <div className="grid justify-center gap-x-10 gap-y-5 p-5 lg:grid-cols-4">
                       <div>
-                        <p>Nombre Completo:</p>
+                        <label className="block text-sm text-gray-500">
+                          Nombre Completo:
+                        </label>
                         <input
                           type="text"
                           {...register("Nombre", {
@@ -138,16 +140,36 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, nombre: e.target.value })
                           }
-                          class="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          // className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Nombre && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Nombre.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Nombre.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Primer Apellido</p>
+                        <label className="block text-sm text-gray-500">
+                          Primer Apellido
+                        </label>
                         <input
                           type="text"
                           {...register("Apellido1", {
@@ -178,17 +200,36 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             })
                           }
                           id={data.nombre}
-                          class="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Apellido1 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Apellido1.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Apellido1.message}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       <div>
-                        <p>Segundo Apellido</p>
+                        <label className="block text-sm text-gray-500">
+                          Segundo Apellido
+                        </label>
                         <input
                           type="text"
                           {...register("Apellido2", {
@@ -218,18 +259,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               segundoapellido: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Apellido2 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Apellido2.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Apellido2.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div className="flex flex-col">
                         <label
                           htmlFor="opciones"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="block text-sm text-gray-500"
                         >
                           Tipo de documento:
                         </label>
@@ -250,7 +308,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               tipodocumento: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
                           <option Value="">Seleccionar</option>
                           <option Value="CC">C.C.</option>
@@ -261,13 +319,32 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           <option Value="CD">Carné diplomático</option>
                         </select>
                         {errors.opciones1 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones1.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.opciones1.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>N° de documento</p>
+                        <label className="block text-sm text-gray-500">
+                          N° de documento
+                        </label>
                         <input
                           type="number"
                           {...register("NDocumento", {
@@ -294,16 +371,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               ip_documento: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.NDocumento && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.NDocumento.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.NDocumento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Lugar de expedición</p>
+                        <label className="block text-sm text-gray-500">
+                          Lugar de expedición
+                        </label>
                         <input
                           type="text"
                           {...register("LugarE", {
@@ -333,16 +429,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               ciudadnacimiento: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.LugarE && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.LugarE.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.LugarE.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Fecha de expedición</p>
+                        <label className="block text-sm text-gray-500">
+                          Fecha de expedición
+                        </label>
                         <input
                           type="date"
                           {...register("FechaE", {
@@ -352,16 +467,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           name="FechaE"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.FechaE && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.FechaE.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.FechaE.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Fecha de nacimiento</p>
+                        <label className="block text-sm text-gray-500">
+                          Fecha de nacimiento
+                        </label>
                         <input
                           type="date"
                           {...register("FechaN", {
@@ -371,16 +505,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           name="FechaN"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.FechaN && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.FechaN.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.FechaN.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Ciudad de nacimiento</p>
+                        <label className="block text-sm text-gray-500">
+                          Ciudad de nacimiento
+                        </label>
                         <input
                           type="text"
                           {...register("CiudadN", {
@@ -410,16 +563,36 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               ciudadnacimiento: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.CiudadN && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.CiudadN.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.CiudadN.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="opciones" className="mr-2">
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
                           Genero:
                         </label>
                         <select
@@ -436,21 +609,41 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, gen: e.target.value })
                           }
-                          className="p-2 rounded border-gray-300 focus:ring-green focus:border-green w-52"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
                           <option Value="">Seleccionar</option>
                           <option Value="F">Femenino</option>
                           <option Value="M">Masculino</option>
                         </select>
                         {errors.opciones2 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones2.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.opciones2.message}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       <div className="flex flex-col">
-                        <label htmlFor="opciones" className="mr-2">
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
                           Estado Civil:
                         </label>
                         <select
@@ -470,7 +663,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               estadocivil: e.target.value,
                             })
                           }
-                          className="p-2 rounded border-gray-300 focus:ring-green focus:border-green w-52"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
                           <option Value="">Seleccionar</option>
                           <option Value="Soltero">Soltero</option>
@@ -478,13 +671,32 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           <option Value="UL">Unión libre</option>
                         </select>
                         {errors.opciones3 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones3.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.opciones3.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Nacionalidad</p>
+                        <label className="block text-sm text-gray-500">
+                          Nacionalidad
+                        </label>
                         <input
                           type="text"
                           {...register("Nacionalidad", {
@@ -514,16 +726,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               nacionalidad: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Nacionalidad && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Nacionalidad.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Nacionalidad.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Dirección residencia</p>
+                        <label className="block text-sm text-gray-500">
+                          Dirección residencia
+                        </label>
                         <input
                           type="text"
                           {...register("DireccionR", {
@@ -549,17 +780,36 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               direccion: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.DireccionR && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.DireccionR.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.DireccionR.message}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       <div>
-                        <p>Barrio</p>
+                        <label className="block text-sm text-gray-500">
+                          Barrio
+                        </label>
                         <input
                           type="text"
                           {...register("Barrio", {
@@ -586,16 +836,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, barrio: e.target.value })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Barrio && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Barrio.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Barrio.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Ciudad/Municipio</p>
+                        <label className="block text-sm text-gray-500">
+                          Ciudad/Municipio
+                        </label>
                         <input
                           type="text"
                           {...register("Municipio", {
@@ -622,16 +891,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, ciudad: e.target.value })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Municipio && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Municipio.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Municipio.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Departamento</p>
+                        <label className="block text-sm text-gray-500">
+                          Departamento
+                        </label>
                         <input
                           type="text"
                           {...register("Departamento", {
@@ -658,16 +946,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, depa: e.target.value })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Departamento && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Departamento.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Departamento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>País</p>
+                        <label className="block text-sm text-gray-500">
+                          País
+                        </label>
                         <input
                           type="text"
                           {...register("Pais", {
@@ -694,16 +1001,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, pais: e.target.value })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Pais && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Pais.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Pais.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Teléfono</p>
+                        <label className="block text-sm text-gray-500">
+                          Teléfono
+                        </label>
                         <input
                           type="number"
                           {...register("Telefono", {
@@ -726,16 +1052,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               telefono: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Telefono && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Telefono.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Telefono.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Celular</p>
+                        <label className="block text-sm text-gray-500">
+                          Celular
+                        </label>
                         <input
                           type="number"
                           {...register("Celular", {
@@ -761,16 +1106,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               celular: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Celular && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Celular.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Celular.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Correo electrónico</p>
+                        <label className="block text-sm text-gray-500">
+                          Correo electrónico
+                        </label>
                         <input
                           type="email"
                           required
@@ -781,11 +1145,13 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           onChange={(e) =>
                             setFormData({ ...formData, correo: e.target.value })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-auto lg:w-72"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                       </div>
-                      <div className="flex flex-col w-52 justify-end">
-                        <p>Profesión</p>
+                      <div>
+                        <label className="block text-sm text-gray-500">
+                          Profesión
+                        </label>
                         <input
                           type="text"
                           {...register("Profesion", {
@@ -815,16 +1181,38 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               profesion: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.Profesion && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Profesion.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.Profesion.message}
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <div className="flex flex-col w-52 justify-end">
-                        <label htmlFor="opciones">Ocupación/Oficio:</label>
+                      <div>
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
+                          Ocupación/Oficio:
+                        </label>
                         <select
                           id="opciones"
                           {...register("opciones4", {
@@ -842,7 +1230,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             })
                           }
                           name="opciones4"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
                           <option Value="">Seleccionar</option>
                           <option Value="Empleado">Empleado</option>
@@ -860,13 +1248,32 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                           <option Value="SOE">Socio o Empleado-socio</option>
                         </select>
                         {errors.opciones4 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones4.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.opciones4.message}
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <div className="flex flex-col justify-end">
-                        <p>Actividad económica principal</p>
+                      <div>
+                        <label className="block text-sm text-gray-500">
+                          Actividad económica principal
+                        </label>
                         <input
                           type="text"
                           {...register("ActiEcoP", {
@@ -892,16 +1299,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               actividad: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.ActiEcoP && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.ActiEcoP.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.ActiEcoP.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Ingresos mensuales</p>
+                        <label className="block text-sm text-gray-500">
+                          Ingresos mensuales
+                        </label>
                         <input
                           type="number"
                           {...register("IngresosM", {
@@ -924,16 +1350,35 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               ingresosmensuales: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.IngresosM && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.IngresosM.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.IngresosM.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div>
-                        <p>Otros ingresos mensuales</p>
+                        <label className="block text-sm text-gray-500">
+                          Otros ingresos mensuales
+                        </label>
                         <input
                           type="number"
                           {...register("OIngresosM", {
@@ -956,16 +1401,36 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               otrosingresos: e.target.value,
                             })
                           }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                         {errors.OIngresosM && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.OIngresosM.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.OIngresosM.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="opciones" className="mr-2">
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
                           ¿Es declarante de renta?:
                         </label>
                         <select
@@ -982,20 +1447,46 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             setFormData({ ...formData, renta: e.target.value })
                           }
                           name="opciones5"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
                           <option Value="">Seleccionar</option>
                           <option Value="Si">Si</option>
                           <option Value="No">No</option>
                         </select>
                         {errors.opciones5 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones5.message}
-                          </span>
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.opciones5.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="flex justify-end items-center gap-4 p-4">
+                  <button className="bg-red-500 text-white text-sm py-1.5 px-4 rounded">
+                    Cancelar
+                  </button>
+                  <button className="bg-emerald-600 text-white text-sm py-1.5 px-4 rounded">
+                    Actualizar
+                  </button>
                 </div>
               </form>
             </div>
