@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
       // alert('Autorización exitosa')
       // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
       Cookies.remove("User");
+      Cookies.remove("selectedAccount");
       setUser(null);
       setIsDirector(false);
       Cookies.remove("isLoggedIn");

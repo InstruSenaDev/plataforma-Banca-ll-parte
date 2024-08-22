@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 import ChipCard from "../../../../assets/Img/Client/chip.png";
 import Logo from "../../../../assets/Img/Logos/ClarBank LogoOnly.svg";
@@ -13,9 +14,21 @@ export const ClientView = ({
   userData,
   setUserData,
   contenidoCliente,
+  logout,
+  setContenidoCliente,
 }) => {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [allMovimientos, setAllMovimientos] = useState([]);
+
+  const handleSetAllMovimientos = (movimientos) => {
+    setAllMovimientos(movimientos);
+  };
+
+  const autorizedAccounts = userData.filter(
+    (data) => data.estado_cuenta === "Autorizado"
+  );
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -31,28 +44,39 @@ export const ClientView = ({
   };
 
   useEffect(() => {
-    if (userData && userData.length > 0) {
-      const storedAccount = localStorage.getItem("selectedAccount");
+    if (!isLoggedIn) {
+      // Limpiar la cookie al cerrar sesión
+      Cookies.remove("selectedAccount");
+      setSelectedAccount(null);
+      return;
+    }
+
+    if (autorizedAccounts && autorizedAccounts.length > 0) {
+      const storedAccount = Cookies.get("selectedAccount");
       if (storedAccount) {
         setSelectedAccount(JSON.parse(storedAccount));
       } else {
-        const initialAccount = userData[0];
+        const initialAccount = autorizedAccounts[0];
         setSelectedAccount(initialAccount);
-        localStorage.setItem("selectedAccount", JSON.stringify(initialAccount));
+        Cookies.set("selectedAccount", JSON.stringify(initialAccount), {
+          expires: 7,
+        }); // La cookie expira en 7 días
       }
       setLoading(false);
     }
-  }, [userData]);
+  }, [userData, isLoggedIn]);
 
   useEffect(() => {
     if (selectedAccount) {
-      localStorage.setItem("selectedAccount", JSON.stringify(selectedAccount));
+      Cookies.set("selectedAccount", JSON.stringify(selectedAccount), {
+        expires: 7,
+      }); // La cookie expira en 7 días
     }
   }, [selectedAccount]);
 
   return (
     <>
-      <section>
+      <section style={{ minHeight: "80vh" }}>
         <h1 className="text-2xl font-semibold">Inicio</h1>
         {loading ? (
           <p>Cargando datos...</p>
@@ -103,7 +127,12 @@ export const ClientView = ({
               />
             </div>
 
-            <ClientMovimientos />
+            <ClientMovimientos
+              userData={userData}
+              contenidoCliente={contenidoCliente}
+              setAllMovimientos={handleSetAllMovimientos}
+              setContenidoCliente={setContenidoCliente}
+            />
           </div>
         )}
       </section>

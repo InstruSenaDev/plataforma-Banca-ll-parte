@@ -15,6 +15,7 @@ export const Formulario = ({
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const { user } = useAuth();
 
   let id = user?.id_empleado;
@@ -32,7 +33,7 @@ export const Formulario = ({
     opciones2: "",
     opciones3: "",
     Nacionalidad: "",
-    // ---------contacto--------
+    // --------- contacto --------
     DireccionR: "",
     BloqueTorre: "",
     AptoCasa: "",
@@ -43,7 +44,7 @@ export const Formulario = ({
     Telefono: "",
     Celular: "",
     CorreoE: "",
-    // ------economica --------------
+    // ------ economica --------------
     Profesion: "",
     opciones4: "",
     ActiEcoP: "",
@@ -68,7 +69,7 @@ export const Formulario = ({
     TotalIn: "",
     VentasA: "",
     FechaCV: "",
-    // ------- Tributaria---------
+    // ------- Tributaria ---------
     opciones5: "",
     opciones6: "",
     opciones7: "",
@@ -79,7 +80,7 @@ export const Formulario = ({
     FondosP: "",
     PaisFondos: "",
     CiudadFondos: "",
-    // ----operaciones--------
+    // ------ operaciones -------
     opciones9: "",
     opciones10: "",
     NombreEn: "",
@@ -100,31 +101,37 @@ export const Formulario = ({
   };
 
   const [datainfo, setdatainfo] = useState();
+
   const OnsumitInfo = async (data) => {
     setdatainfo(data);
     console.log(data);
     handleBotonClick("contacto");
   };
+
   const OnsumitInfo2 = async (data) => {
     setdatainfo(data);
     console.log(data);
     handleBotonClick("economica");
   };
+
   const OnsumitInfo3 = async (data) => {
     setdatainfo(data);
     console.log(data);
     handleBotonClick("financiera");
   };
+
   const OnsumitInfo4 = async (data) => {
     setdatainfo(data);
     console.log(data);
     handleBotonClick("tributaria");
   };
+
   const OnsumitInfo5 = async (data) => {
     setdatainfo(data);
     console.log(data);
     handleBotonClick("operaciones");
   };
+
   const OnsumitInfo6 = async (data) => {
     setdatainfo(data); // Agregar el id_usuario al objeto datainfo
     console.log("datainfo:", datainfo);
@@ -133,20 +140,39 @@ export const Formulario = ({
   };
 
   const CrearCliente = async () => {
-    console.log("id:", id);
-    console.log("datainfo:", datainfo);
-    try {
+    const getClient = async (NDocumento) => {
+      const response = await fetch(
+        `http://localhost:3000/get_client/${NDocumento}`
+      );
+      if (response.status === 404) {
+        // Cliente no encontrado, retornamos un valor que indica que no existe
+        return null;
+      }
+      if (!response.ok) throw new Error("Error al obtener el cliente.");
+      return response.json();
+    };
+
+    const registerClient = async (id, data) => {
       const response = await fetch(`http://localhost:3000/add_natural/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(datainfo, id),
+        body: JSON.stringify(data),
       });
-      const responseData = await response.json();
-      console.log(responseData);
-      if (response.ok) {
-        toast.success("Envio de fomulario exitoso");
+      if (!response.ok) throw new Error("Error al registrar el cliente.");
+      return response.json();
+    };
+
+    try {
+      const data = await getClient(datainfo.NDocumento);
+
+      if (!data) {
+        // Cliente no existe, procede a registrar
+        const responseData = await registerClient(id, datainfo);
+        console.log(responseData);
+        toast.success("Envío de formulario exitoso");
+
         setTimeout(() => {
           // Actualiza localmente el estado del cliente según sea necesario
           // Puedes utilizar la función setDatauser para actualizar el estado local
@@ -154,13 +180,14 @@ export const Formulario = ({
           // alert('Autorización exitosa')
           // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
           window.location = "/DashBoardMenu";
-        }, 2000);
-        setUserData(responseData.user);
+        }, 2000); // 2000 milisegundos = 2 segundos
+      } else {
+        // Cliente ya existe
+        toast.error("El cliente ya se encuentra registrado.");
       }
     } catch (error) {
-      return res
-        .status(400)
-        .json({ message: "No se encontró información del usuario" });
+      console.error("Error:", error.message);
+      toast.error("Ocurrió un error durante el proceso.");
     }
   };
 
@@ -169,16 +196,16 @@ export const Formulario = ({
       {contenidoSeleccionado1 === "InfoPersonal" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo)}>
           <div className=" sm:ml-50">
-            <div >
+            <div>
               <div
-                className="flex gap-5 items-center justify-center flex-col bg-white"
-                style={{ minHeight: "85vh" }}
+                className="flex gap-5 items-center justify-center flex-col "
+                style={{ minHeight: "87vh" }}
               >
                 <h1 className="w-2/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                   Información personal
                 </h1>
                 <div
-                  className="w-11/12  flex justify-center items-center bg-gray-100 rounded shadow-md"
+                  className="w-11/12  flex justify-center items-cente"
                   style={{ minHeight: "55vh" }}
                 >
                   <div className="grid justify-center gap-5 p-5 lg:grid-cols-3">
@@ -582,16 +609,16 @@ export const Formulario = ({
       {contenidoSeleccionado1 === "contacto" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo2)}>
           <div className="sm:ml-50">
-            <div >
+            <div>
               <div
-                className="flex gap-5 items-center justify-center flex-col bg-white"
+                className="flex gap-5 items-center justify-center flex-col"
                 style={{ minHeight: "85vh" }}
               >
                 <h1 className="w-2/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                   Información de contacto personal
                 </h1>
                 <div
-                  className="w-11/12  flex justify-center items-center bg-gray-100 rounded shadow-md"
+                  className="w-11/12  flex justify-center items-center"
                   style={{ minHeight: "55vh" }}
                 >
                   <div className="grid justify-center gap-5 p-5 lg:grid-cols-3">
@@ -935,14 +962,14 @@ export const Formulario = ({
           <div className="sm:ml-50">
             <div>
               <div
-                className="flex gap-5 items-center justify-center flex-col bg-white"
+                className="flex gap-5 items-center justify-center flex-col"
                 style={{ minHeight: "85vh" }}
               >
                 <h1 className="w-2/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                   Información económica y laboral
                 </h1>
                 <div
-                  className="w-11/12  flex justify-center items-center bg-gray-100 rounded shadow-md"
+                  className="w-11/12  flex justify-center items-center"
                   style={{ minHeight: "55vh" }}
                 >
                   <div className="grid justify-center gap-5 p-5 lg:grid-cols-3">
@@ -1413,16 +1440,16 @@ export const Formulario = ({
       {contenidoSeleccionado1 === "financiera" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo4)}>
           <div className="sm:ml-50">
-            <div >
+            <div>
               <div
-                className="flex gap-5 items-center justify-center flex-col bg-white"
+                className="flex gap-5 items-center justify-center flex-col"
                 style={{ minHeight: "85vh" }}
               >
                 <h1 className="w-2/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                   Detalle información financiera
                 </h1>
                 <div
-                  className="w-11/12  flex justify-center items-center bg-gray-100 rounded shadow-md"
+                  className="w-11/12  flex justify-center items-center"
                   style={{ minHeight: "55vh" }}
                 >
                   <div className="grid justify-center gap-5 p-5 lg:grid-cols-3">
@@ -1705,16 +1732,16 @@ export const Formulario = ({
       {contenidoSeleccionado1 === "tributaria" && (
         <form action="" onSubmit={handleSubmit(OnsumitInfo5)}>
           <div className="sm:ml-50">
-            <div >
+            <div>
               <div
-                className="flex gap-5 items-center justify-center flex-col bg-white"
+                className="flex gap-5 items-center justify-center flex-col"
                 style={{ minHeight: "85vh" }}
               >
                 <h1 className="w-2/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                   Información Tributaria
                 </h1>
                 <div
-                  className="w-11/12  flex justify-center items-center bg-gray-100 rounded shadow-md"
+                  className="w-11/12  flex justify-center items-center"
                   style={{ minHeight: "55vh" }}
                 >
                   <div className="grid justify-center gap-5 p-5 lg:grid-cols-3">
@@ -2048,14 +2075,14 @@ export const Formulario = ({
           <div className="sm:ml-50">
             <div>
               <div
-                className="flex gap-5 items-center justify-center flex-col bg-white"
+                className="flex gap-5 items-center justify-center flex-col"
                 style={{ minHeight: "85vh" }}
               >
                 <h1 className="w-2/4 text-black text-4xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                   Información de operaciones internacionales
                 </h1>
                 <div
-                  className="w-11/12  flex justify-center items-center bg-gray-100 rounded shadow-md"
+                  className="w-11/12  flex justify-center items-center"
                   style={{ minHeight: "55vh" }}
                 >
                   <div className="grid justify-center gap-5 p-5 lg:grid-cols-3">

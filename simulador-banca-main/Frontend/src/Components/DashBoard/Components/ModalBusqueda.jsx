@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-export const ModalBusqueda = ({ showModal, closeModal, data }) => {
+export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
   const {
     register,
     handleSubmit,
@@ -60,21 +60,21 @@ export const ModalBusqueda = ({ showModal, closeModal, data }) => {
   const fechaOriginal = "2024-03-14T05:00:00.000Z";
   const fechaFormateada = mostrarFechaEnFormato(fechaOriginal);
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   console.log(data);
   return (
     <>
       {showModal && (
         <div
-          class=" bg-slate-200/50 fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 overflow-y-auto h-svh"
+          class="fixed inset-0 flex items-center justify-center z-50"
           key={data.id_cliente}
         >
-          <div class=" relative  p-4 w-auto h-auto">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 ">
+          <div class="relative p-4 w-auto h-auto">
+            <div class="bg-white rounded-lg">
               <div class="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                  {data.n_cuenta} : {data.estadocliente} : {data.producto}
-                </h3>
-
                 <button
                   type="button"
                   onClick={closeModal}
