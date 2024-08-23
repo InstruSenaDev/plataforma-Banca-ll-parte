@@ -3,9 +3,14 @@ import React from "react";
 import CreditCard from "../../../../assets/Img/Client/creditcard.png";
 
 export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
+  const sectionStyle =
+    contenidoCliente === "ClientTarjet"
+      ? { minHeight: "83vh" }
+      : { minHeight: "51vh" };
+
   return (
     <>
-      <section className="mt-4">
+      <section className="mt-4" style={sectionStyle}>
         {contenidoCliente === "ClientTarjet" && (
           <h1 className="text-xl font-medium mb-4">Tus tarjetas</h1>
         )}

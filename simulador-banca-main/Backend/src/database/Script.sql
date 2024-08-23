@@ -48,6 +48,7 @@ CREATE TABLE movimientos (
     id_boveda INTEGER,
     id_detalle INTEGER,
     saldo NUMERIC(10, 2) NOT NULL,
+    id_empleado_consing INTEGER NULL,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -170,6 +171,7 @@ ALTER TABLE movimientos
 ADD FOREIGN KEY (id_empleado) REFERENCES empleado(id_empleado);
 ADD FOREIGN KEY (id_tipomov) REFERENCES tipo_movimiento(id_tipomov);
 ADD FOREIGN KEY (id_boveda) REFERENCES boveda(id_boveda);
+ADD FOREIGN KEY (id_empleado_consing) REFERENCES empleado(id_empleado),
 
 -- Insertar datos en la tabla rol
 INSERT INTO rol (descripcion) VALUES
