@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ModalBusqueda } from "./ModalBusqueda";
 
 export const ModalInfoCliente = ({
-  accounts,
   filteredData,
   showInfo,
   setShowInfo,
   modalData,
   setModalData,
 }) => {
+  const [accounts, setAccounts] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
+  const getAccounts = async (documento) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_client/${documento}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setAccounts(data);
+    } catch (error) {
+      console.error("error al encontrar informacion", error);
+    }
+  };
+
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
     // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
@@ -23,10 +40,22 @@ export const ModalInfoCliente = ({
     return formatter.format(saldo);
   };
 
-  const formatNac = (fecha) => {
-    const date = new Date(fecha);
-
-    return new Intl.DateTimeFormat("es-CO").format(date);
+  const formatNac = (date) => {
+    if (!date) return "Fecha no disponible";
+    try {
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) {
+        throw new Error("Invalid date");
+      }
+      return dateObj.toLocaleDateString("es-CO", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (error) {
+      console.error("Error al formatear la fecha:", error);
+      return "Fecha inválida";
+    }
   };
 
   const openAddAcount = () => {
@@ -42,6 +71,13 @@ export const ModalInfoCliente = ({
     setShowInfo(false);
     setModalData(null);
   };
+
+  // Efecto para cargar las cuentas cuando se abre el modal
+  useEffect(() => {
+    if (showInfo && modalData) {
+      getAccounts(modalData.ip_documento);
+    }
+  }, [showInfo, modalData]);
 
   return (
     <>
@@ -190,35 +226,37 @@ export const ModalInfoCliente = ({
                       </tr>
                     </thead>
                     <tbody className="border-0">
-                      {accounts?.map((data) => (
-                        <tr
-                          className="border-b hover:bg-gray-50"
-                          key={data.id_detalle}
-                        >
-                          <td className="py-2.5 px-4  font-normal text-black">
-                            <div className="flex justify-center items-center">
-                              {data.num_cuenta}
-                            </div>
-                          </td>
-                          <td className="py-2.5 px-4 font-semibold text-black">
-                            <div className="flex justify-center items-center">
-                              {formatSaldo(data.saldo)}
-                            </div>
-                          </td>
-                          <td className="py-2.5 px-4 text-gray-500">
-                            <div className="flex justify-center items-center">
-                              {data.descripcion}
-                            </div>
-                          </td>
-                          <td className="py-2.5 px-4 font-normal">
-                            <div className="flex justify-center items-center">
-                              <button className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline">
-                                Ver transferencias
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                      {accounts
+                        ?.filter((data) => data.estado_cuenta === "Autorizado")
+                        .map((data) => (
+                          <tr
+                            className="border-b hover:bg-gray-50"
+                            key={data.id_detalle}
+                          >
+                            <td className="py-2.5 px-4  font-normal text-black">
+                              <div className="flex justify-center items-center">
+                                {data.num_cuenta}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-4 font-semibold text-black">
+                              <div className="flex justify-center items-center">
+                                {formatSaldo(data.saldo)}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-4 text-gray-500">
+                              <div className="flex justify-center items-center">
+                                {data.descripcion}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-4 font-normal">
+                              <div className="flex justify-center items-center">
+                                <button className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline">
+                                  Ver transferencias
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

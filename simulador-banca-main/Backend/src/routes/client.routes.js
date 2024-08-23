@@ -15,6 +15,6 @@ router.get("/get_search", getSearch.getSearch);
 router.put("/client_status/:id", clientStatus.clientStatus);
 router.put("/EstadoD/:id", clientDenied.EstadoD);
 router.put("/update_balance/:id", updateBalance.updateClient);
-router.put("/update_client/:id", updateInfo.updateInfo);
+router.put("/update_client/:id_cliente", updateInfo.updateInfo);
 
 module.exports = router;

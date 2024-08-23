@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
 export const ModalBusqueda = ({
@@ -59,10 +60,29 @@ export const ModalBusqueda = ({
     }
   }, [data, setValue]);
 
-  const onSubmit = (formData) => {
-    console.log("Formulario enviado.");
-    console.log(formData);
-    // Lógica para enviar el formulario
+  const onSubmit = async (formData) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/update_client/${data.id_cliente}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al actualizar el cliente");
+      }
+      const result = await response.json();
+      toast.success("Información del cliente actualizada correctamente.");
+
+      setModalData(formData);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error al actualizar el cliente", error);
+    }
   };
 
   const closeModal = () => {
