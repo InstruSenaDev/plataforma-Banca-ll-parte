@@ -41,7 +41,7 @@ export const ModalInfoCliente = ({
     <>
       {showInfo && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:w-2/5 bg-white rounded-md p-4">
+          <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:w-3/5 bg-white rounded-md p-4">
             <div>
               <div className="flex justify-between items-center">
                 <h1 className="text-md font-medium text-gray-800">
@@ -73,7 +73,7 @@ export const ModalInfoCliente = ({
                 </button>
               </div>
 
-              <div className="flex flex-wrap gap-4 border border-gray-300 rounded-md p-2 text-gray-500 text-xs sm:text-sm mt-2">
+              <div className="flex flex-wrap gap-2 border border-gray-300 rounded-md p-2 text-gray-500 text-xs sm:text-sm mt-2">
                 {filteredData?.map((data) => (
                   <React.Fragment key={data.id_cliente}>
                     <div className="flex-1 flex flex-col">
@@ -113,14 +113,14 @@ export const ModalInfoCliente = ({
 
             <div className="mt-4">
               <div className="flex flex-col sm:flex-row justify-between sm:justify-between flex-wrap gap-2">
-                <h1 className="text-sm sm:text-md font-medium text-gray-800">
+                <h1 className="text-md sm:text-md  text-center font-medium text-gray-800">
                   Productos del cliente
                 </h1>
 
-                <div className="flex flex-col sm:flex-row sm:justify-end gap-4">
+                <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
                   <button
                     onClick={() => openModal(filteredData[0])}
-                    className="flex justify-center items-center gap-2 text-xs sm:text-sm text-center bg-amber-500 text-white py-1.5 px-2 rounded transition hover:bg-amber-600"
+                    className="flex justify-center items-center gap-2 text-xs sm:text-xs text-center bg-amber-500 text-white py-1 px-1.5 rounded transition hover:bg-amber-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@ export const ModalInfoCliente = ({
                     <span>Editar Información</span>
                   </button>
 
-                  <button className="flex justify-center items-center gap-2 text-xs sm:text-sm  text-center bg-emerald-500 text-white py-1.5 px-2 rounded transition hover:bg-emerald-600">
+                  <button className="flex justify-center items-center gap-2 text-xs sm:text-xs text-center  bg-emerald-500 text-white py-1.5 px-1.5 rounded transition hover:bg-emerald-600">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
