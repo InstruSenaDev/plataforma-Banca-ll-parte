@@ -29,6 +29,10 @@ export const ModalInfoCliente = ({
     return new Intl.DateTimeFormat("es-CO").format(date);
   };
 
+  const openAddAcount = () => {
+    console.log("Cuenta agregada");
+  };
+
   const openModal = (data) => {
     setModalData(data);
     setShowModal(true);
@@ -36,7 +40,9 @@ export const ModalInfoCliente = ({
 
   const closeModal = () => {
     setShowInfo(false);
+    setModalData(null);
   };
+
   return (
     <>
       {showInfo && (
@@ -74,40 +80,40 @@ export const ModalInfoCliente = ({
               </div>
 
               <div className="flex flex-wrap gap-4 border border-gray-300 rounded-md p-2 text-gray-500 text-xs sm:text-sm mt-2">
-                {filteredData?.map((data) => (
-                  <React.Fragment key={data.id_cliente}>
+                {modalData && (
+                  <React.Fragment key={modalData.id_cliente}>
                     <div className="flex-1 flex flex-col">
                       <span>
-                        {data.nombre} {data.primerapellido}{" "}
-                        {data.segundoapellido}
+                        {modalData.nombre} {modalData.primerapellido}{" "}
+                        {modalData.segundoapellido}
                       </span>
                       <span>
-                        {data.tipodocumento} {data.ip_documento}
+                        {modalData.tipodocumento} {modalData.ip_documento}
                       </span>
 
-                      <span>{data.celular}</span>
-                      <span>{data.correo}</span>
+                      <span>{modalData.celular}</span>
+                      <span>{modalData.correo}</span>
                       <span>
-                        F. Nacimiento: {formatNac(data.fechanacimiento)}
+                        F. Nacimiento: {formatNac(modalData.fechanacimiento)}
                       </span>
                     </div>
 
                     <div className="border-r border-gray-300 "></div>
 
                     <div className="flex-1 flex flex-col">
-                      <span>Nacionalidad: {data.nacionalidad}</span>
+                      <span>Nacionalidad: {modalData.nacionalidad}</span>
                       <span>
-                        Residencia: {data.ciudad} ({data.depa})
+                        Residencia: {modalData.ciudad} ({modalData.depa})
                       </span>
                       <span>
-                        Dirección: {data.direccion} {data.barrio}
+                        Dirección: {modalData.direccion} {modalData.barrio}
                       </span>
 
-                      <span>Profesión: {data.profesion}</span>
-                      <span>Renta: {data.renta}</span>
+                      <span>Profesión: {modalData.profesion}</span>
+                      <span>Renta: {modalData.renta}</span>
                     </div>
                   </React.Fragment>
-                ))}
+                )}
               </div>
             </div>
 
@@ -119,7 +125,7 @@ export const ModalInfoCliente = ({
 
                 <div className="flex flex-col sm:flex-row sm:justify-end gap-4">
                   <button
-                    onClick={() => openModal(filteredData[0])}
+                    onClick={() => openModal(modalData)}
                     className="flex justify-center items-center gap-2 text-xs sm:text-sm text-center bg-amber-500 text-white py-1.5 px-2 rounded transition hover:bg-amber-600"
                   >
                     <svg
@@ -140,7 +146,10 @@ export const ModalInfoCliente = ({
                     <span>Editar Información</span>
                   </button>
 
-                  <button className="flex justify-center items-center gap-2 text-xs sm:text-sm  text-center bg-emerald-500 text-white py-1.5 px-2 rounded transition hover:bg-emerald-600">
+                  <button
+                    onClick={() => openAddAcount()}
+                    className="flex justify-center items-center gap-2 text-xs sm:text-sm  text-center bg-emerald-500 text-white py-1.5 px-2 rounded transition hover:bg-emerald-600"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -221,6 +230,7 @@ export const ModalInfoCliente = ({
 
       <ModalBusqueda
         data={modalData}
+        setModalData={setModalData}
         showModal={showModal}
         setShowModal={setShowModal}
       />

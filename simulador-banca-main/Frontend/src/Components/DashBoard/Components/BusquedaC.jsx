@@ -76,8 +76,9 @@ export const BusquedaC = () => {
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
     ) || [];
 
-  const openInfo = () => {
+  const openInfo = (id_cliente) => {
     setShowInfo(true);
+    setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
   };
 
   const openModal = (data) => {
@@ -209,7 +210,7 @@ export const BusquedaC = () => {
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <button
-                                    onClick={() => openInfo()}
+                                    onClick={() => openInfo(data.id_cliente)}
                                     className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
                                   >
                                     <svg

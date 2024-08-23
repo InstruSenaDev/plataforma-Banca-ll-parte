@@ -1,75 +1,80 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
+export const ModalBusqueda = ({
+  showModal,
+  setShowModal,
+  data,
+  setModalData,
+}) => {
+  const [localData, setLocalData] = useState({});
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm();
-  const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-    // Actualizar el estado local cuando cambia la propiedad data
-    setFormData(data);
-  }, [data]);
+    if (data) {
+      setLocalData({ ...data });
+      // Actualizar los valores de los campos del formulario cuando cambia data
+      setValue("nombre", data.nombre || "");
+      setValue("primer_apellido", data.primerapellido || "");
+      setValue("segundo_apellido", data.segundoapellido || "");
+      setValue("tipo_documento", data.tipodocumento || "");
+      setValue("num_documento", data.ip_documento || "");
+      setValue("lugar_expedicion", data.ciudadnacimiento || "");
+      setValue(
+        "fecha_expedicion",
+        data.fechaexpedicion
+          ? new Date(data.fechaexpedicion).toISOString().split("T")[0]
+          : ""
+      );
+      setValue(
+        "fecha_nacimiento",
+        data.fechanacimiento
+          ? new Date(data.fechanacimiento).toISOString().split("T")[0]
+          : ""
+      );
+      setValue("ciudad_nacimiento", data.ciudadnacimiento || "");
+      setValue("genero", data.gen || "");
+      setValue("estado_civil", data.estadocivil || "");
+      setValue("nacionalidad", data.nacionalidad || "");
+      setValue("direccion_residencia", data.direccion || "");
+      setValue("barrio", data.barrio || "");
+      setValue("ciudad", data.ciudad || "");
+      setValue("departamento", data.depa || "");
+      setValue("pais", data.pais || "");
+      setValue("telefono", data.telefono || "");
+      setValue("celular", data.celular || "");
+      setValue("correo_electronico", data.correo || "");
+      setValue("profesion", data.profesion || "");
+      setValue("ocupacion", data.ocupacion || "");
+      setValue("actividad", data.actividad || "");
+      setValue("ingresos_mensuales", data.ingresosmensuales || "");
+      setValue("otros_ingresos", data.otrosingresos || "");
+      setValue("renta", data.renta || "");
+    }
+  }, [data, setValue]);
 
   const onSubmit = (formData) => {
+    console.log("Formulario enviado.");
     console.log(formData);
     // Lógica para enviar el formulario
   };
 
-  // Función para manejar cambios en los datos del formulario
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  useEffect(() => {
-    // Actualizar los valores de los campos del formulario cuando cambia formData
-    if (formData) {
-      Object.entries(formData).forEach(([key, value]) => {
-        setValue(key, value);
-      });
-    }
-  }, [formData, setValue]);
-
-  function mostrarFechaEnFormato(fecha) {
-    // Crear un objeto Date con la fecha recibida
-    const fechaObjeto = new Date(fecha);
-
-    // Extraer el año, mes y día de la fecha
-    const year = fechaObjeto.getFullYear();
-    const month = fechaObjeto.getMonth() + 1; // Los meses van de 0 a 11, por lo que sumamos 1
-    const day = fechaObjeto.getDate();
-
-    // Formatear el mes y el día como cadenas de dos dígitos
-    const monthString = month < 10 ? "0" + month : month.toString();
-    const dayString = day < 10 ? "0" + day : day.toString();
-
-    // Construir la cadena de fecha en el formato deseado: "yyyy-mm-dd"
-    const fechaFormateada = `${dayString}-${monthString}-${year}`;
-
-    return fechaFormateada;
-  }
-
-  // Ejemplo de uso
-  const fechaOriginal = "2024-03-14T05:00:00.000Z";
-  const fechaFormateada = mostrarFechaEnFormato(fechaOriginal);
-
   const closeModal = () => {
+    setModalData(localData);
     setShowModal(false);
   };
 
-  console.log(data);
   return (
     <>
       {showModal && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="fixed inset-0 flex items-center justify-center z-50"
           key={data.id_cliente}
         >
           <div className="relative p-4 w-4/5 h-auto">
@@ -90,9 +95,9 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                     />
                   </svg>
@@ -100,9 +105,9 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                 </button>
               </div>
 
-              <form action="" onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex gap-3 items-center justify-center flex-col bg-white">
-                  <h1 className="  w-2/4 text-black text-2xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
+                  <h1 className="w-2/4 text-black text-2xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                     Información del Cliente
                   </h1>
                   <div
@@ -116,7 +121,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <input
                           type="text"
-                          {...register("Nombre", {
+                          {...register("nombre", {
                             pattern: {
                               value: /^[A-Za-z ]+$/i,
                               message: "Digita solo letras",
@@ -134,16 +139,9 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="Nombre"
-                          defaultValue={data.nombre} // Utiliza defaultValue para el valor inicial
-                          value={formData?.nombre} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, nombre: e.target.value })
-                          }
-                          // className="rounded-md border-gray-300 focus:ring-green focus:border-green"
-                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
                         />
-                        {errors.Nombre && (
+                        {errors.nombre && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -159,20 +157,20 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                                 d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
                               />
                             </svg>
-
                             <span className="text-sm">
-                              {errors.Nombre.message}
+                              {errors.nombre.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Primer Apellido
                         </label>
                         <input
                           type="text"
-                          {...register("Apellido1", {
+                          {...register("primer_apellido", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -190,19 +188,9 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Apellido1"
-                          defaultValue={data.primerapellido} // Utiliza defaultValue para el valor inicial
-                          value={formData?.primerapellido} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              primerapellido: e.target.value,
-                            })
-                          }
-                          id={data.nombre}
-                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
                         />
-                        {errors.Apellido1 && (
+                        {errors.primer_apellido && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -218,9 +206,8 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                                 d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
                               />
                             </svg>
-
                             <span className="text-sm">
-                              {errors.Apellido1.message}
+                              {errors.primer_apellido.message}
                             </span>
                           </div>
                         )}
@@ -232,7 +219,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <input
                           type="text"
-                          {...register("Apellido2", {
+                          {...register("segundo_apellido", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -250,18 +237,9 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Apellido2"
-                          defaultValue={data.segundoapellido} // Utiliza defaultValue para el valor inicial
-                          value={formData?.segundoapellido} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              segundoapellido: e.target.value,
-                            })
-                          }
-                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
                         />
-                        {errors.Apellido2 && (
+                        {errors.segundo_apellido && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -277,13 +255,13 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                                 d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
                               />
                             </svg>
-
                             <span className="text-sm">
-                              {errors.Apellido2.message}
+                              {errors.segundo_apellido.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div className="flex flex-col">
                         <label
                           htmlFor="opciones"
@@ -293,32 +271,24 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones1", {
+                          {...register("tipo_documento", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="opciones1"
-                          defaultValue={data.tipodocumento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.tipodocumento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              tipodocumento: e.target.value,
-                            })
-                          }
+                          name="tipo_documento"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="CC">C.C.</option>
-                          <option Value="TI">T.I.</option>
-                          <option Value="RCivil">R. Civil</option>
-                          <option Value="CE">Cédula extranjería</option>
-                          <option Value="PP">Pasaporte</option>
-                          <option Value="CD">Carné diplomático</option>
+                          <option value="">Seleccionar</option>
+                          <option value="CC">C.C.</option>
+                          <option value="TI">T.I.</option>
+                          <option value="RCivil">R. Civil</option>
+                          <option value="CE">Cédula extranjería</option>
+                          <option value="PP">Pasaporte</option>
+                          <option value="CD">Carné diplomático</option>
                         </select>
-                        {errors.opciones1 && (
+                        {errors.tipo_documento && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -336,18 +306,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.opciones1.message}
+                              {errors.tipo_documento.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           N° de documento
                         </label>
                         <input
                           type="number"
-                          {...register("NDocumento", {
+                          {...register("num_documento", {
                             required: {
                               value: true,
                               message: "Campo requerido",
@@ -362,18 +333,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="NDocumento"
-                          defaultValue={data.ip_documento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ip_documento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ip_documento: e.target.value,
-                            })
-                          }
+                          name="num_documento"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.NDocumento && (
+                        {errors.num_documento && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -391,18 +354,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.NDocumento.message}
+                              {errors.num_documento.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Lugar de expedición
                         </label>
                         <input
                           type="text"
-                          {...register("LugarE", {
+                          {...register("lugar_expedicion", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -420,18 +384,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="LugarE"
-                          defaultValue={data.ciudadnacimiento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ciudadnacimiento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ciudadnacimiento: e.target.value,
-                            })
-                          }
+                          name="lugar_expedicion"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.LugarE && (
+                        {errors.lugar_expedicion && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -449,27 +405,28 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.LugarE.message}
+                              {errors.lugar_expedicion.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Fecha de expedición
                         </label>
                         <input
                           type="date"
-                          {...register("FechaE", {
+                          {...register("fecha_expedicion", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="FechaE"
+                          name="lugar_expedicion"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.FechaE && (
+                        {errors.lugar_expedicion && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -487,27 +444,28 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.FechaE.message}
+                              {errors.lugar_expedicion.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Fecha de nacimiento
                         </label>
                         <input
                           type="date"
-                          {...register("FechaN", {
+                          {...register("fecha_nacimiento", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="FechaN"
+                          name="fecha_nacimiento"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.FechaN && (
+                        {errors.fecha_nacimiento && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -525,18 +483,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.FechaN.message}
+                              {errors.fecha_nacimiento.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Ciudad de nacimiento
                         </label>
                         <input
                           type="text"
-                          {...register("CiudadN", {
+                          {...register("ciudad_nacimiento", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -554,18 +513,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="CiudadN"
-                          defaultValue={data.ciudadnacimiento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ciudadnacimiento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ciudadnacimiento: e.target.value,
-                            })
-                          }
+                          name="ciudad_nacimiento"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.CiudadN && (
+                        {errors.ciudad_nacimiento && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -583,11 +534,12 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.CiudadN.message}
+                              {errors.ciudad_nacimiento.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div className="flex flex-col">
                         <label
                           htmlFor="opciones"
@@ -597,25 +549,20 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones2", {
+                          {...register("genero", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="opciones2"
-                          defaultValue={data.gen} // Utiliza defaultValue para el valor inicial
-                          value={formData?.gen} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, gen: e.target.value })
-                          }
+                          name="genero"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="F">Femenino</option>
-                          <option Value="M">Masculino</option>
+                          <option value="">Seleccionar</option>
+                          <option value="F">Femenino</option>
+                          <option value="M">Masculino</option>
                         </select>
-                        {errors.opciones2 && (
+                        {errors.genero && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -633,7 +580,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.opciones2.message}
+                              {errors.genero.message}
                             </span>
                           </div>
                         )}
@@ -648,29 +595,21 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones3", {
+                          {...register("estado_civil", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="opciones3"
-                          defaultValue={data.estadocivil} // Utiliza defaultValue para el valor inicial
-                          value={formData?.estadocivil} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              estadocivil: e.target.value,
-                            })
-                          }
+                          name="estado_civil"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="Soltero">Soltero</option>
-                          <option Value="Casado">Casado</option>
-                          <option Value="UL">Unión libre</option>
+                          <option value="">Seleccionar</option>
+                          <option value="Soltero">Soltero</option>
+                          <option value="Casado">Casado</option>
+                          <option value="UL">Unión libre</option>
                         </select>
-                        {errors.opciones3 && (
+                        {errors.estado_civil && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -688,18 +627,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.opciones3.message}
+                              {errors.estado_civil.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Nacionalidad
                         </label>
                         <input
                           type="text"
-                          {...register("Nacionalidad", {
+                          {...register("nacionalidad", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -717,18 +657,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Nacionalidad"
-                          defaultValue={data.nacionalidad} // Utiliza defaultValue para el valor inicial
-                          value={formData?.nacionalidad} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              nacionalidad: e.target.value,
-                            })
-                          }
+                          name="nacionalidad"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Nacionalidad && (
+                        {errors.nacionalidad && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -746,18 +678,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Nacionalidad.message}
+                              {errors.nacionalidad.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Dirección residencia
                         </label>
                         <input
                           type="text"
-                          {...register("DireccionR", {
+                          {...register("direccion_residencia", {
                             required: {
                               value: true,
                               message: "Campo requerido",
@@ -771,18 +704,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 30 digitos",
                             },
                           })}
-                          name="DireccionR"
-                          defaultValue={data.direccion} // Utiliza defaultValue para el valor inicial
-                          value={formData?.direccion} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              direccion: e.target.value,
-                            })
-                          }
+                          name="direccion_residencia"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.DireccionR && (
+                        {errors.direccion_residencia && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -800,7 +725,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.DireccionR.message}
+                              {errors.direccion_residencia.message}
                             </span>
                           </div>
                         )}
@@ -812,7 +737,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <input
                           type="text"
-                          {...register("Barrio", {
+                          {...register("barrio", {
                             pattern: {
                               value: /^[A-Za-z ]+$/i,
                               message: "Digita solo letras",
@@ -830,15 +755,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Barrio"
-                          defaultValue={data.barrio} // Utiliza defaultValue para el valor inicial
-                          value={formData?.barrio} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, barrio: e.target.value })
-                          }
+                          name="barrio"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Barrio && (
+                        {errors.barrio && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -856,18 +776,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Barrio.message}
+                              {errors.barrio.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Ciudad/Municipio
                         </label>
                         <input
                           type="text"
-                          {...register("Municipio", {
+                          {...register("ciudad", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -885,15 +806,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="Municipio"
-                          defaultValue={data.ciudad} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ciudad} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, ciudad: e.target.value })
-                          }
+                          name="ciudad"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Municipio && (
+                        {errors.ciudad && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -911,20 +827,21 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Municipio.message}
+                              {errors.ciudad.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Departamento
                         </label>
                         <input
                           type="text"
-                          {...register("Departamento", {
+                          {...register("departamento", {
                             pattern: {
-                              value: /^[A-Za-z]+$/i,
+                              value: /^[A-Za-z\s]+$/i,
                               message: "Digita solo letras",
                             },
                             required: {
@@ -940,15 +857,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Departamento"
-                          defaultValue={data.depa} // Utiliza defaultValue para el valor inicial
-                          value={formData?.depa} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, depa: e.target.value })
-                          }
+                          name="departamento"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Departamento && (
+                        {errors.departamento && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -966,18 +878,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Departamento.message}
+                              {errors.departamento.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           País
                         </label>
                         <input
                           type="text"
-                          {...register("Pais", {
+                          {...register("pais", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -995,15 +908,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="Pais"
-                          defaultValue={data.pais} // Utiliza defaultValue para el valor inicial
-                          value={formData?.pais} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, pais: e.target.value })
-                          }
+                          name="pais"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Pais && (
+                        {errors.pais && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1021,18 +929,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Pais.message}
+                              {errors.pais.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Teléfono
                         </label>
                         <input
                           type="number"
-                          {...register("Telefono", {
+                          {...register("telefono", {
                             minLength: {
                               value: 10,
                               message: "Minimo 10 Numeros",
@@ -1043,18 +952,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="Telefono"
-                          defaultValue={data.telefono} // Utiliza defaultValue para el valor inicial
-                          value={formData?.telefono} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              telefono: e.target.value,
-                            })
-                          }
+                          name="telefono"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Telefono && (
+                        {errors.telefono && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1072,18 +973,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Telefono.message}
+                              {errors.telefono.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Celular
                         </label>
                         <input
                           type="number"
-                          {...register("Celular", {
+                          {...register("celular", {
                             required: {
                               value: true,
                             },
@@ -1097,18 +999,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="Celular"
-                          defaultValue={data.celular} // Utiliza defaultValue para el valor inicial
-                          value={formData?.celular} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              celular: e.target.value,
-                            })
-                          }
+                          name="celular"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Celular && (
+                        {errors.celular && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1126,11 +1020,12 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Celular.message}
+                              {errors.celular.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Correo electrónico
@@ -1138,23 +1033,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         <input
                           type="email"
                           required
-                          {...register("CorreoE")}
-                          name="CorreoE"
-                          defaultValue={data.correo} // Utiliza defaultValue para el valor inicial
-                          value={formData?.correo} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, correo: e.target.value })
-                          }
+                          {...register("correo_electronico")}
+                          name="correo_electronico"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Profesión
                         </label>
                         <input
                           type="text"
-                          {...register("Profesion", {
+                          {...register("profesion", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -1172,18 +1063,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Profesion"
-                          defaultValue={data.profesion} // Utiliza defaultValue para el valor inicial
-                          value={formData?.profesion} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              profesion: e.target.value,
-                            })
-                          }
+                          name="profesion"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Profesion && (
+                        {errors.profesion && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1201,11 +1084,12 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.Profesion.message}
+                              {errors.profesion.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label
                           htmlFor="opciones"
@@ -1215,39 +1099,31 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones4", {
+                          {...register("ocupacion", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          defaultValue={data.ocupacion} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ocupacion} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ocupacion: e.target.value,
-                            })
-                          }
-                          name="opciones4"
+                          name="ocupacion"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="Empleado">Empleado</option>
-                          <option Value="Pensionado">Pensionado</option>
-                          <option Value="Ama de casa">Ama de casa</option>
-                          <option Value="Estudiante">Estudiante</option>
-                          <option Value="Ganadero">Ganadero</option>
-                          <option Value="Comerciante">Comerciante</option>
-                          <option Value="Agricultor">Agricultor</option>
-                          <option Value="RC">Rentista de capital</option>
-                          <option Value="Independiente">Independiente</option>
-                          <option Value="DSI">Desempleado sin ingresos</option>
-                          <option Value="DCI">Desempleado con ingresos</option>
-                          <option Value="PI">Profesional independiente</option>
-                          <option Value="SOE">Socio o Empleado-socio</option>
+                          <option value="">Seleccionar</option>
+                          <option value="Empleado">Empleado</option>
+                          <option value="Pensionado">Pensionado</option>
+                          <option value="Ama de casa">Ama de casa</option>
+                          <option value="Estudiante">Estudiante</option>
+                          <option value="Ganadero">Ganadero</option>
+                          <option value="Comerciante">Comerciante</option>
+                          <option value="Agricultor">Agricultor</option>
+                          <option value="RC">Rentista de capital</option>
+                          <option value="Independiente">Independiente</option>
+                          <option value="DSI">Desempleado sin ingresos</option>
+                          <option value="DCI">Desempleado con ingresos</option>
+                          <option value="PI">Profesional independiente</option>
+                          <option value="SOE">Socio o Empleado-socio</option>
                         </select>
-                        {errors.opciones4 && (
+                        {errors.ocupacion && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1265,18 +1141,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.opciones4.message}
+                              {errors.ocupacion.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Actividad económica principal
                         </label>
                         <input
                           type="text"
-                          {...register("ActiEcoP", {
+                          {...register("actividad", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -1290,18 +1167,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="ActiEcoP"
-                          defaultValue={data.actividad} // Utiliza defaultValue para el valor inicial
-                          value={formData?.actividad} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              actividad: e.target.value,
-                            })
-                          }
+                          name="actividad"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.ActiEcoP && (
+                        {errors.actividad && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1319,18 +1188,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.ActiEcoP.message}
+                              {errors.actividad.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Ingresos mensuales
                         </label>
                         <input
                           type="number"
-                          {...register("IngresosM", {
+                          {...register("ingresos_mensuales", {
                             minLength: {
                               value: 1,
                               message: "Minimo 1 numeros",
@@ -1341,18 +1211,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="IngresosM"
-                          defaultValue={data.ingresosmensuales} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ingresosmensuales} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ingresosmensuales: e.target.value,
-                            })
-                          }
+                          name="ingresos_mensuales"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.IngresosM && (
+                        {errors.ingresos_mensuales && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1370,18 +1232,19 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.IngresosM.message}
+                              {errors.ingresos_mensuales.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm text-gray-500">
                           Otros ingresos mensuales
                         </label>
                         <input
                           type="number"
-                          {...register("OIngresosM", {
+                          {...register("otros_ingresos", {
                             minLength: {
                               value: 1,
                               message: "Minimo 1 numeros",
@@ -1392,18 +1255,10 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="OIngresosM"
-                          defaultValue={data.otrosingresos} // Utiliza defaultValue para el valor inicial
-                          value={formData?.otrosingresos} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              otrosingresos: e.target.value,
-                            })
-                          }
+                          name="otros_ingresos"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.OIngresosM && (
+                        {errors.otros_ingresos && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1421,11 +1276,12 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.OIngresosM.message}
+                              {errors.otros_ingresos.message}
                             </span>
                           </div>
                         )}
                       </div>
+
                       <div className="flex flex-col">
                         <label
                           htmlFor="opciones"
@@ -1435,25 +1291,20 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones5", {
+                          {...register("renta", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          defaultValue={data.renta} // Utiliza defaultValue para el valor inicial
-                          value={formData?.renta} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, renta: e.target.value })
-                          }
-                          name="opciones5"
+                          name="renta"
                           className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="Si">Si</option>
-                          <option Value="No">No</option>
+                          <option value="">Seleccionar</option>
+                          <option value="Si">Si</option>
+                          <option value="No">No</option>
                         </select>
-                        {errors.opciones5 && (
+                        {errors.renta && (
                           <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -1471,7 +1322,7 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             </svg>
 
                             <span className="text-sm">
-                              {errors.opciones5.message}
+                              {errors.renta.message}
                             </span>
                           </div>
                         )}
@@ -1481,10 +1332,17 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                 </div>
 
                 <div className="flex justify-end items-center gap-4 p-4">
-                  <button className="bg-red-500 text-white text-sm py-1.5 px-4 rounded">
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="bg-red-500 text-white text-sm py-1.5 px-4 rounded"
+                  >
                     Cancelar
                   </button>
-                  <button className="bg-emerald-600 text-white text-sm py-1.5 px-4 rounded">
+                  <button
+                    type="submit"
+                    className="bg-emerald-600 text-white text-sm py-1.5 px-4 rounded"
+                  >
                     Actualizar
                   </button>
                 </div>
