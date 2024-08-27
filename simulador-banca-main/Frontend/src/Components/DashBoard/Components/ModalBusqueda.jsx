@@ -97,7 +97,7 @@ export const ModalBusqueda = ({
           className="fixed inset-0 flex items-center justify-center z-50"
           key={data.id_cliente}
         >
-          <div className="relative p-4 w-4/5 h-auto">
+          <div className="w-full lg:w-4/5 bg-white rounded-lg p-4 max-h-screen overflow-y-auto">
             <div className="bg-white rounded-lg">
               <div className="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
                 <button

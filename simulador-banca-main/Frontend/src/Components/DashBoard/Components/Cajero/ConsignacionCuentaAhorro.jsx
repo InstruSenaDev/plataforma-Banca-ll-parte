@@ -1,226 +1,144 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../../context/AuthContext";
 
-const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
-  const [accountNumber, setAccountNumber] = useState("");
-  const [accountOwner, setAccountOwner] = useState("");
-  const [amount, setAmount] = useState("");
-  const [isAccountNumberFilled, setIsAccountNumberFilled] = useState(false);
-  const [isFormDisabled, setIsFormDisabled] = useState(true);
+const ConsgnacionCuentaAhorro = ({
+  openConsignacion,
+  setOpenConsignacion,
+  modalData,
+  setModalData,
+}) => {
+  const { user } = useAuth();
 
-  const [dataUser, setDataUser] = useState();
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
+  const [amount, setAmount] = useState("");
 
-  // Funciones Consignar -----------------------------------------------------------------------------------------------------------------------------
-  const handleAccountNumberChange = (event) => {
-    const value = event.target.value;
-    setAccountNumber(value);
-    setIsAccountNumberFilled(value.trim() !== "");
-    setIsFormDisabled(value.trim() === "");
+  // Funcion para traer un empleado por id.
+  const fetchEmpleadoId = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_users/${user.id_empleado}`
+      );
+      if (response.ok) {
+        const userData = await response.json();
+        setIdEmpleadoDetails(userData);
+      } else {
+        console.error("Error fetching user info:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
   };
 
-  const handleConsultClick = async () => {
-    try {
-      const accountNumberInt = parseInt(accountNumber, 10);
+  const handleConsignar = async (data) => {
+    const { id_detalle, saldo } = data;
 
-      // Realizar la consulta a la base de datos utilizando el número de cuenta convertido
-      const response = await fetch(
-        `http://localhost:3000/get_account/${accountNumberInt}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+    const id_empleado = idEmpleadoDetails.id_empleado;
+    const saldo_empleado = idEmpleadoDetails.saldo;
 
-      const data = await response.json();
+    const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
+    const newBalanceEmploye = parseFloat(amount) + parseFloat(saldo_empleado);
 
-      // Verificar si se encontraron datos
-      if (data) {
-        const { primernombre, primerapellido, segundoapellido } = data;
-
-        const ownerName = `${primernombre} ${primerapellido} ${segundoapellido}`;
-        setAccountOwner(ownerName);
-        setIsFormDisabled(false);
-        setDataUser(data);
-      } else {
-        console.log(
-          "No se encontraron datos para el número de cuenta proporcionado."
+    if (isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+      toast.error("No puedes consignar saldos menores o iguales a cero");
+    } else {
+      try {
+        // Actualizar el saldo en la base de datos del cliente
+        const responseClient = await fetch(
+          `http://localhost:3000/update_balance/${id_detalle}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceClient,
+            }),
+          }
         );
 
-        // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
+        if (!responseClient.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        // Cambiar el estado del cliente a "Autorizado"
+        const responseStatus = await fetch(
+          `http://localhost:3000/client_status/${id_detalle}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoEstado: "Autorizado",
+            }),
+          }
+        );
+
+        if (!responseStatus.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responseEmploye = await fetch(
+          `http://localhost:3000/balance_request/${id_empleado}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nuevoSaldo: newBalanceEmploye,
+              newStatus: "Activo",
+              saldoSolicitado: 0,
+            }),
+          }
+        );
+
+        if (!responseEmploye.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        // Registrar movimiento
+        const responseMovimiento = await fetch(
+          `http://localhost:3000/post_movimiento`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: id_detalle,
+              saldo: amount,
+              idEmpleado: id_empleado,
+              tipoMovimiento: 1,
+            }),
+          }
+        );
+
+        if (!responseMovimiento.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        toast.success("Consignación exitosa");
+        setTimeout(() => {
+          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
+          window.location = "/DashBoardMenu";
+        }, 1500);
+      } catch (error) {
+        console.error("Error general:", error);
       }
-    } catch (error) {
-      console.error("Error al consultar la base de datos:", error);
-      toast.error("Error: Número de cuenta no encontrado.");
-      // Puedes establecer un mensaje de error o realizar otras acciones según sea necesario
     }
   };
 
-  // const handleConsign = async () => {
-  //   const id = dataUser.id_detalle;
-  //   const { saldo, estado } = dataUser;
-
-  //   const idEmpleado = idEmpleadoDetails.id_empleado;
-  //   const saldoEmpleado = idEmpleadoDetails.saldo;
-
-  //   const newBalanceClient = parseFloat(amount) + parseFloat(saldo);
-  //   const newBalanceEmploye = parseFloat(saldoEmpleado) + parseFloat(amount);
-
-  //   // Verificar que la cuenta este autorizada y que el saldo no sea menor o igual a cero
-  //   if (estado === "Denegado") {
-  //     toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
-  //   } else if (estado === "Pendiente") {
-  //     toast.error("Error: Esta cuenta no ha sido autorizada por un Director.");
-  //     // } else if (parseFloat(amount) > saldoEmpleado) {
-  //     //   toast.error("Error: No tienes saldo suficiente para esta consignación.");
-  //   } else if (parseFloat(amount) <= 0) {
-  //     toast.error("Error: El saldo a consignar no puede ser 0 o menor a 0.");
-  //   } else {
-  //     try {
-  //       // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
-  //       const responseClient = await fetch(
-  //         `http://localhost:3000/update_balance/${id}`,
-  //         {
-  //           method: "PUT",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             nuevoSaldo: newBalanceClient,
-  //           }),
-  //         }
-  //       );
-  //       if (!responseClient.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-
-  //       const responseEmploye = await fetch(
-  //         `http://localhost:3000/balance_request/${idEmpleado}`,
-  //         {
-  //           method: "PUT",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             nuevoSaldo: newBalanceEmploye,
-  //             newStatus: "Activo",
-  //             saldoSolicitado: 0,
-  //           }),
-  //         }
-  //       );
-
-  //       if (!responseEmploye.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-
-  //       const responseMovimiento = await fetch(
-  //         `http://localhost:3000/post_movimiento`,
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             id: id,
-  //             idEmpleado: idEmpleado,
-  //             saldo: amount,
-  //             tipoMovimiento: 1,
-  //           }),
-  //         }
-  //       );
-
-  //       if (!responseMovimiento.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-
-  //       const data = await responseClient.json();
-  //       console.log(data.message);
-  //       toast.success("Saldo consignado correctamente.");
-
-  //       setTimeout(() => {
-  //         // Actualiza localmente el estado del cliente según sea necesario
-  //         // Puedes utilizar la función setDataUser para actualizar el estado local
-  //         // Ejemplo: setDataUser(prevData => [...prevData, data.updatedClient]);
-  //         // alert('Autorización exitosa')
-  //         // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-  //         window.location = "/DashBoardMenu";
-  //       }, 1500); // 2000 milisegundos = 2 segundos
-  //     } catch (error) {
-  //       console.error("Error general:", error);
-  //     }
-  //   }
-  const handleConsignar = async (id) => {
-    const { saldo } = dataUser;
-    const saldoAsNumber = parseFloat(saldo);
-    const amountAsNumber = parseFloat(amount);
-
-    // Realizar la suma
-    const newBalanceClient = saldoAsNumber + amountAsNumber;
-
-    try {
-      // Actualizar el saldo en la base de datos del cliente
-      const responseClient = await fetch(
-        `http://localhost:3000/update_balance/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nuevoSaldo: newBalanceClient,
-          }),
-        }
-      );
-
-      if (!responseClient.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      // Cambiar el estado del cliente a "Autorizado"
-      const responseStatus = await fetch(
-        `http://localhost:3000/client_status/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nuevoEstado: "Autorizado",
-          }),
-        }
-      );
-
-      const responseMovimiento = await fetch(
-        `http://localhost:3000/post_movimiento`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: id,
-            saldo: amount,
-            tipoMovimiento: 1,
-          }),
-        }
-      );
-
-      if (!responseMovimiento.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      if (!responseStatus.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      toast.success("Consignación exitosa");
-      setTimeout(() => {
-        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      console.error("Error general:", error);
-    }
+  const closeModal = () => {
+    setOpenConsignacion(false);
+    setModalData(null);
+    setAmount("");
   };
+
+  useEffect(() => {
+    fetchEmpleadoId();
+  }, []);
 
   return (
     <>
@@ -235,7 +153,7 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                 <button
                   type="button"
                   className="text-gray-400 bg-transparent transition hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  onClick={closeModal}
+                  onClick={() => closeModal()}
                 >
                   <svg
                     className="w-3 h-3"
@@ -270,28 +188,11 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                     name="accountNumber"
                     type="number"
                     placeholder="Número de cuenta"
-                    value={accountNumber}
-                    onChange={handleAccountNumberChange}
-                    required
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                      !isAccountNumberFilled
-                        ? "border-gray-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-                        : ""
-                    }`}
+                    value={modalData?.num_cuenta || ""}
+                    readOnly
+                    className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-md placeholder-gray-500 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40"
                   />
                 </div>
-                {isAccountNumberFilled && (
-                  <div className="flex items-center justify-end  ">
-                    <button
-                      onClick={() => handleConsultClick()}
-                      className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
-                 ${isFormDisabled ? "" : ""}`}
-                      disabled={isFormDisabled}
-                    >
-                      Consultar
-                    </button>
-                  </div>
-                )}
 
                 <div className="space-y-2 w-full md:w-auto">
                   <label
@@ -304,13 +205,11 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                     id="accountOwner"
                     type="text"
                     placeholder="Nombre del dueño"
-                    value={accountOwner}
-                    onChange={(event) => setAccountOwner(event.target.value)}
-                    className={`flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                      isFormDisabled || !isAccountNumberFilled ? "" : ""
-                    }`}
+                    value={`${modalData?.nombre || ""} ${
+                      modalData?.p_apellido || ""
+                    } ${modalData?.s_apellido || ""}`}
                     readOnly
-                    disabled={!isAccountNumberFilled}
+                    className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-md placeholder-gray-500 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40"
                   />
                 </div>
                 <div className="space-y-2">
@@ -325,20 +224,17 @@ const ConsgnacionCuentaAhorro = ({ openConsignacion, closeModal }) => {
                     type="number"
                     min="0"
                     step="1000"
-                    disabled={!isAccountNumberFilled}
                     placeholder="Ingrese saldo a consignar"
-                    value={amount}
+                    value={amount || ""}
                     onChange={(event) => setAmount(event.target.value)}
-                    className={`flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                      isFormDisabled || !isAccountNumberFilled ? "" : ""
-                    }`}
+                    className="flex h-10 w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-end p-4 px-4 gap-2">
               <button
-                onClick={() => handleConsignar(dataUser.id_detalle)}
+                onClick={() => handleConsignar(modalData)}
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
               >
                 Consignar

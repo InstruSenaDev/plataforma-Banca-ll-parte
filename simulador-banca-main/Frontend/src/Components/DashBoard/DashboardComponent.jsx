@@ -24,8 +24,7 @@ import AperturaCuentaAhorro from "./Components/Cajero/AperturaCuentaAhorro";
 import { ClientView } from "./Components/Cliente/ClientView";
 import { AllTarjets } from "./Components/Cliente/AllTarjets";
 import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
-import  { Cancelación } from "./Components/Cajero/Cancelación";
-
+import { Cancelación } from "./Components/Cajero/Cancelación";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -525,8 +524,6 @@ export const DashboardComponent = () => {
                                 </button>
                               </div>
                             )}
-
-                           
                           </>
                         )}
 
@@ -766,7 +763,7 @@ export const DashboardComponent = () => {
                   )}
                   {contenidoSeleccionado === "Boveda" && <Boveda />}
                   {contenidoSeleccionado === "Transfers" && <Transfers />}
-                  {contenidoSeleccionado === "Cancelación" && <Cancelación/>}
+                  {contenidoSeleccionado === "Cancelación" && <Cancelación />}
                   {contenidoSeleccionado === "AperturaCuentaAhorro" && (
                     <AperturaCuentaAhorro />
                   )}
