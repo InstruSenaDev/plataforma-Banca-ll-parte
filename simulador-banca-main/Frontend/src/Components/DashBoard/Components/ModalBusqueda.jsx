@@ -78,8 +78,10 @@ export const ModalBusqueda = ({
       const result = await response.json();
       toast.success("Información del cliente actualizada correctamente.");
 
-      setModalData(formData);
       setShowModal(false);
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
     } catch (error) {
       console.error("Error al actualizar el cliente", error);
     }
@@ -1351,7 +1353,7 @@ export const ModalBusqueda = ({
                   </div>
                 </div>
 
-                <div className="flex justify-end items-center gap-4 p-4">
+                <div className="flex justify-end items-center gap-4 py-1 px-4">
                   <button
                     type="button"
                     onClick={closeModal}

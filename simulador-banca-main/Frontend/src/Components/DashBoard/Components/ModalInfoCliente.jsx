@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ModalBusqueda } from "./ModalBusqueda";
+import { ModalMovimientos } from "./ModalMovimientos";
 
 export const ModalInfoCliente = ({
   filteredData,
@@ -9,7 +10,9 @@ export const ModalInfoCliente = ({
   setModalData,
 }) => {
   const [accounts, setAccounts] = useState([]);
+  const [userName, setUserName] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [modalMovimientos, setModalMovimientos] = useState(false);
 
   const getAccounts = async (documento) => {
     try {
@@ -60,6 +63,11 @@ export const ModalInfoCliente = ({
 
   const openAddAcount = () => {
     console.log("Cuenta agregada");
+  };
+
+  const openMovimientos = (documento) => {
+    setUserName(documento);
+    setModalMovimientos(true);
   };
 
   const openModal = (data) => {
@@ -250,7 +258,12 @@ export const ModalInfoCliente = ({
                             </td>
                             <td className="py-2.5 px-4 font-normal">
                               <div className="flex justify-center items-center">
-                                <button className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline">
+                                <button
+                                  onClick={() =>
+                                    openMovimientos(data.documento)
+                                  }
+                                  className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline"
+                                >
                                   Ver transferencias
                                 </button>
                               </div>
@@ -271,6 +284,12 @@ export const ModalInfoCliente = ({
         setModalData={setModalData}
         showModal={showModal}
         setShowModal={setShowModal}
+      />
+
+      <ModalMovimientos
+        modalMovimientos={modalMovimientos}
+        setModalMovimientos={setModalMovimientos}
+        userName={userName}
       />
     </>
   );
