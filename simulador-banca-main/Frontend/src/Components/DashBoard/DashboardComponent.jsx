@@ -452,7 +452,7 @@ export const DashboardComponent = () => {
                                 />
                               </svg>
 
-                              <span className="mx-1">Historial cuentas</span>
+                              <span className="mx-1">Historial Clientes</span>
                             </button>
 
                             <button
