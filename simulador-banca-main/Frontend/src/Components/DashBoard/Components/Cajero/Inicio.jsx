@@ -8,21 +8,18 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../../context/AuthContext";
 import Transfers from "../CajeroPrincipal/Transfers";
 
-
 export const Inicio = () => {
   //General Status
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [empleadoDetails, setEmpleadoDetails] = useState("");
 
-
   //Disable Modales
   const [amount, setAmount] = useState("");
 
   // Abrir Modal
- 
+
   const [openModal2, setOpenModal2] = useState(false);
   const [openModal3, setOpenModal3] = useState(false);
-
 
   //Login, user context
   const { user } = useAuth();
@@ -67,10 +64,6 @@ export const Inicio = () => {
 
     return () => clearInterval(interval);
   }, [user]);
-
-
-
-
 
   // Actualiza estado al momento de solicitar saldo
   const handleSolicitarSaldo = async () => {
@@ -147,27 +140,29 @@ export const Inicio = () => {
     const filterEmpleadoPrincipal = empleadoDetails.filter(
       (users) => users.id_rol === 4
     );
-  
+
     const idEmpleado = idEmpleadoDetails.id_empleado;
     const saldoEmpleado = parseFloat(idEmpleadoDetails.saldo);
     const idPrincipal = filterEmpleadoPrincipal[0].id_empleado;
     const saldoPrincipal = parseFloat(filterEmpleadoPrincipal[0].saldo);
-  
+
     // Convertir el monto ingresado a un número flotante
     const amountToReturn = parseFloat(amount);
-  
+
     // Validaciones
     if (isNaN(amountToReturn) || amountToReturn <= 0) {
       return toast.error("Por favor, ingrese un monto válido.");
     }
-  
+
     if (amountToReturn > saldoEmpleado) {
-      return toast.error("No tienes suficiente saldo para devolver esa cantidad.");
+      return toast.error(
+        "No tienes suficiente saldo para devolver esa cantidad."
+      );
     }
-  
+
     const newSaldoEmpleado = saldoEmpleado - amountToReturn;
     const newSaldoPrincipal = saldoPrincipal + amountToReturn;
-  
+
     try {
       // Actualiza el saldo del cajero
       const responseCajero = await fetch(
@@ -184,13 +179,13 @@ export const Inicio = () => {
           }),
         }
       );
-  
+
       if (!responseCajero.ok) {
         throw new Error(
           "Network response was not ok al actualizar el saldo del cajero"
         );
       }
-  
+
       // Actualiza el saldo del cajero principal (bóveda)
       const responsePrincipal = await fetch(
         `http://localhost:3000/balance_request/${idPrincipal}`,
@@ -206,13 +201,13 @@ export const Inicio = () => {
           }),
         }
       );
-  
+
       if (!responsePrincipal.ok) {
         throw new Error(
           "Network response was not ok al actualizar el saldo del cajero principal"
         );
       }
-  
+
       // Registrar el movimiento en el historial
       const responseMovimiento = await fetch(
         `http://localhost:3000/post_devolver/`,
@@ -229,13 +224,15 @@ export const Inicio = () => {
           }),
         }
       );
-  
+
       if (!responseMovimiento.ok) {
-        throw new Error("Network response was not ok al registrar el movimiento");
+        throw new Error(
+          "Network response was not ok al registrar el movimiento"
+        );
       }
-  
+
       toast.success("Saldo devuelto y actualizado correctamente.");
-  
+
       setTimeout(() => {
         window.location = "/DashBoardMenu";
       }, 1500);
@@ -243,7 +240,7 @@ export const Inicio = () => {
       console.error("Error al devolver el saldo:", error);
       toast.error("Error al devolver el saldo.");
     }
-  };  
+  };
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -258,27 +255,24 @@ export const Inicio = () => {
     return formatter.format(saldo);
   };
 
- 
-
   return (
     <>
       {
         <div
-          className="flex justify-center items-center flex-col gap-x-14 text-center"
-          style={{ minHeight: "75vh" }}
+          className="flex justify-start items-center flex-col text-center"
+          style={{ minHeight: "80vh" }}
         >
-          
           <div className="w-full flex overflow-hidden border-gray-200 dark:bg-gray-800 flex-col sm:flex sm:items-center sm:justify-between">
-            <div className="w-full p-4 max-w-5xl mx-auto">
-              <div className="mt-4 ">
-                <div className="flex flex-col-reverse sm:flex-row sm:items-start sm:justify-between  bg-DarkSlate px-4 py-8 rounded">
-                  <div className="flex flex-col justify-center gap-y-2 h-24 ">
-                    <div className="flex items-center ">
+            <div className="w-full mx-auto">
+              <div className="p-4">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between  bg-DarkSlate px-4 py-12 rounded">
+                  <div className="flex flex-col items-center justify-center gap-y-2 h-24 ">
+                    <div className="flex items-center justify-center">
                       <p className="font-regular text-2xl text-white dark:text-gray-200 ">
                         Saldo total
                       </p>
                     </div>
-                    <div className="flex jutify-center items-end gap-x-2">
+                    <div className="flex jutify-center items-center gap-x-2">
                       <p className="font-semibold text-3xl text-white dark:text-gray-300">
                         {formatSaldo(idEmpleadoDetails.saldo)}
                       </p>
@@ -308,46 +302,46 @@ export const Inicio = () => {
                       <p>Entregar saldo</p>
                     </button>
                     <Modal
-                            className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                            show={openModal3}
-                            size="md"
-                            onClose={() => setOpenModal3(false)}
-                            popup
-                          >
-                            <Modal.Header>
-                              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                Entrega de Saldo
-                              </span>
-                            </Modal.Header>
-                            <Modal.Body className="px-5 pt-2 pb-5">
-                              <div className="space-y-6">
-                                <div>
-                                  <label
-                                    htmlFor="amount"
-                                    className="font-medium text-gray-700 dark:text-white"
-                                  >
-                                    Monto a entregar:
-                                  </label>
-                                  <input
-                                    id="amount"
-                                    type="number"
-                                    placeholder="Monto a consignar"
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    className={`w-full px-3 py-2 border rounded-md focus:outline-none`}
-                                  />
-                                </div>
-                                <div className="w-full">
-                                  <button
-                                     onClick={handleDevolverSaldo}
-                                    className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
-                                  >
-                                    Enviar
-                                  </button>
-                                </div>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
+                      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                      show={openModal3}
+                      size="md"
+                      onClose={() => setOpenModal3(false)}
+                      popup
+                    >
+                      <Modal.Header>
+                        <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                          Entrega de Saldo
+                        </span>
+                      </Modal.Header>
+                      <Modal.Body className="px-5 pt-2 pb-5">
+                        <div className="space-y-6">
+                          <div>
+                            <label
+                              htmlFor="amount"
+                              className="font-medium text-gray-700 dark:text-white"
+                            >
+                              Monto a entregar:
+                            </label>
+                            <input
+                              id="amount"
+                              type="number"
+                              placeholder="Monto a consignar"
+                              value={amount}
+                              onChange={(e) => setAmount(e.target.value)}
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none`}
+                            />
+                          </div>
+                          <div className="w-full">
+                            <button
+                              onClick={handleDevolverSaldo}
+                              className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
+                            >
+                              Enviar
+                            </button>
+                          </div>
+                        </div>
+                      </Modal.Body>
+                    </Modal>
                     {idEmpleadoDetails.estado === "Solicitud" && (
                       <button
                         className="flex justify-center items-center gap-x-2 px-3 py-2 rounded-md text-white backdrop-blur-sm hover:backdrop-blur-lg bg-white/30 shadow"
@@ -439,12 +433,10 @@ export const Inicio = () => {
                       )}
                     </>
                   </div>
-            
-
                 </div>
-                <Transfers />
               </div>
             </div>
+            <Transfers />
           </div>
         </div>
       }
