@@ -1,15 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ModalBusqueda } from "./ModalBusqueda";
+import { ModalMovimientos } from "./ModalMovimientos";
 
 export const ModalInfoCliente = ({
-  accounts,
   filteredData,
   showInfo,
   setShowInfo,
   modalData,
   setModalData,
 }) => {
+  const [accounts, setAccounts] = useState([]);
+  const [userName, setUserName] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [modalMovimientos, setModalMovimientos] = useState(false);
+
+  const getAccounts = async (documento) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/get_client/${documento}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setAccounts(data);
+    } catch (error) {
+      console.error("error al encontrar informacion", error);
+    }
+  };
+
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
     // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
@@ -23,10 +43,31 @@ export const ModalInfoCliente = ({
     return formatter.format(saldo);
   };
 
-  const formatNac = (fecha) => {
-    const date = new Date(fecha);
+  const formatNac = (date) => {
+    if (!date) return "Fecha no disponible";
+    try {
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) {
+        throw new Error("Invalid date");
+      }
+      return dateObj.toLocaleDateString("es-CO", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (error) {
+      console.error("Error al formatear la fecha:", error);
+      return "Fecha inválida";
+    }
+  };
 
-    return new Intl.DateTimeFormat("es-CO").format(date);
+  const openAddAcount = () => {
+    console.log("Cuenta agregada");
+  };
+
+  const openMovimientos = (documento) => {
+    setUserName(documento);
+    setModalMovimientos(true);
   };
 
   const openModal = (data) => {
@@ -36,12 +77,21 @@ export const ModalInfoCliente = ({
 
   const closeModal = () => {
     setShowInfo(false);
+    setModalData(null);
   };
+
+  // Efecto para cargar las cuentas cuando se abre el modal
+  useEffect(() => {
+    if (showInfo && modalData) {
+      getAccounts(modalData.ip_documento);
+    }
+  }, [showInfo, modalData]);
+
   return (
     <>
       {showInfo && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="w-2/5 bg-white rounded-md p-4">
+          <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:w-3/5 bg-white rounded-md p-4">
             <div>
               <div className="flex justify-between items-center">
                 <h1 className="text-md font-medium text-gray-800">
@@ -73,54 +123,54 @@ export const ModalInfoCliente = ({
                 </button>
               </div>
 
-              <div className="flex flex-row gap-4 border border-gray-300 rounded-md p-2 text-gray-500 text-sm mt-2">
-                {filteredData?.map((data) => (
-                  <React.Fragment key={data.id_cliente}>
+              <div className="flex flex-wrap gap-4 border border-gray-300 rounded-md p-2 text-gray-500 text-xs sm:text-sm mt-2">
+                {modalData && (
+                  <React.Fragment key={modalData.id_cliente}>
                     <div className="flex-1 flex flex-col">
                       <span>
-                        {data.nombre} {data.primerapellido}{" "}
-                        {data.segundoapellido}
+                        {modalData.nombre} {modalData.primerapellido}{" "}
+                        {modalData.segundoapellido}
                       </span>
                       <span>
-                        {data.tipodocumento} {data.ip_documento}
+                        {modalData.tipodocumento} {modalData.ip_documento}
                       </span>
 
-                      <span>{data.celular}</span>
-                      <span>{data.correo}</span>
+                      <span>{modalData.celular}</span>
+                      <span>{modalData.correo}</span>
                       <span>
-                        F. Nacimiento: {formatNac(data.fechanacimiento)}
+                        F. Nacimiento: {formatNac(modalData.fechanacimiento)}
                       </span>
                     </div>
 
-                    <div className="border-r border-gray-300"></div>
+                    <div className="border-r border-gray-300 "></div>
 
                     <div className="flex-1 flex flex-col">
-                      <span>Nacionalidad: {data.nacionalidad}</span>
+                      <span>Nacionalidad: {modalData.nacionalidad}</span>
                       <span>
-                        Residencia: {data.ciudad} ({data.depa})
+                        Residencia: {modalData.ciudad} ({modalData.depa})
                       </span>
                       <span>
-                        Dirección: {data.direccion} {data.barrio}
+                        Dirección: {modalData.direccion} {modalData.barrio}
                       </span>
 
-                      <span>Profesión: {data.profesion}</span>
-                      <span>Renta: {data.renta}</span>
+                      <span>Profesión: {modalData.profesion}</span>
+                      <span>Renta: {modalData.renta}</span>
                     </div>
                   </React.Fragment>
-                ))}
+                )}
               </div>
             </div>
 
             <div className="mt-4">
-              <div className="flex justify-between">
-                <h1 className="text-md font-medium text-gray-800">
+              <div className="flex flex-col sm:flex-row justify-between sm:justify-between flex-wrap gap-2">
+                <h1 className="text-md sm:text-md  text-center font-medium text-gray-800">
                   Productos del cliente
                 </h1>
 
-                <div className="flex flex-row gap-4">
+                <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
                   <button
-                    onClick={() => openModal(filteredData[0])}
-                    className="flex justify-center items-center gap-2 text-sm bg-amber-500 text-white py-1 px-2 rounded transition hover:bg-amber-600"
+                    onClick={() => openModal(modalData)}
+                    className="flex justify-center items-center gap-2 text-xs sm:text-xs text-center bg-amber-500 text-white py-1 px-1.5 rounded transition hover:bg-amber-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -140,12 +190,15 @@ export const ModalInfoCliente = ({
                     <span>Editar Información</span>
                   </button>
 
-                  <button className="flex justify-center items-center gap-2 text-sm bg-emerald-500 text-white py-1 px-2 rounded transition hover:bg-emerald-600">
+                  <button
+                    onClick={() => openAddAcount()}
+                    className="flex justify-center items-center gap-2 text-xs sm:text-xs text-center  bg-emerald-500 text-white py-1.5 px-1.5 rounded transition hover:bg-emerald-600"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      strokeWidth={1.4}
+                      strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-4"
                     >
@@ -181,35 +234,42 @@ export const ModalInfoCliente = ({
                       </tr>
                     </thead>
                     <tbody className="border-0">
-                      {accounts?.map((data) => (
-                        <tr
-                          className="border-b hover:bg-gray-50"
-                          key={data.id_detalle}
-                        >
-                          <td className="py-2.5 px-4  font-normal text-black">
-                            <div className="flex justify-center items-center">
-                              {data.num_cuenta}
-                            </div>
-                          </td>
-                          <td className="py-2.5 px-4 font-semibold text-black">
-                            <div className="flex justify-center items-center">
-                              {formatSaldo(data.saldo)}
-                            </div>
-                          </td>
-                          <td className="py-2.5 px-4 text-gray-500">
-                            <div className="flex justify-center items-center">
-                              {data.descripcion}
-                            </div>
-                          </td>
-                          <td className="py-2.5 px-4 font-normal">
-                            <div className="flex justify-center items-center">
-                              <button className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline">
-                                Ver transferencias
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                      {accounts
+                        ?.filter((data) => data.estado_cuenta === "Autorizado")
+                        .map((data) => (
+                          <tr
+                            className="border-b hover:bg-gray-50"
+                            key={data.id_detalle}
+                          >
+                            <td className="py-2.5 px-4  font-normal text-black">
+                              <div className="flex justify-center items-center">
+                                {data.num_cuenta}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-4 font-semibold text-black">
+                              <div className="flex justify-center items-center">
+                                {formatSaldo(data.saldo)}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-4 text-gray-500">
+                              <div className="flex justify-center items-center">
+                                {data.descripcion}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-4 font-normal">
+                              <div className="flex justify-center items-center">
+                                <button
+                                  onClick={() =>
+                                    openMovimientos(data.documento)
+                                  }
+                                  className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline"
+                                >
+                                  Ver transferencias
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
@@ -221,8 +281,15 @@ export const ModalInfoCliente = ({
 
       <ModalBusqueda
         data={modalData}
+        setModalData={setModalData}
         showModal={showModal}
         setShowModal={setShowModal}
+      />
+
+      <ModalMovimientos
+        modalMovimientos={modalMovimientos}
+        setModalMovimientos={setModalMovimientos}
+        userName={userName}
       />
     </>
   );

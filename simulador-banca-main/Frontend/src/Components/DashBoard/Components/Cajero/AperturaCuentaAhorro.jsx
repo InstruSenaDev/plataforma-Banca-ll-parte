@@ -3,28 +3,29 @@ import ConsgnacionCuentaAhorro from "../Cajero/ConsignacionCuentaAhorro";
 
 const AperturaCuentaAhorro = () => {
   const [openConsignacion, setOpenConsignacion] = useState(false);
-
-  const openModal = () => setOpenConsignacion(true);
-  const closeModal = () => setOpenConsignacion(false);
-
+  const [modalData, setModalData] = useState([]);
   const [dataUser, setDataUser] = useState([]);
 
   const firstCosing = async () => {
     try {
       const response = await fetch("http://localhost:3000/firstConsing");
       if (!response.ok) {
+        if (response.status === 404) {
+          console.error("Información no encontrada");
+          return;
+        }
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
-      if (data.result && data.result.rows) {
-        setDataUser(data.result.rows);
-      } else {
-        console.error("Unexpected data structure:", data);
-      }
+      setDataUser(data);
     } catch (error) {
       console.error("Error fetching information:", error);
     }
+  };
+
+  const openModal = (data) => {
+    setModalData(data);
+    setOpenConsignacion(true);
   };
 
   useEffect(() => {
@@ -132,7 +133,7 @@ const AperturaCuentaAhorro = () => {
                                 <div className="inline-flex items-center gap-x-2 px-3 py-1 text-gray-500 dark:text-gray-400">
                                   <button
                                     className="text-gray-500 transition-colors duration-200 dark:hover:text-bg-emerald-500 dark:text-gray-300 hover:text-red-600 focus:outline-none"
-                                    onClick={openModal}
+                                    onClick={() => openModal(data)}
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -200,9 +201,12 @@ const AperturaCuentaAhorro = () => {
             </div>
           </div>
         </div>
+
         <ConsgnacionCuentaAhorro
+          modalData={modalData}
+          setModalData={setModalData}
           openConsignacion={openConsignacion}
-          closeModal={closeModal}
+          setOpenConsignacion={setOpenConsignacion}
         />
       </section>
     </>

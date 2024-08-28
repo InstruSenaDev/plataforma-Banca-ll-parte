@@ -5,7 +5,7 @@ import { ModalInfoCliente } from "./ModalInfoCliente";
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [accounts, setAccounts] = useState([]);
+
   const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
   const [showModal, setShowModal] = useState(false); // Para controlar la visibilidad del modal
   const [showInfo, setShowInfo] = useState(false);
@@ -23,33 +23,17 @@ export const BusquedaC = () => {
     }
   };
 
-  const getAccounts = async (documento) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/get_client/${documento}`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      setAccounts(data);
-    } catch (error) {
-      console.error("error al encontrar informacion", error);
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const documento =
-      filteredData.length > 0 ? filteredData[0].ip_documento : null;
-    if (documento) {
-      getAccounts(documento);
-    }
-  }, [searchTerm, dataUser]); // Llamamos a getAccounts cuando searchTerm o dataUser cambia
+  // useEffect(() => {
+  //   const documento =
+  //     filteredData.length > 0 ? filteredData[0].ip_documento : null;
+  //   if (documento) {
+  //     getAccounts(documento);
+  //   }
+  // }, [searchTerm, dataUser]); // Llamamos a getAccounts cuando searchTerm o dataUser cambia
 
   const formatFecha = (fecha) => {
     const date = new Date(fecha);
@@ -76,8 +60,9 @@ export const BusquedaC = () => {
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
     ) || [];
 
-  const openInfo = () => {
+  const openInfo = (id_cliente) => {
     setShowInfo(true);
+    setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
   };
 
   const openModal = (data) => {
@@ -209,7 +194,7 @@ export const BusquedaC = () => {
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <button
-                                    onClick={() => openInfo()}
+                                    onClick={() => openInfo(data.id_cliente)}
                                     className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
                                   >
                                     <svg
@@ -242,7 +227,6 @@ export const BusquedaC = () => {
                 </div>
 
                 <ModalInfoCliente
-                  accounts={accounts}
                   filteredData={filteredData}
                   showInfo={showInfo}
                   setShowInfo={setShowInfo}

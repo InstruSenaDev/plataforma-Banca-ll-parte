@@ -1,88 +1,115 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
-export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
+export const ModalBusqueda = ({
+  showModal,
+  setShowModal,
+  data,
+  setModalData,
+}) => {
+  const [localData, setLocalData] = useState({});
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm();
-  const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-    // Actualizar el estado local cuando cambia la propiedad data
-    setFormData(data);
-  }, [data]);
-
-  const onSubmit = (formData) => {
-    console.log(formData);
-    // Lógica para enviar el formulario
-  };
-
-  // Función para manejar cambios en los datos del formulario
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  useEffect(() => {
-    // Actualizar los valores de los campos del formulario cuando cambia formData
-    if (formData) {
-      Object.entries(formData).forEach(([key, value]) => {
-        setValue(key, value);
-      });
+    if (data) {
+      setLocalData({ ...data });
+      // Actualizar los valores de los campos del formulario cuando cambia data
+      setValue("nombre", data.nombre || "");
+      setValue("primer_apellido", data.primerapellido || "");
+      setValue("segundo_apellido", data.segundoapellido || "");
+      setValue("tipo_documento", data.tipodocumento || "");
+      setValue("num_documento", data.ip_documento || "");
+      setValue("lugar_expedicion", data.ciudadnacimiento || "");
+      setValue(
+        "fecha_expedicion",
+        data.fechaexpedicion
+          ? new Date(data.fechaexpedicion).toISOString().split("T")[0]
+          : ""
+      );
+      setValue(
+        "fecha_nacimiento",
+        data.fechanacimiento
+          ? new Date(data.fechanacimiento).toISOString().split("T")[0]
+          : ""
+      );
+      setValue("ciudad_nacimiento", data.ciudadnacimiento || "");
+      setValue("genero", data.gen || "");
+      setValue("estado_civil", data.estadocivil || "");
+      setValue("nacionalidad", data.nacionalidad || "");
+      setValue("direccion_residencia", data.direccion || "");
+      setValue("barrio", data.barrio || "");
+      setValue("ciudad", data.ciudad || "");
+      setValue("departamento", data.depa || "");
+      setValue("pais", data.pais || "");
+      setValue("telefono", data.telefono || "");
+      setValue("celular", data.celular || "");
+      setValue("correo_electronico", data.correo || "");
+      setValue("profesion", data.profesion || "");
+      setValue("ocupacion", data.ocupacion || "");
+      setValue("actividad", data.actividad || "");
+      setValue("ingresos_mensuales", data.ingresosmensuales || "");
+      setValue("otros_ingresos", data.otrosingresos || "");
+      setValue("renta", data.renta || "");
     }
-  }, [formData, setValue]);
+  }, [data, setValue]);
 
-  function mostrarFechaEnFormato(fecha) {
-    // Crear un objeto Date con la fecha recibida
-    const fechaObjeto = new Date(fecha);
+  const onSubmit = async (formData) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/update_client/${data.id_cliente}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al actualizar el cliente");
+      }
+      const result = await response.json();
+      toast.success("Información del cliente actualizada correctamente.");
 
-    // Extraer el año, mes y día de la fecha
-    const year = fechaObjeto.getFullYear();
-    const month = fechaObjeto.getMonth() + 1; // Los meses van de 0 a 11, por lo que sumamos 1
-    const day = fechaObjeto.getDate();
-
-    // Formatear el mes y el día como cadenas de dos dígitos
-    const monthString = month < 10 ? "0" + month : month.toString();
-    const dayString = day < 10 ? "0" + day : day.toString();
-
-    // Construir la cadena de fecha en el formato deseado: "yyyy-mm-dd"
-    const fechaFormateada = `${dayString}-${monthString}-${year}`;
-
-    return fechaFormateada;
-  }
-
-  // Ejemplo de uso
-  const fechaOriginal = "2024-03-14T05:00:00.000Z";
-  const fechaFormateada = mostrarFechaEnFormato(fechaOriginal);
+      setShowModal(false);
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error al actualizar el cliente", error);
+    }
+  };
 
   const closeModal = () => {
+    setModalData(localData);
     setShowModal(false);
   };
 
-  console.log(data);
   return (
     <>
       {showModal && (
         <div
-          class="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50"
           key={data.id_cliente}
         >
-          <div class="relative p-4 w-auto h-auto">
-            <div class="bg-white rounded-lg">
-              <div class="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
+          <div className="w-full lg:w-4/5 bg-white rounded-lg p-4 max-h-screen overflow-y-auto">
+            <div className="bg-white rounded-lg">
+              <div className="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
                 <button
                   type="button"
                   onClick={closeModal}
-                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-4 h-4 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm w-4 h-4 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-hide="default-modal"
                 >
                   <svg
-                    class="w-3 h-3"
+                    className="w-3 h-3"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -90,31 +117,33 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                     />
                   </svg>
-                  <span class="sr-only">Close modal</span>
+                  <span className="sr-only">Close modal</span>
                 </button>
               </div>
 
-              <form action="" onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex gap-3 items-center justify-center flex-col bg-white    ">
-                  <h1 className="  w-2/4 text-black text-2xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex gap-3 items-center justify-center flex-col bg-white">
+                  <h1 className="w-2/4 text-black text-2xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
                     Información del Cliente
                   </h1>
                   <div
-                    className="w-12/12   flex justify-center items-center "
+                    className="w-12/12 flex justify-center items-center "
                     style={{ minHeight: "55vh" }}
                   >
-                    <div className="grid  justify-center gap-6 p-5 lg:grid-cols-4">
+                    <div className="grid justify-center gap-x-10 gap-y-5 p-5 lg:grid-cols-4">
                       <div>
-                        <p>Nombre Completo:</p>
+                        <label className="block text-sm text-gray-500">
+                          Nombre Completo:
+                        </label>
                         <input
                           type="text"
-                          {...register("Nombre", {
+                          {...register("nombre", {
                             pattern: {
                               value: /^[A-Za-z ]+$/i,
                               message: "Digita solo letras",
@@ -132,66 +161,38 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="Nombre"
-                          defaultValue={data.nombre} // Utiliza defaultValue para el valor inicial
-                          value={formData?.nombre} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, nombre: e.target.value })
-                          }
-                          class="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
                         />
-                        {errors.Nombre && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Nombre.message}
-                          </span>
-                        )}
-                      </div>
-                      <div>
-                        <p>Primer Apellido</p>
-                        <input
-                          type="text"
-                          {...register("Apellido1", {
-                            pattern: {
-                              value: /^[A-Za-z]+$/i,
-                              message: "Digita solo letras",
-                            },
-                            required: {
-                              value: true,
-                              message: "Campo requerido",
-                            },
-                            minLength: {
-                              value: 3,
-                              message: "Minimo 3 letras",
-                            },
-                            maxLength: {
-                              value: 15,
-                              message: "Maximo 15 letras",
-                            },
-                          })}
-                          name="Apellido1"
-                          defaultValue={data.primerapellido} // Utiliza defaultValue para el valor inicial
-                          value={formData?.primerapellido} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              primerapellido: e.target.value,
-                            })
-                          }
-                          id={data.nombre}
-                          class="rounded-md border-gray-300 focus:ring-green focus:border-green"
-                        />
-                        {errors.Apellido1 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Apellido1.message}
-                          </span>
+                        {errors.nombre && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+                            <span className="text-sm">
+                              {errors.nombre.message}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       <div>
-                        <p>Segundo Apellido</p>
+                        <label className="block text-sm text-gray-500">
+                          Primer Apellido
+                        </label>
                         <input
                           type="text"
-                          {...register("Apellido2", {
+                          {...register("primer_apellido", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -209,68 +210,137 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Apellido2"
-                          defaultValue={data.segundoapellido} // Utiliza defaultValue para el valor inicial
-                          value={formData?.segundoapellido} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              segundoapellido: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
                         />
-                        {errors.Apellido2 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Apellido2.message}
-                          </span>
+                        {errors.primer_apellido && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+                            <span className="text-sm">
+                              {errors.primer_apellido.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
+                      <div>
+                        <label className="block text-sm text-gray-500">
+                          Segundo Apellido
+                        </label>
+                        <input
+                          type="text"
+                          {...register("segundo_apellido", {
+                            pattern: {
+                              value: /^[A-Za-z]+$/i,
+                              message: "Digita solo letras",
+                            },
+                            required: {
+                              value: true,
+                              message: "Campo requerido",
+                            },
+                            minLength: {
+                              value: 3,
+                              message: "Minimo 3 letras",
+                            },
+                            maxLength: {
+                              value: 15,
+                              message: "Maximo 15 letras",
+                            },
+                          })}
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
+                        />
+                        {errors.segundo_apellido && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+                            <span className="text-sm">
+                              {errors.segundo_apellido.message}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
                       <div className="flex flex-col">
                         <label
                           htmlFor="opciones"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          className="block text-sm text-gray-500"
                         >
                           Tipo de documento:
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones1", {
+                          {...register("tipo_documento", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="opciones1"
-                          defaultValue={data.tipodocumento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.tipodocumento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              tipodocumento: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
+                          name="tipo_documento"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="CC">C.C.</option>
-                          <option Value="TI">T.I.</option>
-                          <option Value="RCivil">R. Civil</option>
-                          <option Value="CE">Cédula extranjería</option>
-                          <option Value="PP">Pasaporte</option>
-                          <option Value="CD">Carné diplomático</option>
+                          <option value="">Seleccionar</option>
+                          <option value="CC">C.C.</option>
+                          <option value="TI">T.I.</option>
+                          <option value="RCivil">R. Civil</option>
+                          <option value="CE">Cédula extranjería</option>
+                          <option value="PP">Pasaporte</option>
+                          <option value="CD">Carné diplomático</option>
                         </select>
-                        {errors.opciones1 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones1.message}
-                          </span>
+                        {errors.tipo_documento && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.tipo_documento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>N° de documento</p>
+                        <label className="block text-sm text-gray-500">
+                          N° de documento
+                        </label>
                         <input
                           type="number"
-                          {...register("NDocumento", {
+                          {...register("num_documento", {
                             required: {
                               value: true,
                               message: "Campo requerido",
@@ -285,28 +355,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="NDocumento"
-                          defaultValue={data.ip_documento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ip_documento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ip_documento: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="num_documento"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.NDocumento && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.NDocumento.message}
-                          </span>
+                        {errors.num_documento && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.num_documento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Lugar de expedición</p>
+                        <label className="block text-sm text-gray-500">
+                          Lugar de expedición
+                        </label>
                         <input
                           type="text"
-                          {...register("LugarE", {
+                          {...register("lugar_expedicion", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -324,66 +406,118 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="LugarE"
-                          defaultValue={data.ciudadnacimiento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ciudadnacimiento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ciudadnacimiento: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="lugar_expedicion"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.LugarE && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.LugarE.message}
-                          </span>
+                        {errors.lugar_expedicion && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.lugar_expedicion.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Fecha de expedición</p>
+                        <label className="block text-sm text-gray-500">
+                          Fecha de expedición
+                        </label>
                         <input
                           type="date"
-                          {...register("FechaE", {
+                          {...register("fecha_expedicion", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="FechaE"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52"
+                          name="lugar_expedicion"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.FechaE && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.FechaE.message}
-                          </span>
+                        {errors.lugar_expedicion && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.lugar_expedicion.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Fecha de nacimiento</p>
+                        <label className="block text-sm text-gray-500">
+                          Fecha de nacimiento
+                        </label>
                         <input
                           type="date"
-                          {...register("FechaN", {
+                          {...register("fecha_nacimiento", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="FechaN"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52"
+                          name="fecha_nacimiento"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.FechaN && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.FechaN.message}
-                          </span>
+                        {errors.fecha_nacimiento && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.fecha_nacimiento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Ciudad de nacimiento</p>
+                        <label className="block text-sm text-gray-500">
+                          Ciudad de nacimiento
+                        </label>
                         <input
                           type="text"
-                          {...register("CiudadN", {
+                          {...register("ciudad_nacimiento", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -401,93 +535,133 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="CiudadN"
-                          defaultValue={data.ciudadnacimiento} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ciudadnacimiento} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ciudadnacimiento: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="ciudad_nacimiento"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.CiudadN && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.CiudadN.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col">
-                        <label htmlFor="opciones" className="mr-2">
-                          Genero:
-                        </label>
-                        <select
-                          id="opciones"
-                          {...register("opciones2", {
-                            required: {
-                              value: true,
-                              message: "Campo requerido",
-                            },
-                          })}
-                          name="opciones2"
-                          defaultValue={data.gen} // Utiliza defaultValue para el valor inicial
-                          value={formData?.gen} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, gen: e.target.value })
-                          }
-                          className="p-2 rounded border-gray-300 focus:ring-green focus:border-green w-52"
-                        >
-                          <option Value="">Seleccionar</option>
-                          <option Value="F">Femenino</option>
-                          <option Value="M">Masculino</option>
-                        </select>
-                        {errors.opciones2 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones2.message}
-                          </span>
+                        {errors.ciudad_nacimiento && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.ciudad_nacimiento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       <div className="flex flex-col">
-                        <label htmlFor="opciones" className="mr-2">
-                          Estado Civil:
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
+                          Genero:
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones3", {
+                          {...register("genero", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          name="opciones3"
-                          defaultValue={data.estadocivil} // Utiliza defaultValue para el valor inicial
-                          value={formData?.estadocivil} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              estadocivil: e.target.value,
-                            })
-                          }
-                          className="p-2 rounded border-gray-300 focus:ring-green focus:border-green w-52"
+                          name="genero"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="Soltero">Soltero</option>
-                          <option Value="Casado">Casado</option>
-                          <option Value="UL">Unión libre</option>
+                          <option value="">Seleccionar</option>
+                          <option value="F">Femenino</option>
+                          <option value="M">Masculino</option>
                         </select>
-                        {errors.opciones3 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones3.message}
-                          </span>
+                        {errors.genero && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.genero.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
+                      <div className="flex flex-col">
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
+                          Estado Civil:
+                        </label>
+                        <select
+                          id="opciones"
+                          {...register("estado_civil", {
+                            required: {
+                              value: true,
+                              message: "Campo requerido",
+                            },
+                          })}
+                          name="estado_civil"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
+                        >
+                          <option value="">Seleccionar</option>
+                          <option value="Soltero">Soltero</option>
+                          <option value="Casado">Casado</option>
+                          <option value="UL">Unión libre</option>
+                        </select>
+                        {errors.estado_civil && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.estado_civil.message}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
                       <div>
-                        <p>Nacionalidad</p>
+                        <label className="block text-sm text-gray-500">
+                          Nacionalidad
+                        </label>
                         <input
                           type="text"
-                          {...register("Nacionalidad", {
+                          {...register("nacionalidad", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -505,28 +679,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Nacionalidad"
-                          defaultValue={data.nacionalidad} // Utiliza defaultValue para el valor inicial
-                          value={formData?.nacionalidad} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              nacionalidad: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="nacionalidad"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Nacionalidad && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Nacionalidad.message}
-                          </span>
+                        {errors.nacionalidad && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.nacionalidad.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Dirección residencia</p>
+                        <label className="block text-sm text-gray-500">
+                          Dirección residencia
+                        </label>
                         <input
                           type="text"
-                          {...register("DireccionR", {
+                          {...register("direccion_residencia", {
                             required: {
                               value: true,
                               message: "Campo requerido",
@@ -540,29 +726,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 30 digitos",
                             },
                           })}
-                          name="DireccionR"
-                          defaultValue={data.direccion} // Utiliza defaultValue para el valor inicial
-                          value={formData?.direccion} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              direccion: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="direccion_residencia"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.DireccionR && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.DireccionR.message}
-                          </span>
+                        {errors.direccion_residencia && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.direccion_residencia.message}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       <div>
-                        <p>Barrio</p>
+                        <label className="block text-sm text-gray-500">
+                          Barrio
+                        </label>
                         <input
                           type="text"
-                          {...register("Barrio", {
+                          {...register("barrio", {
                             pattern: {
                               value: /^[A-Za-z ]+$/i,
                               message: "Digita solo letras",
@@ -580,25 +777,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Barrio"
-                          defaultValue={data.barrio} // Utiliza defaultValue para el valor inicial
-                          value={formData?.barrio} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, barrio: e.target.value })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="barrio"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Barrio && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Barrio.message}
-                          </span>
+                        {errors.barrio && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.barrio.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Ciudad/Municipio</p>
+                        <label className="block text-sm text-gray-500">
+                          Ciudad/Municipio
+                        </label>
                         <input
                           type="text"
-                          {...register("Municipio", {
+                          {...register("ciudad", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -616,27 +828,42 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="Municipio"
-                          defaultValue={data.ciudad} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ciudad} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, ciudad: e.target.value })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="ciudad"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Municipio && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Municipio.message}
-                          </span>
+                        {errors.ciudad && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.ciudad.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Departamento</p>
+                        <label className="block text-sm text-gray-500">
+                          Departamento
+                        </label>
                         <input
                           type="text"
-                          {...register("Departamento", {
+                          {...register("departamento", {
                             pattern: {
-                              value: /^[A-Za-z]+$/i,
+                              value: /^[A-Za-z\s]+$/i,
                               message: "Digita solo letras",
                             },
                             required: {
@@ -652,25 +879,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Departamento"
-                          defaultValue={data.depa} // Utiliza defaultValue para el valor inicial
-                          value={formData?.depa} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, depa: e.target.value })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="departamento"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Departamento && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Departamento.message}
-                          </span>
+                        {errors.departamento && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.departamento.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>País</p>
+                        <label className="block text-sm text-gray-500">
+                          País
+                        </label>
                         <input
                           type="text"
-                          {...register("Pais", {
+                          {...register("pais", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -688,25 +930,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 20 letras",
                             },
                           })}
-                          name="Pais"
-                          defaultValue={data.pais} // Utiliza defaultValue para el valor inicial
-                          value={formData?.pais} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, pais: e.target.value })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="pais"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Pais && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Pais.message}
-                          </span>
+                        {errors.pais && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.pais.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Teléfono</p>
+                        <label className="block text-sm text-gray-500">
+                          Teléfono
+                        </label>
                         <input
                           type="number"
-                          {...register("Telefono", {
+                          {...register("telefono", {
                             minLength: {
                               value: 10,
                               message: "Minimo 10 Numeros",
@@ -717,28 +974,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="Telefono"
-                          defaultValue={data.telefono} // Utiliza defaultValue para el valor inicial
-                          value={formData?.telefono} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              telefono: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="telefono"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Telefono && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Telefono.message}
-                          </span>
+                        {errors.telefono && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.telefono.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Celular</p>
+                        <label className="block text-sm text-gray-500">
+                          Celular
+                        </label>
                         <input
                           type="number"
-                          {...register("Celular", {
+                          {...register("celular", {
                             required: {
                               value: true,
                             },
@@ -752,43 +1021,53 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="Celular"
-                          defaultValue={data.celular} // Utiliza defaultValue para el valor inicial
-                          value={formData?.celular} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              celular: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="celular"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Celular && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Celular.message}
-                          </span>
+                        {errors.celular && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.celular.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Correo electrónico</p>
+                        <label className="block text-sm text-gray-500">
+                          Correo electrónico
+                        </label>
                         <input
                           type="email"
                           required
-                          {...register("CorreoE")}
-                          name="CorreoE"
-                          defaultValue={data.correo} // Utiliza defaultValue para el valor inicial
-                          value={formData?.correo} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, correo: e.target.value })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-auto lg:w-72"
+                          {...register("correo_electronico")}
+                          name="correo_electronico"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
                       </div>
-                      <div className="flex flex-col w-52 justify-end">
-                        <p>Profesión</p>
+
+                      <div>
+                        <label className="block text-sm text-gray-500">
+                          Profesión
+                        </label>
                         <input
                           type="text"
-                          {...register("Profesion", {
+                          {...register("profesion", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -806,70 +1085,97 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="Profesion"
-                          defaultValue={data.profesion} // Utiliza defaultValue para el valor inicial
-                          value={formData?.profesion} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              profesion: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="profesion"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.Profesion && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.Profesion.message}
-                          </span>
+                        {errors.profesion && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.profesion.message}
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <div className="flex flex-col w-52 justify-end">
-                        <label htmlFor="opciones">Ocupación/Oficio:</label>
+
+                      <div>
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
+                          Ocupación/Oficio:
+                        </label>
                         <select
                           id="opciones"
-                          {...register("opciones4", {
+                          {...register("ocupacion", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          defaultValue={data.ocupacion} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ocupacion} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ocupacion: e.target.value,
-                            })
-                          }
-                          name="opciones4"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="ocupacion"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="Empleado">Empleado</option>
-                          <option Value="Pensionado">Pensionado</option>
-                          <option Value="Ama de casa">Ama de casa</option>
-                          <option Value="Estudiante">Estudiante</option>
-                          <option Value="Ganadero">Ganadero</option>
-                          <option Value="Comerciante">Comerciante</option>
-                          <option Value="Agricultor">Agricultor</option>
-                          <option Value="RC">Rentista de capital</option>
-                          <option Value="Independiente">Independiente</option>
-                          <option Value="DSI">Desempleado sin ingresos</option>
-                          <option Value="DCI">Desempleado con ingresos</option>
-                          <option Value="PI">Profesional independiente</option>
-                          <option Value="SOE">Socio o Empleado-socio</option>
+                          <option value="">Seleccionar</option>
+                          <option value="Empleado">Empleado</option>
+                          <option value="Pensionado">Pensionado</option>
+                          <option value="Ama de casa">Ama de casa</option>
+                          <option value="Estudiante">Estudiante</option>
+                          <option value="Ganadero">Ganadero</option>
+                          <option value="Comerciante">Comerciante</option>
+                          <option value="Agricultor">Agricultor</option>
+                          <option value="RC">Rentista de capital</option>
+                          <option value="Independiente">Independiente</option>
+                          <option value="DSI">Desempleado sin ingresos</option>
+                          <option value="DCI">Desempleado con ingresos</option>
+                          <option value="PI">Profesional independiente</option>
+                          <option value="SOE">Socio o Empleado-socio</option>
                         </select>
-                        {errors.opciones4 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones4.message}
-                          </span>
+                        {errors.ocupacion && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.ocupacion.message}
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <div className="flex flex-col justify-end">
-                        <p>Actividad económica principal</p>
+
+                      <div>
+                        <label className="block text-sm text-gray-500">
+                          Actividad económica principal
+                        </label>
                         <input
                           type="text"
-                          {...register("ActiEcoP", {
+                          {...register("actividad", {
                             pattern: {
                               value: /^[A-Za-z]+$/i,
                               message: "Digita solo letras",
@@ -883,28 +1189,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               message: "Maximo 15 letras",
                             },
                           })}
-                          name="ActiEcoP"
-                          defaultValue={data.actividad} // Utiliza defaultValue para el valor inicial
-                          value={formData?.actividad} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              actividad: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="actividad"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.ActiEcoP && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.ActiEcoP.message}
-                          </span>
+                        {errors.actividad && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.actividad.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Ingresos mensuales</p>
+                        <label className="block text-sm text-gray-500">
+                          Ingresos mensuales
+                        </label>
                         <input
                           type="number"
-                          {...register("IngresosM", {
+                          {...register("ingresos_mensuales", {
                             minLength: {
                               value: 1,
                               message: "Minimo 1 numeros",
@@ -915,28 +1233,40 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="IngresosM"
-                          defaultValue={data.ingresosmensuales} // Utiliza defaultValue para el valor inicial
-                          value={formData?.ingresosmensuales} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              ingresosmensuales: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="ingresos_mensuales"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.IngresosM && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.IngresosM.message}
-                          </span>
+                        {errors.ingresos_mensuales && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.ingresos_mensuales.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div>
-                        <p>Otros ingresos mensuales</p>
+                        <label className="block text-sm text-gray-500">
+                          Otros ingresos mensuales
+                        </label>
                         <input
                           type="number"
-                          {...register("OIngresosM", {
+                          {...register("otros_ingresos", {
                             minLength: {
                               value: 1,
                               message: "Minimo 1 numeros",
@@ -947,55 +1277,96 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                             },
                           })}
                           pattern="[0-9]*"
-                          name="OIngresosM"
-                          defaultValue={data.otrosingresos} // Utiliza defaultValue para el valor inicial
-                          value={formData?.otrosingresos} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              otrosingresos: e.target.value,
-                            })
-                          }
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green"
+                          name="otros_ingresos"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         />
-                        {errors.OIngresosM && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.OIngresosM.message}
-                          </span>
+                        {errors.otros_ingresos && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.otros_ingresos.message}
+                            </span>
+                          </div>
                         )}
                       </div>
+
                       <div className="flex flex-col">
-                        <label htmlFor="opciones" className="mr-2">
+                        <label
+                          htmlFor="opciones"
+                          className="block text-sm text-gray-500"
+                        >
                           ¿Es declarante de renta?:
                         </label>
                         <select
                           id="opciones"
-                          {...register("opciones5", {
+                          {...register("renta", {
                             required: {
                               value: true,
                               message: "Campo requerido",
                             },
                           })}
-                          defaultValue={data.renta} // Utiliza defaultValue para el valor inicial
-                          value={formData?.renta} // Utiliza value para el valor actual del campo controlado
-                          onChange={(e) =>
-                            setFormData({ ...formData, renta: e.target.value })
-                          }
-                          name="opciones5"
-                          className="rounded-md border-gray-300 focus:ring-green focus:border-green w-52 p-2"
+                          name="renta"
+                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
                         >
-                          <option Value="">Seleccionar</option>
-                          <option Value="Si">Si</option>
-                          <option Value="No">No</option>
+                          <option value="">Seleccionar</option>
+                          <option value="Si">Si</option>
+                          <option value="No">No</option>
                         </select>
-                        {errors.opciones5 && (
-                          <span className="text-red-600 flex items-end">
-                            {errors.opciones5.message}
-                          </span>
+                        {errors.renta && (
+                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+
+                            <span className="text-sm">
+                              {errors.renta.message}
+                            </span>
+                          </div>
                         )}
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="flex justify-end items-center gap-4 py-1 px-4">
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="bg-red-500 text-white text-sm py-1.5 px-4 rounded"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-emerald-600 text-white text-sm py-1.5 px-4 rounded"
+                  >
+                    Actualizar
+                  </button>
                 </div>
               </form>
             </div>
