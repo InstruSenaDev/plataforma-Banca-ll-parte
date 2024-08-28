@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { ModalRetirar } from "./ModalRetirar";
+import { ModalDevolver } from "./ModalDevolver";
 
 const Card = () => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [bovedaDetails, setBovedaDetails] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModal1, setOpenModal1] = useState(false);
+
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
 
   //Login, user context
@@ -316,7 +319,7 @@ const Card = () => {
               </button>
               <button
                 className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-emerald-600 hover:bg-emerald-700 transition text-white font-semibold rounded-lg"
-                onClick={devolverBalance}
+                onClick={() => setOpenModal1(!openModal1)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -334,6 +337,7 @@ const Card = () => {
                 </svg>
 
                 <span>Devolver a Bóveda</span>
+                
               </button>
             </div>
           </div>
@@ -341,6 +345,9 @@ const Card = () => {
       </div>
 
       <ModalRetirar openModal={openModal} setOpenModal={setOpenModal} />
+      
+      <ModalDevolver openModal1={openModal1} setOpenModal1={setOpenModal1} />
+
     </div>
   );
 };
