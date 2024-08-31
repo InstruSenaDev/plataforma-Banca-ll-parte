@@ -10,7 +10,7 @@ export const ModalInfoCliente = ({
   setModalData,
 }) => {
   const [accounts, setAccounts] = useState([]);
-  const [userName, setUserName] = useState("");
+  const [detalleAccount, setDetalleAccount] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalMovimientos, setModalMovimientos] = useState(false);
 
@@ -65,9 +65,11 @@ export const ModalInfoCliente = ({
     console.log("Cuenta agregada");
   };
 
-  const openMovimientos = (documento) => {
-    setUserName(documento);
+  const openMovimientos = (id_detalle) => {
+    setDetalleAccount(id_detalle);
     setModalMovimientos(true);
+
+    console.log(id_detalle);
   };
 
   const openModal = (data) => {
@@ -91,7 +93,7 @@ export const ModalInfoCliente = ({
     <>
       {showInfo && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:w-3/5 bg-white rounded-md p-4">
+          <div className="w-full max-w-xl lg:max-w-3xl xl:max-w-4xl bg-white rounded-md p-4">
             <div>
               <div className="flex justify-between items-center">
                 <h1 className="text-md font-medium text-gray-800">
@@ -260,7 +262,7 @@ export const ModalInfoCliente = ({
                               <div className="flex justify-center items-center">
                                 <button
                                   onClick={() =>
-                                    openMovimientos(data.documento)
+                                    openMovimientos(data.id_detalle)
                                   }
                                   className="inline-flex items-center justify-center whitespace-nowrap text-sm hover:underline"
                                 >
@@ -289,7 +291,7 @@ export const ModalInfoCliente = ({
       <ModalMovimientos
         modalMovimientos={modalMovimientos}
         setModalMovimientos={setModalMovimientos}
-        userName={userName}
+        detalleAccount={detalleAccount}
       />
     </>
   );

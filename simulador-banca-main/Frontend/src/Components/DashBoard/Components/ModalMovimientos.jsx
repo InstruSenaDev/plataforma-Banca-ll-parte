@@ -4,17 +4,17 @@ import userProfile from "../../../assets/Img/Login/user.png";
 export const ModalMovimientos = ({
   modalMovimientos,
   setModalMovimientos,
-  userName,
+  detalleAccount,
 }) => {
   const [allMovimientos, setAllMovimientos] = useState([]);
 
   // Funcion para traer movimientos de un cliente
   const fetchMovimientos = async () => {
-    if (!userName) return;
+    if (!detalleAccount) return;
 
     try {
       const response = await fetch(
-        `http://localhost:3000/user_movimientos/${userName}`
+        `http://localhost:3000/account_movimientos/${detalleAccount}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -27,6 +27,8 @@ export const ModalMovimientos = ({
       console.error("Error fetching user info:", error);
     }
   };
+
+  console.log(allMovimientos);
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -58,20 +60,21 @@ export const ModalMovimientos = ({
     return new Intl.DateTimeFormat("es-CO", options).format(date);
   };
 
-  // Solo llamar a fetchMovimientos cuando userName cambie
+  // Solo llamar a fetchMovimientos cuando detalleAccount cambie
   useEffect(() => {
     fetchMovimientos();
-  }, [userName]);
+  }, [detalleAccount]);
 
   const closeModal = () => {
     setModalMovimientos(false);
+    setAllMovimientos([]);
   };
 
   return (
     <>
       {modalMovimientos && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="w-full lg:w-5/6 bg-white rounded-lg p-4 max-h-screen overflow-y-auto">
+          <div className="w-[600px] h-[500px] lg:w-5/6 bg-white rounded-lg p-4 max-h-screen overflow-y-auto">
             <div className="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
               <button
                 type="button"
