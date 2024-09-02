@@ -32,16 +32,10 @@ const getSearch = async (req, res) => {
       fpn.AE_profesion AS Profesion , 
       fpn.AE_ocupacion AS Ocupacion,
       fpn.AE_detalle_act AS Actividad ,
-      fpn.IP_tipoDoc AS Tipodocumento,
-      dc.estado AS EstadoCliente,
-      tc.descripcion AS Tipo_Cuenta,
-      dc.num_cuenta,
-      dc.fecha
+      fpn.IP_tipoDoc AS Tipodocumento
       FROM
-      detalle_cuenta AS dc
-      JOIN cliente AS c ON dc.id_cliente = c.id_cliente
+      cliente AS c
       JOIN FormPersonNatural AS fpn ON c.id_formpn = fpn.id_formpn
-      JOIN tipo_cuentas AS tc ON dc.id_tcuenta = tc.id_tcuenta
       `);
 
     if (result.rows.length > 0) {
