@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
+  const [accounts, setAccounts] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
   const [modalData, setModalData] = useState(null);
@@ -26,8 +27,22 @@ export const BusquedaC = () => {
     }
   };
 
-  // Función para traer las cuenta bancarias en base al id del cliente
-  const fetchAccounts = async () => {};
+  // Función para traer las cuentas bancarias en base al id del cliente.
+  const fetchAccounts = async (id_cliente) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user_accounts/${id_cliente}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setDateCreation(data[0].fecha);
+      setAccounts((prev) => ({ ...prev, [id_cliente]: data }));
+    } catch (error) {
+      console.error("error al encontrar información", error);
+    }
+  };
 
   const formatFecha = (fecha) => {
     const date = new Date(fecha);

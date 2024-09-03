@@ -7,10 +7,13 @@ const userAccounts = async (req, res) => {
   const { id_cliente } = req.params;
 
   try {
-    const result = await pool.query("", []);
+    const result = await pool.query(
+      "SELECT * FROM detalle_cuenta WHERE id_cliente = $1 ORDER BY fecha ASC",
+      [id_cliente]
+    );
 
     if (result.rows.length > 0) {
-      return res.status(200).json(result.rows[0]);
+      return res.status(200).json(result.rows);
     } else {
       return res.status(404).json({ message: "No se encontraron resultados." });
     }
