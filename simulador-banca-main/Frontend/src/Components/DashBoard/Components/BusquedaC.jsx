@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
-  const [accounts, setAccounts] = useState({});
+  const [accounts, setAccounts] = useState({}); // Manejo de múltiples clientes
   const [searchTerm, setSearchTerm] = useState("");
 
   const [modalData, setModalData] = useState(null);
@@ -23,7 +23,7 @@ export const BusquedaC = () => {
       const data = await response.json();
       setDataUser(data);
     } catch (error) {
-      console.error("error al encontrar informacion", error);
+      console.error("Error al encontrar información:", error);
     }
   };
 
@@ -37,16 +37,20 @@ export const BusquedaC = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      setDateCreation(data[0].fecha);
-      setAccounts((prev) => ({ ...prev, [id_cliente]: data }));
+      setAccounts((prevAccounts) => ({
+        ...prevAccounts,
+        [id_cliente]: data, // Asocia las cuentas con el id_cliente
+      }));
     } catch (error) {
-      console.error("error al encontrar información", error);
+      console.error(
+        "Error al encontrar información de cuentas bancarias:",
+        error
+      );
     }
   };
 
   const formatFecha = (fecha) => {
     const date = new Date(fecha);
-
     const options = {
       day: "2-digit",
       month: "2-digit",
@@ -56,14 +60,12 @@ export const BusquedaC = () => {
       second: "2-digit",
       hour12: true,
     };
-
     return new Intl.DateTimeFormat("es-CO", options).format(date);
   };
 
   // Función para abrir cuenta (ahorro) para el cliente seleccionado.
   const openAccount = async (id_cliente) => {
     const id_empleado = user.id_empleado;
-
     try {
       const response = await fetch(
         `http://localhost:3000/create_account/${id_cliente}`,
@@ -78,21 +80,13 @@ export const BusquedaC = () => {
           }),
         }
       );
-
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
       toast.success("Cuenta de ahorros creada correctamente.");
-
       setTimeout(() => {
-        // Actualiza localmente el estado del cliente según sea necesario
-        // Puedes utilizar la función setDatauser para actualizar el estado local
-        // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-        // alert('Autorización exitosa')
-        // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
         window.location = "/DashBoardMenu";
-      }, 1500); // 2000 milisegundos = 2 segundos
+      }, 1500);
     } catch (error) {
       console.error("Error general:", error);
     }
@@ -102,7 +96,7 @@ export const BusquedaC = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar cliente segun la busqueda por documento.
+  // Filtrar cliente según la búsqueda por documento.
   const filteredData =
     dataUser?.filter(
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
@@ -114,11 +108,16 @@ export const BusquedaC = () => {
     setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
   };
 
-  console.log(dataUser);
-
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // Buscar cuentas bancarias para cada cliente filtrado
+    filteredData.forEach((client) => {
+      fetchAccounts(client.id_cliente);
+    });
+  }, [filteredData]);
 
   return (
     <>
@@ -157,7 +156,7 @@ export const BusquedaC = () => {
 
                 <input
                   type="text"
-                  defaultValue={searchTerm}
+                  value={searchTerm}
                   onChange={handleSearch}
                   placeholder="Busqueda por documento"
                   className="w-full py-2.5 text-gray-700 placeholder-gray-400/70 bg-white border border-gray-200 rounded-lg pl-11 pr-5  focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
@@ -183,6 +182,7 @@ export const BusquedaC = () => {
                             </button>
                           </div>
                         </th>
+
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
@@ -193,6 +193,18 @@ export const BusquedaC = () => {
                             </button>
                           </div>
                         </th>
+
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                        >
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Productos bancarios</span>
+                            </button>
+                          </div>
+                        </th>
+
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
@@ -217,71 +229,117 @@ export const BusquedaC = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {searchTerm !== "" &&
-                        filteredData?.map((data) => (
-                          <React.Fragment key={data.id_cliente}>
-                            <tr>
-                              <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{data.ip_documento}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{data.nombre}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  {/* <span>{formatFecha(data.fecha)}</span> */}
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <button
-                                    onClick={() => openUpdate(data.id_cliente)}
-                                    className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      strokeWidth={1.5}
-                                      stroke="currentColor"
-                                      className="size-5"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                      />
-                                    </svg>
-                                  </button>
+                      {searchTerm === "" ? (
+                        <tr>
+                          <td
+                            colSpan="5"
+                            className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
+                          >
+                            <span>
+                              Por favor, ingrese un término de búsqueda.
+                            </span>
+                          </td>
+                        </tr>
+                      ) : filteredData.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan="5"
+                            className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
+                          >
+                            <span>No se encontraron clientes.</span>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredData.map((client) => {
+                          const clientAccounts =
+                            accounts[client.id_cliente] || [];
 
-                                  <button
-                                    onClick={() => openAccount(data.id_cliente)}
-                                    className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      strokeWidth={1.5}
-                                      stroke="currentColor"
-                                      className="size-5"
+                          const totalAccounts = clientAccounts.length;
+
+                          const creationDate =
+                            clientAccounts.length > 0
+                              ? formatFecha(clientAccounts[0].fecha)
+                              : "No disponible";
+
+                          return (
+                            <React.Fragment key={client.id_cliente}>
+                              <tr>
+                                <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{client.ip_documento}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{client.nombre}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{totalAccounts}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{creationDate}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <button
+                                      onClick={() =>
+                                        openUpdate(client.id_cliente)
+                                      }
+                                      className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
                                     >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          </React.Fragment>
-                        ))}
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="size-5"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                        />
+                                      </svg>
+                                    </button>
+
+                                    <button
+                                      onClick={() =>
+                                        openAccount(client.id_cliente)
+                                      }
+                                      className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="size-5"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            </React.Fragment>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
