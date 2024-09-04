@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
-  const [accounts, setAccounts] = useState({}); // Manejo de múltiples clientes
+  const [accounts, setAccounts] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
   const [modalData, setModalData] = useState(null);
@@ -13,7 +13,6 @@ export const BusquedaC = () => {
 
   const { user } = useAuth();
 
-  // Función para traer información del cliente.
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_search");
@@ -27,19 +26,18 @@ export const BusquedaC = () => {
     }
   };
 
-  // Función para traer las cuentas bancarias en base al id del cliente.
   const fetchAccounts = async (id_cliente) => {
     try {
       const response = await fetch(
         `http://localhost:3000/user_accounts/${id_cliente}`
       );
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(`Network response was not ok for ID ${id_cliente}`);
       }
       const data = await response.json();
       setAccounts((prevAccounts) => ({
         ...prevAccounts,
-        [id_cliente]: data, // Asocia las cuentas con el id_cliente
+        [id_cliente]: data,
       }));
     } catch (error) {
       console.error(
@@ -63,7 +61,6 @@ export const BusquedaC = () => {
     return new Intl.DateTimeFormat("es-CO", options).format(date);
   };
 
-  // Función para abrir cuenta (ahorro) para el cliente seleccionado.
   const openAccount = async (id_cliente) => {
     const id_empleado = user.id_empleado;
     try {
@@ -96,13 +93,15 @@ export const BusquedaC = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar cliente según la búsqueda por documento.
+  // Filtrar cliente y sus cuentas según la búsqueda por documento.
   const filteredData =
-    dataUser?.filter(
-      (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
-    ) || [];
+    dataUser?.filter((item) => {
+      const hasAccount = accounts[item.id_cliente]?.length > 0; // Verifica si el cliente tiene cuentas
+      return (
+        item?.ip_documento?.includes(searchTerm.trim()) ?? (false || hasAccount)
+      );
+    }) || [];
 
-  // Función para abrir modal para actualizar los datos del cliente.
   const openUpdate = (id_cliente) => {
     setShowModal(true);
     setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
@@ -113,11 +112,11 @@ export const BusquedaC = () => {
   }, []);
 
   useEffect(() => {
-    // Buscar cuentas bancarias para cada cliente filtrado
-    filteredData.forEach((client) => {
-      fetchAccounts(client.id_cliente);
+    // Cuando se cargan los usuarios, se obtienen sus cuentas
+    dataUser.forEach((user) => {
+      fetchAccounts(user.id_cliente);
     });
-  }, [filteredData]);
+  }, [dataUser]);
 
   return (
     <>
