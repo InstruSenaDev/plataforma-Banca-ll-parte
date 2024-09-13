@@ -568,7 +568,7 @@ export const Movimientos = () => {
       {
         <div
           className="flex justify-center items-center flex-col gap-x-14 text-center"
-          style={{ minHeight: "75vh" }}
+          style={{ minHeight: "87vh" }}
         >
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
       Selecciona el movimiento que desea realizar
