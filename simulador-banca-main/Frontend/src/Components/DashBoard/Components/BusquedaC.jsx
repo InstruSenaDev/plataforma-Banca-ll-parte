@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { ModalBusqueda } from "./ModalBusqueda";
 import { toast } from "react-toastify";
+import { BusquedaInfoC } from "./BusquedaInfoC";
+import { dateFormatter } from "../../../utils/dateFormatter";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
   const [accounts, setAccounts] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
-
-  const [modalData, setModalData] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
   const { user } = useAuth();
 
@@ -47,51 +45,38 @@ export const BusquedaC = () => {
     }
   };
 
-  const formatFecha = (fecha) => {
-    const date = new Date(fecha);
-    const options = {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true,
-    };
-    return new Intl.DateTimeFormat("es-CO", options).format(date);
-  };
-
-  const openAccount = async (id_cliente) => {
-    const id_empleado = user.id_empleado;
-    try {
-      const response = await fetch(
-        `http://localhost:3000/create_account/${id_cliente}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idEmpleado: id_empleado,
-            tipoCuenta: 1,
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      toast.success("Cuenta de ahorros creada correctamente.");
-      setTimeout(() => {
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      console.error("Error general:", error);
-    }
-  };
-
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+    const term = event.target.value;
+    setSearchTerm(term);
   };
+
+  // const openAccount = async (id_cliente) => {
+  //   const id_empleado = user.id_empleado;
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:3000/create_account/${id_cliente}`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           idEmpleado: id_empleado,
+  //           tipoCuenta: 1,
+  //         }),
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+  //     toast.success("Cuenta de ahorros creada correctamente.");
+  //     setTimeout(() => {
+  //       window.location = "/DashBoardMenu";
+  //     }, 1500);
+  //   } catch (error) {
+  //     console.error("Error general:", error);
+  //   }
+  // };
 
   // Filtrar cliente y sus cuentas según la búsqueda por documento.
   const filteredData =
@@ -107,13 +92,14 @@ export const BusquedaC = () => {
       );
     }) || [];
 
-  const openUpdate = (id_cliente) => {
-    setShowModal(true);
-    setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
-  };
-
   useEffect(() => {
-    fetchData();
+    // Agregar un retraso de 2 segundos antes de cargar los datos
+    const timeoutId = setTimeout(() => {
+      fetchData();
+    }, 2000); // 2000 milisegundos = 2 segundos
+
+    // Limpiar el timeout si el componente se desmonta antes de que se complete el tiempo
+    return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -169,195 +155,207 @@ export const BusquedaC = () => {
             </div>
           </div>
 
-          <div className="border-y border-gray-300 py-5">
-            <ModalBusqueda data={filteredData} />
-          </div>
+          {searchTerm === "" ? (
+            <div className="border-t border-gray-300 text-gray-500 text-center py-5">
+              Por favor, ingrese un término de búsqueda.
+            </div>
+          ) : filteredData.length === 0 ? (
+            <div className="border-t border-gray-300 text-gray-500 text-center py-5">
+              No se encontraron clientes.
+            </div>
+          ) : (
+            <>
+              <div className="border-y border-gray-300 py-5">
+                <BusquedaInfoC data={filteredData} />
+              </div>
 
-          <div className="flex flex-col">
-            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-DarkSlate dark:bg-gray-800">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-3">
-                            <button>
-                              <span>N° Documento</span>
-                            </button>
-                          </div>
-                        </th>
+              <div className="flex flex-col">
+                <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-DarkSlate dark:bg-gray-800">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            >
+                              <div className="flex justify-center items-center gap-x-3">
+                                <button>
+                                  <span>N° Documento</span>
+                                </button>
+                              </div>
+                            </th>
 
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-3">
-                            <button>
-                              <span>Nombre Cliente</span>
-                            </button>
-                          </div>
-                        </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            >
+                              <div className="flex justify-center items-center gap-x-3">
+                                <button>
+                                  <span>Nombre Cliente</span>
+                                </button>
+                              </div>
+                            </th>
 
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-3">
-                            <button>
-                              <span>Productos bancarios</span>
-                            </button>
-                          </div>
-                        </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            >
+                              <div className="flex justify-center items-center gap-x-3">
+                                <button>
+                                  <span>Productos bancarios</span>
+                                </button>
+                              </div>
+                            </th>
 
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-3">
-                            <button>
-                              <span>Fecha Creación</span>
-                            </button>
-                          </div>
-                        </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            >
+                              <div className="flex justify-center items-center gap-x-3">
+                                <button>
+                                  <span>Fecha Creación</span>
+                                </button>
+                              </div>
+                            </th>
 
-                        <th
-                          scope="col"
-                          className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-2">
-                            <button>
-                              <span>Acción</span>
-                            </button>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {searchTerm === "" ? (
-                        <tr>
-                          <td
-                            colSpan="5"
-                            className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
-                          >
-                            <span>
-                              Por favor, ingrese un término de búsqueda.
-                            </span>
-                          </td>
-                        </tr>
-                      ) : filteredData.length === 0 ? (
-                        <tr>
-                          <td
-                            colSpan="5"
-                            className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
-                          >
-                            <span>No se encontraron clientes.</span>
-                          </td>
-                        </tr>
-                      ) : (
-                        filteredData.map((client) => {
-                          const clientAccounts =
-                            accounts[client.id_cliente] || [];
+                            <th
+                              scope="col"
+                              className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                            >
+                              <div className="flex justify-center items-center gap-x-2">
+                                <button>
+                                  <span>Acción</span>
+                                </button>
+                              </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                          {searchTerm === "" ? (
+                            <tr>
+                              <td
+                                colSpan="5"
+                                className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
+                              >
+                                <span>
+                                  Por favor, ingrese un término de búsqueda.
+                                </span>
+                              </td>
+                            </tr>
+                          ) : filteredData.length === 0 ? (
+                            <tr>
+                              <td
+                                colSpan="5"
+                                className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
+                              >
+                                <span>No se encontraron clientes.</span>
+                              </td>
+                            </tr>
+                          ) : (
+                            filteredData.map((client) => {
+                              const clientAccounts =
+                                accounts[client.id_cliente] || [];
 
-                          const filterAccounts = clientAccounts.filter(
-                            (acount) => acount.estado === "Autorizado"
-                          );
+                              const filterAccounts = clientAccounts.filter(
+                                (acount) => acount.estado === "Autorizado"
+                              );
 
-                          const totalAccounts = filterAccounts.length;
+                              const totalAccounts = filterAccounts.length;
 
-                          const creationDate =
-                            clientAccounts.length > 0
-                              ? formatFecha(clientAccounts[0].fecha)
-                              : "No disponible";
+                              const creationDate =
+                                clientAccounts.length > 0
+                                  ? dateFormatter(clientAccounts[0].fecha)
+                                  : "No disponible";
 
-                          return (
-                            <React.Fragment key={client.id_cliente}>
-                              <tr>
-                                <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
-                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.ip_documento}</span>
-                                  </div>
-                                </td>
+                              return (
+                                <React.Fragment key={client.id_cliente}>
+                                  <tr>
+                                    <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
+                                      <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                        <span>{client.ip_documento}</span>
+                                      </div>
+                                    </td>
 
-                                <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
-                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.nombre}</span>
-                                  </div>
-                                </td>
+                                    <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                                      <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                        <span>{client.nombre}</span>
+                                      </div>
+                                    </td>
 
-                                <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
-                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{totalAccounts}</span>
-                                  </div>
-                                </td>
+                                    <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                                      <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                        <span>{totalAccounts}</span>
+                                      </div>
+                                    </td>
 
-                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{creationDate}</span>
-                                  </div>
-                                </td>
+                                    <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                      <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                        <span>{creationDate}</span>
+                                      </div>
+                                    </td>
 
-                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <button
-                                      onClick={() =>
-                                        openUpdate(client.id_cliente)
-                                      }
-                                      className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-5"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                        />
-                                      </svg>
-                                    </button>
+                                    <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                      <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                        <button
+                                          onClick={() =>
+                                            openUpdate(client.id_cliente)
+                                          }
+                                          className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="size-5"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                            />
+                                          </svg>
+                                        </button>
 
-                                    <button
-                                      onClick={() =>
-                                        openAccount(client.id_cliente)
-                                      }
-                                      className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-5"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            </React.Fragment>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
+                                        <button
+                                          onClick={() =>
+                                            openAccount(client.id_cliente)
+                                          }
+                                          className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="size-5"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                            />
+                                          </svg>
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </React.Fragment>
+                              );
+                            })
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </section>
     </>
