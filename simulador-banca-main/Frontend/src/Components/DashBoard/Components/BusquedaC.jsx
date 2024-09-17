@@ -97,8 +97,13 @@ export const BusquedaC = () => {
   const filteredData =
     dataUser?.filter((item) => {
       const hasAccount = accounts[item.id_cliente]?.length > 0; // Verifica si el cliente tiene cuentas
+      const isDocumentComplete = searchTerm.trim().length > 0; // Verifica que el término de búsqueda no esté vacío
+
+      // Compara el documento solo si está completo y específico
       return (
-        item?.ip_documento?.includes(searchTerm.trim()) ?? (false || hasAccount)
+        isDocumentComplete &&
+        item?.ip_documento === searchTerm.trim() && // Comparación exacta del documento
+        hasAccount
       );
     }) || [];
 
@@ -121,16 +126,16 @@ export const BusquedaC = () => {
   return (
     <>
       <section className="container p-4 mx-auto" style={{ minHeight: "87vh" }}>
-        <div className="flex flex-col justify-center items-between h-full">
+        <div className="flex flex-col justify-center items-between gap-y-6 h-full">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-col justify-center items-start">
               <div className="flex flex-row items-center gap-x-3">
                 <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-                  Explorar clientes
+                  Gestion de Clientes
                 </h2>
               </div>
               <p className="text-sm text-gray-500 m-0 p-0">
-                Descubre una variedad de productos bancarios.
+                Información y Productos bancarios.
               </p>
             </div>
 
@@ -164,7 +169,11 @@ export const BusquedaC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col mt-6">
+          <div className="border-y border-gray-300 py-5">
+            <ModalBusqueda data={filteredData} />
+          </div>
+
+          <div className="flex flex-col">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
@@ -253,7 +262,11 @@ export const BusquedaC = () => {
                           const clientAccounts =
                             accounts[client.id_cliente] || [];
 
-                          const totalAccounts = clientAccounts.length;
+                          const filterAccounts = clientAccounts.filter(
+                            (acount) => acount.estado === "Autorizado"
+                          );
+
+                          const totalAccounts = filterAccounts.length;
 
                           const creationDate =
                             clientAccounts.length > 0
@@ -342,12 +355,6 @@ export const BusquedaC = () => {
                     </tbody>
                   </table>
                 </div>
-
-                <ModalBusqueda
-                  data={modalData}
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                />
               </div>
             </div>
           </div>

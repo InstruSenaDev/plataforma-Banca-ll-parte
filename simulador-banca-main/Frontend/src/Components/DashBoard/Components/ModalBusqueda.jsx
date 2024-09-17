@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
-export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
-  const [localData, setLocalData] = useState({});
-
+export const ModalBusqueda = ({ data }) => {
   const {
     register,
     handleSubmit,
@@ -14,8 +12,6 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
 
   useEffect(() => {
     if (data) {
-      setLocalData({ ...data });
-      // Actualizar los valores de los campos del formulario cuando cambia data
       setValue("nombre", data.nombre || "");
       setValue("primer_apellido", data.primerapellido || "");
       setValue("segundo_apellido", data.segundoapellido || "");
@@ -55,230 +51,175 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
     }
   }, [data, setValue]);
 
-  const onSubmit = async (formData) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/update_client/${data.id_cliente}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Error al actualizar el cliente");
-      }
-      const result = await response.json();
-      toast.success("Información del cliente actualizada correctamente.");
+  // const onSubmit = async (formData) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:3000/update_client/${data.id_cliente}`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(formData),
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Error al actualizar el cliente");
+  //     }
+  //     const result = await response.json();
+  //     toast.success("Información del cliente actualizada correctamente.");
 
-      setShowModal(false);
-      setTimeout(() => {
-        window.location = "/DashBoardMenu";
-      }, 1500);
-    } catch (error) {
-      console.error("Error al actualizar el cliente", error);
-    }
-  };
+  //     setShowModal(false);
+  //     setTimeout(() => {
+  //       window.location = "/DashBoardMenu";
+  //     }, 1500);
+  //   } catch (error) {
+  //     console.error("Error al actualizar el cliente", error);
+  //   }
+  // };
 
-  const closeModal = () => {
-    setShowModal(false);
+  // const closeModal = () => {
+  //   setShowModal(false);
+  // };
+
+  const onSubmit = (formData) => {
+    console.log(formData);
+    // Aquí puedes añadir la lógica para enviar el formulario
   };
 
   return (
     <>
-      {showModal && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-          key={data.id_cliente}
-        >
-          <div className="w-full lg:w-4/5 bg-white rounded-lg p-4 max-h-screen overflow-y-auto">
-            <div className="bg-white rounded-lg">
-              <div className="flex items-center justify-between p-2 md:p-3 border-b rounded-t dark:border-gray-600">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm w-4 h-4 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="default-modal"
-                >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <form> */}
+        <div className="flex flex-col gap-3">
+          <div className="grid gap-5 lg:grid-cols-4">
+            <div>
+              <label className="block text-sm text-gray-500">
+                Nombre Completo:
+              </label>
+              <input
+                type="text"
+                {...register("nombre", {
+                  pattern: {
+                    value: /^[A-Za-z\s]+$/i,
+                    message: "Digita solo letras",
+                  },
+                  required: {
+                    value: true,
+                    message: "Campo requerido",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "Minimo 3 letras",
+                  },
+                  maxLength: {
+                    value: 40,
+                    message: "Maximo 40 letras",
+                  },
+                })}
+                className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
+              />
+              {errors.nombre && (
+                <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
                   <svg
-                    className="w-3 h-3"
-                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
-                    viewBox="0 0 14 14"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4"
                   >
                     <path
-                      stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
                     />
                   </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
-              </div>
+                  <span className="text-sm">{errors.nombre.message}</span>
+                </div>
+              )}
+            </div>
 
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex gap-3 items-center justify-center flex-col bg-white">
-                  <h1 className="w-2/4 text-black text-2xl flex items-center justify-center font-semibold text-center p-2 border-b-2 border-lightGreen">
-                    Información del Cliente
-                  </h1>
-                  <div
-                    className="w-12/12 flex justify-center items-center "
-                    style={{ minHeight: "55vh" }}
+            <div>
+              <label className="block text-sm text-gray-500">
+                Primer Apellido
+              </label>
+              <input
+                type="text"
+                {...register("primer_apellido")}
+                className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-500">
+                Segundo Apellido
+              </label>
+              <input
+                type="text"
+                {...register("segundo_apellido")}
+                className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="opciones" className="block text-sm text-gray-500">
+                Tipo de documento:
+              </label>
+              <select
+                id="opciones"
+                {...register("tipo_documento", {
+                  required: {
+                    value: true,
+                    message: "Campo requerido",
+                  },
+                })}
+                name="tipo_documento"
+                className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40  dark:focus:border-emerald-300"
+              >
+                <option value="">Seleccionar</option>
+                <option value="CC">C.C.</option>
+                <option value="TI">T.I.</option>
+                <option value="RCivil">R. Civil</option>
+                <option value="CE">Cédula extranjería</option>
+                <option value="PP">Pasaporte</option>
+                <option value="CD">Carné diplomático</option>
+              </select>
+              {errors.tipo_documento && (
+                <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4"
                   >
-                    <div className="grid justify-center gap-x-10 gap-y-5 p-5 lg:grid-cols-4">
-                      <div>
-                        <label className="block text-sm text-gray-500">
-                          Nombre Completo:
-                        </label>
-                        <input
-                          type="text"
-                          {...register("nombre", {
-                            pattern: {
-                              value: /^[A-Za-z ]+$/i,
-                              message: "Digita solo letras",
-                            },
-                            required: {
-                              value: true,
-                              message: "Campo requerido",
-                            },
-                            minLength: {
-                              value: 3,
-                              message: "Minimo 3 letras",
-                            },
-                            maxLength: {
-                              value: 20,
-                              message: "Maximo 20 letras",
-                            },
-                          })}
-                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
-                        />
-                        {errors.nombre && (
-                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-4"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
-                              />
-                            </svg>
-                            <span className="text-sm">
-                              {errors.nombre.message}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                    />
+                  </svg>
 
-                      <div>
-                        <label className="block text-sm text-gray-500">
-                          Primer Apellido
-                        </label>
-                        <input
-                          type="text"
-                          {...register("primer_apellido", {
-                            pattern: {
-                              value: /^[A-Za-z]+$/i,
-                              message: "Digita solo letras",
-                            },
-                            required: {
-                              value: true,
-                              message: "Campo requerido",
-                            },
-                            minLength: {
-                              value: 3,
-                              message: "Minimo 3 letras",
-                            },
-                            maxLength: {
-                              value: 15,
-                              message: "Maximo 15 letras",
-                            },
-                          })}
-                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
-                        />
-                        {errors.primer_apellido && (
-                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-4"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
-                              />
-                            </svg>
-                            <span className="text-sm">
-                              {errors.primer_apellido.message}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                  <span className="text-sm">
+                    {errors.tipo_documento.message}
+                  </span>
+                </div>
+              )}
+            </div>
 
-                      <div>
-                        <label className="block text-sm text-gray-500">
-                          Segundo Apellido
-                        </label>
-                        <input
-                          type="text"
-                          {...register("segundo_apellido", {
-                            pattern: {
-                              value: /^[A-Za-z]+$/i,
-                              message: "Digita solo letras",
-                            },
-                            required: {
-                              value: true,
-                              message: "Campo requerido",
-                            },
-                            minLength: {
-                              value: 3,
-                              message: "Minimo 3 letras",
-                            },
-                            maxLength: {
-                              value: 15,
-                              message: "Maximo 15 letras",
-                            },
-                          })}
-                          className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
-                        />
-                        {errors.segundo_apellido && (
-                          <div className="flex justify-start items-center text-red-500 gap-2 mt-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-4"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
-                              />
-                            </svg>
-                            <span className="text-sm">
-                              {errors.segundo_apellido.message}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col">
+            <div>
+              <label className="block text-sm text-gray-500">
+                Número Documento
+              </label>
+              <input
+                type="text"
+                {...register("num_documento")}
+                className="mt-2 block w-full placeholder-gray-400/70 rounded-lg border border-gray-200 bg-white text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring focus:ring-emerald-300 focus:ring-opacity-40 dark:focus:border-emerald-300"
+              />
+            </div>
+            {/* <div className="flex flex-col">
                         <label
                           htmlFor="opciones"
                           className="block text-sm text-gray-500"
@@ -1341,32 +1282,20 @@ export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
                               {errors.renta.message}
                             </span>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end items-center gap-4 py-1 px-4">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="bg-red-500 text-white text-sm py-1.5 px-4 rounded"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-emerald-600 text-white text-sm py-1.5 px-4 rounded"
-                  >
-                    Actualizar
-                  </button>
-                </div>
-              </form>
-            </div>
+                        )} 
+                      </div> */}
           </div>
         </div>
-      )}
+
+        <div className="flex justify-end items-center gap-4 py-1 px-4">
+          <button
+            type="submit"
+            className="bg-emerald-600 text-white text-sm py-2 px-4 rounded"
+          >
+            Actualizar Información
+          </button>
+        </div>
+      </form>
     </>
   );
 };
