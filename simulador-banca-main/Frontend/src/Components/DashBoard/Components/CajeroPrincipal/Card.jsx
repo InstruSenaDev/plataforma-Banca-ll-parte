@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { ModalRetirar } from "./ModalRetirar";
+import { ModalDevolver } from "./ModalDevolver";
 
 const Card = () => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
   const [bovedaDetails, setBovedaDetails] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModal1, setOpenModal1] = useState(false);
+
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
 
   //Login, user context
@@ -61,75 +64,7 @@ const Card = () => {
     }
   };
 
-  // Función para devolver saldo a la boveda y registrar sus respectivos movimientos
-  const devolverBalance = async () => {
-    const idEmpleado = idEmpleadoDetails.id_empleado;
-    const saldoEmpleado = idEmpleadoDetails.saldo;
-    const saldoBoveda = bovedaDetails.saldo_boveda;
-
-    const newBalanceBoveda =
-      parseFloat(saldoEmpleado) + parseFloat(saldoBoveda);
-
-    if (saldoEmpleado > 0) {
-      try {
-        // Realiza una solicitud al servidor para actualizar el saldo del cajero principal
-        const responseCajero = await fetch(
-          `http://localhost:3000/balance_request/${idEmpleado}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              nuevoSaldo: 0,
-              saldoSolicitado: 0,
-              newStatus: "Activo",
-            }),
-          }
-        );
-
-        if (!responseCajero.ok) {
-          throw new Error(
-            "Network response was not ok al actualizar el saldo del cajero"
-          );
-        }
-
-        // Realiza una solicitud al servidor para actualizar el saldo de la boveda y regitrar el movimiento.
-        const entradaBoveda = await fetch(
-          `http://localhost:3000/entrada_boveda/${idEmpleado}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              entradaSaldo: saldoEmpleado,
-              nuevoSaldo: newBalanceBoveda,
-            }),
-          }
-        );
-
-        if (!entradaBoveda.ok) {
-          throw new Error(
-            "Network response was not ok al actualizar el saldo del cajero"
-          );
-        }
-
-        console.log("saldo actualizado correctamente");
-        toast.success("Saldo devuelto y actualizado correctamente.");
-
-        setTimeout(() => {
-          // Actualiza localmente el estado del cliente según sea necesario
-          // Puedes utilizar la función setDatauser para actualizar el estado local
-          // Ejemplo: setDatauser(prevData => [...prevData, data.updatedClient]);
-          // alert('Autorización exitosa')
-          // Redirige a la página '/DashBoardMenu' después de procesar la respuesta
-          window.location = "/DashBoardMenu";
-        }, 1500);
-      } catch (error) {
-        console.error("Error: ", error);
-        toast.error("Error al devolver el saldo.");
-      }
-    } else {
-      toast.error("No tienes saldo para devolver a bóveda.");
-    }
-  };
+  
 
   // Función para formatear el costo a miles sin decimales.
   const formatSaldo = (saldo) => {
@@ -316,7 +251,7 @@ const Card = () => {
               </button>
               <button
                 className="flex-auto flex items-center justify-center p-4 gap-x-2 bg-emerald-600 hover:bg-emerald-700 transition text-white font-semibold rounded-lg"
-                onClick={devolverBalance}
+                onClick={() => setOpenModal1(!openModal1)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -334,6 +269,7 @@ const Card = () => {
                 </svg>
 
                 <span>Devolver a Bóveda</span>
+                
               </button>
             </div>
           </div>
@@ -341,6 +277,9 @@ const Card = () => {
       </div>
 
       <ModalRetirar openModal={openModal} setOpenModal={setOpenModal} />
+      
+      <ModalDevolver openModal1={openModal1} setOpenModal1={setOpenModal1} />
+
     </div>
   );
 };
