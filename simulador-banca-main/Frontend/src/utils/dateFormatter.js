@@ -1,4 +1,4 @@
-// Formatear fechas
+// Función para formatear la fecha en "dd/mm/yyyy hh:mm:ss a.m./p.m.".
 
 export function dateFormatter(fecha) {
   const date = new Date(fecha);
@@ -10,7 +10,7 @@ export function dateFormatter(fecha) {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: false,
+    hour12: true,
   };
 
   return new Intl.DateTimeFormat("es-CO", options).format(date);

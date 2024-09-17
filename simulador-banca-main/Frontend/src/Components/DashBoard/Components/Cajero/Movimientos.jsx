@@ -6,6 +6,7 @@ import { Button, Modal } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../../context/AuthContext";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 export const Movimientos = () => {
   //General Status
@@ -33,7 +34,6 @@ export const Movimientos = () => {
 
   //Login, user context
   const { user } = useAuth();
-
 
   // Funcion para traer un empleado por id.
   const fetchEmpleadoId = async () => {
@@ -545,19 +545,6 @@ export const Movimientos = () => {
     }
   };
 
-  // Función para formatear el costo a miles sin decimales.
-  const formatSaldo = (saldo) => {
-    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
-    const formatter = new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
-
-    // Formatea el costo usando la configuración especificada.
-    return formatter.format(saldo);
-  };
-
   function onCloseModal() {
     setOpenModal(false);
     setEmail("");
@@ -586,7 +573,7 @@ export const Movimientos = () => {
                     </div>
                     <div className="flex jutify-center items-end gap-x-2">
                       <p className="font-semibold text-3xl text-white dark:text-gray-300">
-                        {formatSaldo(idEmpleadoDetails.saldo)}
+                        {saldoFormatter(idEmpleadoDetails.saldo)}
                       </p>
                     </div>
                   </div>

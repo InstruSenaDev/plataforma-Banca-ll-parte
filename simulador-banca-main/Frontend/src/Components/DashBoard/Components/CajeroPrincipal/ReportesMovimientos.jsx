@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import userProfile from "../../../../assets/Img/Login/user.png";
 import { Pagination } from "../../../Pagination/Pagination";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
+import { dateFormatter } from "../../../../utils/dateFormatter";
 
 export const ReportesMovimientos = () => {
   const [allMovimientos, setAllMovimientos] = useState([]);
@@ -23,37 +25,6 @@ export const ReportesMovimientos = () => {
   };
 
   const movementsTotal = allMovimientos.length;
-
-  // Función para formatear el costo a miles sin decimales.
-  const formatSaldo = (saldo) => {
-    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
-    const formatter = new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
-
-    // Formatea el costo usando la configuración especificada.
-    return formatter.format(saldo);
-  };
-
-  // Función para formatear la fecha en "dd/mm/yyyy hh:mm:ss a.m./p.m.".
-  const formatFecha = (fecha) => {
-    const date = new Date(fecha);
-
-    const options = {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true,
-    };
-
-    return new Intl.DateTimeFormat("es-CO", options).format(date);
-  };
-
   const lastIndex = currentPage * movementsPage;
   const firstIndex = lastIndex - movementsPage;
 
@@ -241,13 +212,13 @@ export const ReportesMovimientos = () => {
 
                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{formatSaldo(data.saldo)}</span>
+                                    <span>{saldoFormatter(data.saldo)}</span>
                                   </div>
                                 </td>
 
                                 <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{formatFecha(data.fecha)}</span>
+                                    <span>{dateFormatter(data.fecha)}</span>
                                   </div>
                                 </td>
 
