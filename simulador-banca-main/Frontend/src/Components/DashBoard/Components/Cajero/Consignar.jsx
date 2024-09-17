@@ -137,8 +137,10 @@ const Consignar = () => {
     const { id_detalle, saldo, estado } = dataUser;
     const { id_empleado, saldo: saldoEmpleado } = idEmpleadoDetails;
 
-    const newBalanceClient = parseFloat(saldo) - parseFloat(amount);
-    const newBalanceEmployee = parseFloat(saldoEmpleado) - parseFloat(amount);
+    if (!id_empleado || !saldoEmpleado) {
+      toast.error("Error: No se encontraron detalles del empleado.");
+      return;
+    }
 
     if (estado === "Denegado") {
       toast.error("Error: Esta cuenta ha sido rechazada por un Director.");
@@ -155,6 +157,9 @@ const Consignar = () => {
     }
 
     try {
+      const newBalanceClient = parseFloat(saldo) - parseFloat(amount);
+      const newBalanceEmployee = parseFloat(saldoEmpleado) - parseFloat(amount);
+
       const responseClient = await fetch(`http://localhost:3000/update_balance/${id_detalle}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -205,123 +210,119 @@ const Consignar = () => {
   };
 
   return (
-<section className="container p-4 mx-auto flex space-x-4">
-  {/* Consignar Section */}
-  <div className="flex-1 p-4 bg-white border border-gray-300 rounded-md shadow-sm">
-    <h1 className="font-semibold text-2xl mb-4">Consignación a cuentas de clientes</h1>
-    <div className="w-full max-w-md">
-      <div className="mb-4">
-        <label htmlFor="accountNumber" className="font-medium text-gray-700">Número de cuenta de ahorro:</label>
-        <input
-          id="accountNumber"
-          type="number"
-          placeholder="Número de cuenta"
-          value={accountNumber}
-          onChange={handleAccountNumberChange}
-          required
-          className="w-full px-3 py-2 border rounded-md focus:outline-none"
-        />
-        <button
-          onClick={handleConsultClick}
-          disabled={isLoading}
-          className={`mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          {isLoading ? "Cargando..." : "Consultar"}
-        </button>
+    <section className="container p-4 mx-auto flex space-x-4">
+      {/* Consignar Section */}
+      <div className="flex-1 p-4 bg-white border border-gray-300 rounded-md shadow-sm">
+        <h1 className="font-semibold text-2xl mb-4">Consignación a cuentas de clientes</h1>
+        <div className="w-full max-w-md">
+          <div className="mb-4">
+            <label htmlFor="accountNumber" className="font-medium text-gray-700">Número de cuenta de ahorro:</label>
+            <input
+              id="accountNumber"
+              type="number"
+              placeholder="Número de cuenta"
+              value={accountNumber}
+              onChange={handleAccountNumberChange}
+              required
+              className="w-full px-3 py-2 border rounded-md focus:outline-none"
+            />
+            <button
+              onClick={handleConsultClick}
+              disabled={isLoading}
+              className={`mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {isLoading ? "Cargando..." : "Consultar"}
+            </button>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="accountOwner" className="font-medium text-gray-700">Nombre del dueño de la cuenta:</label>
+            <input
+              id="accountOwner"
+              type="text"
+              value={accountOwner}
+              readOnly
+              className="w-full px-3 py-2 border rounded-md bg-gray-100"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="amount" className="font-medium text-gray-700">Monto a consignar:</label>
+            <input
+              id="amount"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              min="0.01"
+              step="0.01"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none"
+              disabled={isFormDisabled}
+            />
+          </div>
+          <button
+            onClick={handleConsign}
+            disabled={isFormDisabled || amount.trim() === ""}
+            className={`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-all ${isFormDisabled || amount.trim() === "" ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            Consignar
+          </button>
+        </div>
       </div>
-      <div className="mb-4">
-        <label htmlFor="accountOwner" className="font-medium text-gray-700">Nombre del dueño de la cuenta:</label>
-        <input
-          id="accountOwner"
-          type="text"
-          placeholder="Nombre del dueño"
-          value={accountOwner}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none"
-          readOnly
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="amount" className="font-medium text-gray-700">Monto a consignar:</label>
-        <input
-          id="amount"
-          type="number"
-          placeholder="Monto a consignar"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none"
-          required
-        />
-      </div>
-      <div>
-        <button
-          onClick={handleConsign}
-          disabled={isFormDisabled}
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all"
-        >
-          Enviar
-        </button>
-      </div>
-    </div>
-  </div>
 
-  {/* Retirar Section */}
-  <div className="flex-1 p-4 bg-white border border-gray-300 rounded-md shadow-sm">
-    <h1 className="text-xl font-semibold mb-4">Retirar a cuentas de clientes</h1>
-    <div className="w-full max-w-md">
-      <div className="mb-4">
-        <label htmlFor="accountNumberRetirar" className="font-medium text-gray-700">Número de cuenta de ahorro:</label>
-        <input
-          id="accountNumberRetirar"
-          type="number"
-          placeholder="Número de cuenta"
-          value={accountNumber}
-          onChange={(e) => setAccountNumber(e.target.value)}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none ${!isAccountNumberFilled ? "border-gray-300 focus:border-blue-500" : ""}`}
-        />
-        <button
-          onClick={handleConsultClick}
-          disabled={isLoading || isFormDisabled}
-          className={`mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all ${isLoading || isFormDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          {isLoading ? "Cargando..." : "Buscar"}
-        </button>
+      {/* Retirar Section */}
+      <div className="flex-1 p-4 bg-white border border-gray-300 rounded-md shadow-sm">
+        <h1 className="font-semibold text-2xl mb-4">Retiro de cuentas de clientes</h1>
+        <div className="w-full max-w-md">
+          <div className="mb-4">
+            <label htmlFor="accountNumberRetiro" className="font-medium text-gray-700">Número de cuenta de ahorro:</label>
+            <input
+              id="accountNumberRetiro"
+              type="number"
+              placeholder="Número de cuenta"
+              value={accountNumber}
+              onChange={handleAccountNumberChange}
+              required
+              className="w-full px-3 py-2 border rounded-md focus:outline-none"
+            />
+            <button
+              onClick={handleConsultClick}
+              disabled={isLoading}
+              className={`mt-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {isLoading ? "Cargando..." : "Consultar"}
+            </button>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="accountOwnerRetiro" className="font-medium text-gray-700">Nombre del dueño de la cuenta:</label>
+            <input
+              id="accountOwnerRetiro"
+              type="text"
+              value={accountOwner}
+              readOnly
+              className="w-full px-3 py-2 border rounded-md bg-gray-100"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="amountRetiro" className="font-medium text-gray-700">Monto a retirar:</label>
+            <input
+              id="amountRetiro"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              min="0.01"
+              step="0.01"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none"
+              disabled={isFormDisabled}
+            />
+          </div>
+          <button
+            onClick={handleRetirar}
+            disabled={isFormDisabled || amount.trim() === ""}
+            className={`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-all ${isFormDisabled || amount.trim() === "" ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            Retirar
+          </button>
+        </div>
       </div>
-      <div className="mb-4">
-        <label htmlFor="accountOwnerRetirar" className="font-medium text-gray-700">Nombre del dueño de la cuenta:</label>
-        <input
-          id="accountOwnerRetirar"
-          type="text"
-          placeholder="Nombre del dueño"
-          value={accountOwner}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none ${isFormDisabled || !isAccountNumberFilled ? "border-gray-200 text-gray-500 cursor-not-allowed" : "border-gray-300 focus:border-blue-500"}`}
-          readOnly
-          disabled={!isAccountNumberFilled}
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="amountRetirar" className="font-medium text-gray-700">Monto a retirar:</label>
-        <input
-          id="amountRetirar"
-          type="number"
-          placeholder="Monto a retirar"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none ${isFormDisabled || !isAccountNumberFilled ? "border-gray-200 text-gray-500 cursor-not-allowed" : "border-gray-300 focus:border-blue-500"}`}
-          disabled={!isAccountNumberFilled}
-        />
-      </div>
-      <div>
-        <button
-          onClick={handleRetirar}
-          className={`w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-all ${isFormDisabled || !isAccountNumberFilled ? "opacity-50 cursor-not-allowed" : ""}`}
-          disabled={isFormDisabled || !isAccountNumberFilled}
-        >
-          Retirar
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
   );
 };
 
