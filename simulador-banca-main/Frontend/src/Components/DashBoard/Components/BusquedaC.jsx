@@ -27,6 +27,21 @@ export const BusquedaC = () => {
     }
   };
 
+  const fetchInfo = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/get_client/:userName"
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setDataUser(data);
+    } catch (error) {
+      console.error("Error al encontrar información:", error);
+    }
+  };
+
   // Función para traer las cuentas bancarias en base al id del cliente.
   const fetchAccounts = async (id_cliente) => {
     try {
@@ -113,6 +128,10 @@ export const BusquedaC = () => {
   }, []);
 
   useEffect(() => {
+    fetchInfo();
+  }, []);
+
+  useEffect(() => {
     // Buscar cuentas bancarias para cada cliente filtrado
     filteredData.forEach((client) => {
       fetchAccounts(client.id_cliente);
@@ -178,7 +197,7 @@ export const BusquedaC = () => {
                         >
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span>N° Documento</span>
+                              <span>N° Cuenta</span>
                             </button>
                           </div>
                         </th>
@@ -189,7 +208,7 @@ export const BusquedaC = () => {
                         >
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span>Nombre Cliente</span>
+                              <span>Tipo de cuenta</span>
                             </button>
                           </div>
                         </th>
@@ -200,7 +219,7 @@ export const BusquedaC = () => {
                         >
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span>Productos bancarios</span>
+                              <span>Saldo</span>
                             </button>
                           </div>
                         </th>
@@ -266,19 +285,19 @@ export const BusquedaC = () => {
                               <tr>
                                 <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.ip_documento}</span>
+                                    <span>{client.num_cuenta}</span>
                                   </div>
                                 </td>
 
                                 <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.nombre}</span>
+                                    <span>{client.descripcion}</span>
                                   </div>
                                 </td>
 
                                 <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{totalAccounts}</span>
+                                    <span>{client.saldo}</span>
                                   </div>
                                 </td>
 
@@ -307,29 +326,7 @@ export const BusquedaC = () => {
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                        />
-                                      </svg>
-                                    </button>
-
-                                    <button
-                                      onClick={() =>
-                                        openAccount(client.id_cliente)
-                                      }
-                                      className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-5"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                                         />
                                       </svg>
                                     </button>
