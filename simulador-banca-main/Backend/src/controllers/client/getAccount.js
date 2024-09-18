@@ -18,7 +18,8 @@ const getAccount = async (req, res) => {
       fpn.ip_segundoApellido AS segundoApellido,
       dc.num_cuenta,
       dc.saldo,
-      dc.estado
+      dc.estado,
+      dc.descripcion
       FROM cliente AS c
       JOIN detalle_cuenta AS dc ON c.id_cliente = dc.id_cliente
       JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn

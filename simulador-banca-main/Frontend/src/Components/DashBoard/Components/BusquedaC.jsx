@@ -13,6 +13,8 @@ export const BusquedaC = () => {
 
   const { user } = useAuth();
 
+  
+
   // Función para traer información del cliente.
   const fetchData = async () => {
     try {
@@ -27,20 +29,7 @@ export const BusquedaC = () => {
     }
   };
 
-  const fetchInfo = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/get_client/:userName"
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setDataUser(data);
-    } catch (error) {
-      console.error("Error al encontrar información:", error);
-    }
-  };
+  
 
   // Función para traer las cuentas bancarias en base al id del cliente.
   const fetchAccounts = async (id_cliente) => {
@@ -127,9 +116,6 @@ export const BusquedaC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    fetchInfo();
-  }, []);
 
   useEffect(() => {
     // Buscar cuentas bancarias para cada cliente filtrado
@@ -280,24 +266,24 @@ export const BusquedaC = () => {
                               ? formatFecha(clientAccounts[0].fecha)
                               : "No disponible";
 
-                          return (
-                            <React.Fragment key={client.id_cliente}>
+                          return clientAccounts.map((account) => (
+                            <React.Fragment key={account.num_cuenta}>
                               <tr>
                                 <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.num_cuenta}</span>
+                                    <span>{account.num_cuenta}</span>
                                   </div>
                                 </td>
 
                                 <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.descripcion}</span>
+                                    <span>{account.descripcion}</span>
                                   </div>
                                 </td>
 
                                 <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                    <span>{client.saldo}</span>
+                                    <span>{account.saldo}</span>
                                   </div>
                                 </td>
 
@@ -334,7 +320,7 @@ export const BusquedaC = () => {
                                 </td>
                               </tr>
                             </React.Fragment>
-                          );
+                          ));
                         })
                       )}
                     </tbody>
