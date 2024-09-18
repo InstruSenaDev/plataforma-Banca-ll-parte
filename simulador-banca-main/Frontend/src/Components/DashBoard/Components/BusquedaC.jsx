@@ -13,8 +13,6 @@ export const BusquedaC = () => {
 
   const { user } = useAuth();
 
-  
-
   // Función para traer información del cliente.
   const fetchData = async () => {
     try {
@@ -28,8 +26,6 @@ export const BusquedaC = () => {
       console.error("Error al encontrar información:", error);
     }
   };
-
-  
 
   // Función para traer las cuentas bancarias en base al id del cliente.
   const fetchAccounts = async (id_cliente) => {
@@ -106,6 +102,8 @@ export const BusquedaC = () => {
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
     ) || [];
 
+  console.log(accounts);
+
   // Función para abrir modal para actualizar los datos del cliente.
   const openUpdate = (id_cliente) => {
     setShowModal(true);
@@ -115,7 +113,6 @@ export const BusquedaC = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
 
   useEffect(() => {
     // Buscar cuentas bancarias para cada cliente filtrado
