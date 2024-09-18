@@ -1406,7 +1406,7 @@ export const BusquedaInfoC = ({ data }) => {
         <div className="flex justify-end items-center">
           <button
             type="submit"
-            className="flex justify-center items-center gap-x-2 bg-emerald-600 text-white text-sm py-2 px-4 rounded"
+            className="flex justify-center items-center gap-x-2 bg-emerald-600 text-white text-sm py-2 px-4 rounded hover:"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
