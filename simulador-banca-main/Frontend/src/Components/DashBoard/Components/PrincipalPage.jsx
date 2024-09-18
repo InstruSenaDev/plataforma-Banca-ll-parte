@@ -53,7 +53,7 @@ export const PrincipalPage = () => {
   if (user?.id_rol === 3) {
     return (
       <>
-        <div className="w-full flex justify-start items-center mb-2 lg:mb-0 lg:px-4 lg:pt-4">
+        <div className="w-full flex justify-start items-center mb-2 lg:mb-0 lg:px-4">
           <p className="font-semibold text-2xl">Bienvenido, {user?.username}</p>
         </div>
         <Inicio />

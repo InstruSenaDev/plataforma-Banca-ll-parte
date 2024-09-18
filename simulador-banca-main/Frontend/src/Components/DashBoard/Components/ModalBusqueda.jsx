@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
-export const ModalBusqueda = ({
-  showModal,
-  setShowModal,
-  data,
-  setModalData,
-}) => {
+export const ModalBusqueda = ({ showModal, setShowModal, data }) => {
   const [localData, setLocalData] = useState({});
 
   const {
@@ -88,7 +83,6 @@ export const ModalBusqueda = ({
   };
 
   const closeModal = () => {
-    setModalData(localData);
     setShowModal(false);
   };
 
@@ -96,7 +90,7 @@ export const ModalBusqueda = ({
     <>
       {showModal && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
           key={data.id_cliente}
         >
           <div className="w-full lg:w-4/5 bg-white rounded-lg p-4 max-h-screen overflow-y-auto">

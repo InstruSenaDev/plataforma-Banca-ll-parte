@@ -20,12 +20,12 @@ export const ModalConsignarCajero = ({
       if (response.ok) {
         const userData = await response.json();
         setEmpleadoDetails(userData);
-  
+
         // Filtrar el empleado logueado
         const empleadoPrincipal = userData.find(
           (empleado) => empleado.id_empleado === user.id_empleado
         );
-  
+
         if (empleadoPrincipal) {
           setIdEmpleadoDetails(empleadoPrincipal);
         } else {
@@ -41,7 +41,7 @@ export const ModalConsignarCajero = ({
 
   const handleConsign = async () => {
     const { id_empleado, saldo } = idEmpleadoDetails || {};
-    
+
     if (!id_empleado) {
       return toast.error("Error: No se pudo obtener el ID del empleado.");
     }
@@ -50,17 +50,17 @@ export const ModalConsignarCajero = ({
     if (id_empleado === user.id_empleado) {
       return toast.error("Error: No puedes enviarte dinero a ti mismo.");
     }
-  
+
     // Obtener el saldo del usuario logueado desde el estado o contexto
     const saldoPrincipal = empleadoDetails.find(
       (empleado) => empleado.id_empleado === user.id_empleado
     )?.saldo;
-    
+
     console.log("Saldo del empleado logueado:", saldoPrincipal);
 
     const newBalanceEmpleado = parseFloat(saldo) + parseFloat(amount);
     const newBalancePrincipal = parseFloat(saldoPrincipal) - parseFloat(amount);
-  
+
     if (amount <= 0 || isNaN(amount)) {
       return toast.error("Error: El saldo no debe ser menor o igual a cero.");
     } else if (parseFloat(amount) > parseFloat(saldoPrincipal)) {
@@ -81,11 +81,11 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
-  
+
         if (!responseEmpleado.ok) {
           throw new Error("Network response was not ok");
         }
-  
+
         const responsePrincipal = await fetch(
           `http://localhost:3000/balance_request/${user.id_empleado}`,
           {
@@ -100,11 +100,11 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
-  
+
         if (!responsePrincipal.ok) {
           throw new Error("Network response was not ok");
         }
-  
+
         const responseMovimiento = await fetch(
           `http://localhost:3000/post_movimiento`,
           {
@@ -120,11 +120,11 @@ export const ModalConsignarCajero = ({
             }),
           }
         );
-  
+
         if (!responseMovimiento.ok) {
           throw new Error("Network response was not ok");
         }
-  
+
         toast.success("Consignación realizada correctamente.");
         setTimeout(() => {
           window.location = "/DashBoardMenu";
@@ -134,7 +134,7 @@ export const ModalConsignarCajero = ({
       }
     }
   };
-  
+
   const closeConsing = () => {
     setIdEmpleadoDetails(null);
     setOpenConsing(false);
@@ -149,47 +149,49 @@ export const ModalConsignarCajero = ({
   useEffect(() => {
     fetchEmpleados();
   }, []);
-  
+
   return (
     <>
       {openConsing && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="rounded-lg bg-white shadow-sm w-full max-w-md">
-            <div className="flex flex-col space-y-1.5 p-6">
-              <div className="flex items-center justify-between">
-                <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
-                  Enviar saldo
-                </h3>
+            <div className="flex flex-col items-start justify-start space-y-1.5 p-6">
+              <div className="flex flex-col w-full">
+                <div className="flex justify-between">
+                  <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
+                    Enviar saldo
+                  </h3>
 
-                <button
-                  type="button"
-                  onClick={closeConsing}
-                  className="text-gray-400 bg-transparent transition hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-toggle="crud-modal"
-                >
-                  <svg
-                    className="w-3 h-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 14"
+                  <button
+                    type="button"
+                    onClick={closeConsing}
+                    className="text-gray-400 bg-transparent transition hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-toggle="crud-modal"
                   >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                    />
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
+                    <svg
+                      className="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Close modal</span>
+                  </button>
+                </div>
               </div>
               <p className="text-sm text-gray-600">
                 Ingrese el saldo a consignar para el empleado seleccionado.
               </p>
             </div>
-            <div className="px-6 space-y-4">
+            <div className="px-6 space-y-4 text-start">
               <div className="flex justify-between">
                 <div className="space-y-2">
                   <label

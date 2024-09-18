@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import { ModalBusqueda } from "./ModalBusqueda";
-import { ModalInfoCliente } from "./ModalInfoCliente";
+import { toast } from "react-toastify";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
+  const [accounts, setAccounts] = useState({}); // Manejo de múltiples clientes
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [modalData, setModalData] = useState(null); // Para almacenar los datos del modal
-  const [showModal, setShowModal] = useState(false); // Para controlar la visibilidad del modal
-  const [showInfo, setShowInfo] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
+  const { user } = useAuth();
+
+  // Función para traer información del cliente.
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_search");
@@ -19,25 +23,34 @@ export const BusquedaC = () => {
       const data = await response.json();
       setDataUser(data);
     } catch (error) {
-      console.error("error al encontrar informacion", error);
+      console.error("Error al encontrar información:", error);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  // useEffect(() => {
-  //   const documento =
-  //     filteredData.length > 0 ? filteredData[0].ip_documento : null;
-  //   if (documento) {
-  //     getAccounts(documento);
-  //   }
-  // }, [searchTerm, dataUser]); // Llamamos a getAccounts cuando searchTerm o dataUser cambia
+  // Función para traer las cuentas bancarias en base al id del cliente.
+  const fetchAccounts = async (id_cliente) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user_accounts/${id_cliente}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setAccounts((prevAccounts) => ({
+        ...prevAccounts,
+        [id_cliente]: data, // Asocia las cuentas con el id_cliente
+      }));
+    } catch (error) {
+      console.error(
+        "Error al encontrar información de cuentas bancarias:",
+        error
+      );
+    }
+  };
 
   const formatFecha = (fecha) => {
     const date = new Date(fecha);
-
     const options = {
       day: "2-digit",
       month: "2-digit",
@@ -47,33 +60,66 @@ export const BusquedaC = () => {
       second: "2-digit",
       hour12: true,
     };
-
     return new Intl.DateTimeFormat("es-CO", options).format(date);
+  };
+
+  // Función para abrir cuenta (ahorro) para el cliente seleccionado.
+  const openAccount = async (id_cliente) => {
+    const id_empleado = user.id_empleado;
+    try {
+      const response = await fetch(
+        `http://localhost:3000/create_account/${id_cliente}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idEmpleado: id_empleado,
+            tipoCuenta: 1,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      toast.success("Cuenta de ahorros creada correctamente.");
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error general:", error);
+    }
   };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  // Filtrar cliente según la búsqueda por documento.
   const filteredData =
     dataUser?.filter(
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
     ) || [];
 
-  const openInfo = (id_cliente) => {
-    setShowInfo(true);
+  console.log(accounts);
+
+  // Función para abrir modal para actualizar los datos del cliente.
+  const openUpdate = (id_cliente) => {
+    setShowModal(true);
     setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
   };
 
-  const openModal = (data) => {
-    setModalData(data);
-    setShowModal(true);
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const closeModal = () => {
-    setModalData(null); // Limpiar modalData
-    setShowModal(false);
-  };
+  useEffect(() => {
+    // Buscar cuentas bancarias para cada cliente filtrado
+    filteredData.forEach((client) => {
+      fetchAccounts(client.id_cliente);
+    });
+  }, [filteredData]);
 
   return (
     <>
@@ -112,7 +158,7 @@ export const BusquedaC = () => {
 
                 <input
                   type="text"
-                  defaultValue={searchTerm}
+                  value={searchTerm}
                   onChange={handleSearch}
                   placeholder="Busqueda por documento"
                   className="w-full py-2.5 text-gray-700 placeholder-gray-400/70 bg-white border border-gray-200 rounded-lg pl-11 pr-5  focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
@@ -134,20 +180,33 @@ export const BusquedaC = () => {
                         >
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span>N° Documento</span>
+                              <span>N° Cuenta</span>
                             </button>
                           </div>
                         </th>
+
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
                         >
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span>Nombre Cliente</span>
+                              <span>Tipo de cuenta</span>
                             </button>
                           </div>
                         </th>
+
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
+                        >
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Saldo</span>
+                            </button>
+                          </div>
+                        </th>
+
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
@@ -172,66 +231,102 @@ export const BusquedaC = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                      {searchTerm !== "" &&
-                        filteredData?.map((data) => (
-                          <React.Fragment key={data.id_cliente}>
-                            <tr>
-                              <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{data.ip_documento}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{data.nombre}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{formatFecha(data.fecha)}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <button
-                                    onClick={() => openInfo(data.id_cliente)}
-                                    className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      strokeWidth={1.5}
-                                      stroke="currentColor"
-                                      className="size-5"
+                      {searchTerm === "" ? (
+                        <tr>
+                          <td
+                            colSpan="5"
+                            className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
+                          >
+                            <span>
+                              Por favor, ingrese un término de búsqueda.
+                            </span>
+                          </td>
+                        </tr>
+                      ) : filteredData.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan="5"
+                            className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
+                          >
+                            <span>No se encontraron clientes.</span>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredData.map((client) => {
+                          const clientAccounts =
+                            accounts[client.id_cliente] || [];
+
+                          const totalAccounts = clientAccounts.length;
+
+                          const creationDate =
+                            clientAccounts.length > 0
+                              ? formatFecha(clientAccounts[0].fecha)
+                              : "No disponible";
+
+                          return clientAccounts.map((account) => (
+                            <React.Fragment key={account.num_cuenta}>
+                              <tr>
+                                <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{account.num_cuenta}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{account.descripcion}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{account.saldo}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <span>{creationDate}</span>
+                                  </div>
+                                </td>
+
+                                <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                  <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                    <button
+                                      onClick={() =>
+                                        openUpdate(client.id_cliente)
+                                      }
+                                      className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
                                     >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                                      />
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          </React.Fragment>
-                        ))}
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="size-5"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            </React.Fragment>
+                          ));
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
 
-                <ModalInfoCliente
-                  filteredData={filteredData}
-                  showInfo={showInfo}
-                  setShowInfo={setShowInfo}
-                  modalData={modalData}
-                  setModalData={setModalData}
+                <ModalBusqueda
+                  data={modalData}
+                  showModal={showModal}
                   setShowModal={setShowModal}
                 />
               </div>

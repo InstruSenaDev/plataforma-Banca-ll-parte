@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import userProfile from "../../../../assets/Img/Login/user.png";
 import ModalInfoCajeros from "../ModalInfoCajeros";
 
 export const MovimientosCajeros = () => {
@@ -13,7 +14,11 @@ export const MovimientosCajeros = () => {
         throw new Error("Network response was not ok");
       }
       const cajero = await response.json();
-      const filterCajeros = cajero.filter((users) => users.id_rol === 3);
+      const roles = [3, 4]; // Roles filtrados
+
+      const filterCajeros = cajero.filter((cajero) =>
+        roles.includes(cajero.id_rol)
+      );
       setMoviCajeros(filterCajeros);
     } catch (error) {
       console.error("Error fetching user info:", error);
@@ -101,28 +106,6 @@ export const MovimientosCajeros = () => {
                             </button>
                           </div>
                         </th>
-
-                        <th
-                          scope="col"
-                          className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-2">
-                            <button>
-                              <span>Fecha y Hora</span>
-                            </button>
-                          </div>
-                        </th>
-
-                        <th
-                          scope="col"
-                          className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white dark:text-gray-400"
-                        >
-                          <div className="flex justify-center items-center gap-x-2">
-                            <button>
-                              <span>Acción</span>
-                            </button>
-                          </div>
-                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
@@ -140,7 +123,8 @@ export const MovimientosCajeros = () => {
                                   <div className="flex items-center gap-x-2">
                                     <img
                                       className="object-cover w-10 h-10 rounded-full"
-                                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                      // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                      src={userProfile}
                                       alt=""
                                     />
                                     <div>
@@ -149,6 +133,9 @@ export const MovimientosCajeros = () => {
                                       </h2>
                                       <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                         {cajero.id_rol === 3 && <>Cajero</>}
+                                        {cajero.id_rol === 4 && (
+                                          <>Cajero Principal</>
+                                        )}
                                       </p>
                                     </div>
                                   </div>
@@ -168,36 +155,6 @@ export const MovimientosCajeros = () => {
                                 <h2 className="text-sm font-normal text-emerald-500">
                                   Activo
                                 </h2>
-                              </div>
-                            </td>
-
-                            <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                              <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                <span>03/07/2024, 04:56:02 p. m.</span>
-                              </div>
-                            </td>
-
-                            <td className="flex justify-center px-5 py-5 text-sm font-medium text-gray-700 whitespace-nowrap">
-                              <div className="inline-flex items-center px-3 py-1 text-gray-500 dark:text-gray-400">
-                                <button
-                                  className="text-gray-500 transition-colors duration-200 dark:hover:text-amber-500 dark:text-gray-300 hover:text-amber-500 focus:outline-none"
-                                  onClick={() => openModal(cajero)}
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="w-5 h-5"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                    />
-                                  </svg>
-                                </button>
                               </div>
                             </td>
                           </tr>

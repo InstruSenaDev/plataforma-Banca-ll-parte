@@ -3,6 +3,7 @@ import { Button, Modal } from "flowbite-react";
 import { toast } from "react-toastify";
 import userProfile from "../../../../assets/Img/Login/user.png";
 import { ModalConsignarCajero } from "./ModalConsignarCajero";
+import { useAuth } from "../../../../context/AuthContext";
 
 const Transfers = () => {
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
@@ -13,6 +14,8 @@ const Transfers = () => {
 
   const [openModal1, setOpenModal1] = useState(false);
   const [openConsing, setOpenConsing] = useState(false);
+
+  const { user } = useAuth();
 
   const fetchEmpleados = async () => {
     try {
@@ -134,8 +137,8 @@ const Transfers = () => {
       </div>
 
       <div className="flex flex-col mt-2">
-        <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle md:px-4 lg:px-6 xl:px-8">
             <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-DarkSlate dark:bg-gray-800">
@@ -186,95 +189,102 @@ const Transfers = () => {
 
                 {filterEmpleados.length > 0 ? (
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    {filterEmpleados.map((empleado) => (
-                      <tr key={empleado.id_empleado}>
-                        <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <span># {empleado.id_empleado}</span>
-                          </div>
-                        </td>
-                        <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <div className="flex items-center gap-x-2">
-                              <img
-                                className="object-cover w-10 h-10 rounded-full"
-                                // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                                src={userProfile}
-                                alt=""
-                              />
-                              <div>
-                                <h2 className="font-medium text-gray-800 dark:text-white">
-                                  {empleado.username}
-                                </h2>
-                                <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                  Cajeros
-                                </p>
+                    {filterEmpleados.map(
+                      (empleado) =>
+                        user.id_empleado !== empleado.id_empleado && (
+                          <tr key={empleado.id_empleado}>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span># {empleado.id_empleado}</span>
                               </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-3">
-                            <span>
-                              {formatSaldo(empleado.saldo_solicitado)}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                          <div className="w-full inline-flex justify-center items-center gap-x-4">
-                            <button
-                              className="flex justify-center items-center dark:bg-gray-800"
-                              onClick={() => openModal(empleado.id_empleado)}
-                            >
-                              {/* <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
+                            </td>
+                            <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <div className="flex items-center gap-x-2">
+                                  <img
+                                    className="object-cover w-10 h-10 rounded-full"
+                                    // src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                    src={userProfile}
+                                    alt=""
+                                  />
+                                  <div>
+                                    <h2 className="font-medium text-gray-800 dark:text-white">
+                                      {empleado.username}
+                                    </h2>
+                                    <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                      Cajeros
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span>
+                                  {formatSaldo(empleado.saldo_solicitado)}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-4">
+                                <button
+                                  className="flex justify-center items-center dark:bg-gray-800"
+                                  onClick={() =>
+                                    openModal(empleado.id_empleado)
+                                  }
+                                >
+                                  {/* <h2 className="text-md font-normal text-emerald-500 group-hover:text-white">
                               Transferir Saldo
                             </h2> */}
-                              <span className="text-gray-500 hover:text-emerald-600">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.6}
-                                  stroke="currentColor"
-                                  className="size-5"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                  />
-                                </svg>
-                              </span>
-                            </button>
+                                  <span className="text-gray-500 hover:text-emerald-600">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1.6}
+                                      stroke="currentColor"
+                                      className="size-5"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
 
-                            <button
-                              className="flex justify-center items-center dark:bg-gray-800"
-                              onClick={() => handleCancel(empleado)}
-                            >
-                              {/* <h2 className="text-md font-normal text-red-500 group-hover:text-white">
+                                {user.id_rol !== 3 && (
+                                  <button
+                                    className="flex justify-center items-center dark:bg-gray-800"
+                                    onClick={() => handleCancel(empleado)}
+                                  >
+                                    {/* <h2 className="text-md font-normal text-red-500 group-hover:text-white">
                               Cancelar Solicitud
                             </h2> */}
-                              <span className="text-gray-500 hover:text-red-600">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.6}
-                                  stroke="currentColor"
-                                  className="size-5"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                  />
-                                </svg>
-                              </span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                                    <span className="text-gray-500 hover:text-red-600">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.6}
+                                        stroke="currentColor"
+                                        className="size-5"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                    )}
                   </tbody>
                 ) : (
                   <>

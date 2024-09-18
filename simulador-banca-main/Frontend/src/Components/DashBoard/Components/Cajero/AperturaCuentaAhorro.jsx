@@ -29,7 +29,11 @@ const AperturaCuentaAhorro = () => {
   };
 
   useEffect(() => {
-    firstCosing();
+    const interval = setInterval(() => {
+      firstCosing();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
   return (
     <>
