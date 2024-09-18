@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { ModalBusqueda } from "./ModalBusqueda";
+import ModalMovimientoCliente from "./ModalMovimientoCliente";
 import { toast } from "react-toastify";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
-  const [accounts, setAccounts] = useState({}); // Manejo de múltiples clientes
+  const [accounts, setAccounts] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
-
   const [modalData, setModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showMovimientosModal, setShowMovimientosModal] = useState(false); // Estado para el modal de movimientos
+  const [idClienteDetails, setIdClienteDetails] = useState(null);
 
   const { user } = useAuth();
 
@@ -102,12 +104,18 @@ export const BusquedaC = () => {
       (item) => item?.ip_documento?.includes(searchTerm.trim()) ?? false
     ) || [];
 
-  console.log(accounts);
-
   // Función para abrir modal para actualizar los datos del cliente.
   const openUpdate = (id_cliente) => {
     setShowModal(true);
     setModalData(filteredData.find((data) => data.id_cliente === id_cliente));
+  };
+
+  const openMovimientos = (id_cliente) => {
+    const clienteDetails = dataUser.find(
+      (data) => data.id_cliente === id_cliente
+    );
+    setIdClienteDetails(clienteDetails); // Establecer los detalles del cliente
+    setShowMovimientosModal(true); // Abrir el modal de movimientos
   };
 
   useEffect(() => {
@@ -294,7 +302,7 @@ export const BusquedaC = () => {
                                   <div className="w-full inline-flex justify-center items-center gap-x-3">
                                     <button
                                       onClick={() =>
-                                        openUpdate(client.id_cliente)
+                                        openMovimientos(client.id_cliente)
                                       }
                                       className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
                                     >
@@ -324,6 +332,12 @@ export const BusquedaC = () => {
                   </table>
                 </div>
 
+                <ModalMovimientoCliente
+                  openMovimientos={showMovimientosModal}
+                  setOpenMovimientos={setShowMovimientosModal}
+                  idClienteDetails={idClienteDetails}
+                  setIdClienteDetails={setIdClienteDetails}
+                />
                 <ModalBusqueda
                   data={modalData}
                   showModal={showModal}
