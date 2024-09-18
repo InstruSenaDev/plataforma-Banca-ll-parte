@@ -19,9 +19,10 @@ const getAccount = async (req, res) => {
       dc.num_cuenta,
       dc.saldo,
       dc.estado,
-      dc.descripcion
+      tc.descripcion
       FROM cliente AS c
       JOIN detalle_cuenta AS dc ON c.id_cliente = dc.id_cliente
+      JOIN tipo_cuentas AS tc ON tc.id_tcuenta = dc.id_tcuenta
       JOIN formpersonnatural AS fpn ON c.id_formpn = fpn.id_formpn
       WHERE dc.num_cuenta = $1
     `;

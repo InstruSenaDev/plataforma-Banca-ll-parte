@@ -5,6 +5,7 @@ import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJur
 import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
 import { PrincipalPage } from "./Components/PrincipalPage";
 import userProfile from "../../assets/Img/Login/user.png";
+import Analytics from "../../assets/Img/UsoVario/Analytics.svg";
 import { No_Disponible } from "./Components/NoDisponible";
 import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
 import { CrearUsuario } from "./Components/Director/CrearUsuario";
@@ -25,6 +26,7 @@ import { ClientView } from "./Components/Cliente/ClientView";
 import { AllTarjets } from "./Components/Cliente/AllTarjets";
 import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
 import { Cancelación } from "./Components/Cajero/Cancelación";
+import Consignar from "./Components/Cajero/Consignar";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +36,7 @@ export const DashboardComponent = () => {
   const [userData, setUserData] = useState([]); // Variable de estado para almacenar el nombre de usuario
   const [data, setData] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownItem, setDropdownItem] = useState(false);
   const [contenidoSeleccionado, setContenidoSeleccionado] =
     useState("PrincipalPage");
 
@@ -62,10 +65,6 @@ export const DashboardComponent = () => {
           const data = await response.json();
           setUserData(data); // Almacenar los datos del usuario en el estado
           setData(userData.ip_primernombre);
-          console.log(userData);
-          const dataFetch = await response.json();
-          setUserData(dataFetch); // Almacenar los datos del usuario en el estado
-          setData(dataFetch[0]);
         }
       } catch (error) {
         console.error("Error al obtener información:", error);
@@ -111,13 +110,13 @@ export const DashboardComponent = () => {
   };
 
   const handlelogout = () => {
+    setDropdownItem(false);
     logout();
   };
 
   // console.log(userName);
   // console.log(userData);
   // console.log(user);
-  // console.log(data);
   // console.log({ contenidoSeleccionado });
 
   return (
@@ -467,7 +466,7 @@ export const DashboardComponent = () => {
                                 />
                               </svg>
 
-                              <span className="mx-1">Historial cuentas</span>
+                              <span className="mx-1">Historial Clientes</span>
                             </button>
 
                             <button
@@ -566,6 +565,31 @@ export const DashboardComponent = () => {
                                 </button>
                               </div>
                             )}
+
+                            <button
+                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                              onClick={() => {
+                                closeSidebar();
+                                handleBotonClick("Movimientos");
+                              }}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                                />
+                              </svg>
+
+                              <span className="mx-1">Movimientos</span>
+                            </button>
                           </>
                         )}
 
@@ -658,7 +682,7 @@ export const DashboardComponent = () => {
                       >
                         <img
                           className="w-1/1 mx-auto"
-                          src="/src/assets/Img/UsoVario/Analytics.svg"
+                          src={Analytics}
                           alt="sidebar illustrations"
                         />
                       </div>
@@ -708,11 +732,13 @@ export const DashboardComponent = () => {
                     </div>
 
                     {/* Botón para configuraciones */}
-                    <Dropdown
-                      arrowIcon={false}
-                      inline
-                      label={
-                        <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
+                    <div className="relative inline-block">
+                      {/* Dropdown toggle button */}
+                      <button
+                        className="relative z-10 flex items-center"
+                        onClick={() => setDropdownItem(!dropdownItem)}
+                      >
+                        <div className="flex flex-row items-center text-sm gap-x-3">
                           <div className="flex flex-col justify-end ps-8 my-0">
                             <p className="flex items-center justify-end text-sm font-semibold text-gray-700 dark:text-gray-200">
                               {user?.username}
@@ -738,35 +764,41 @@ export const DashboardComponent = () => {
                             </div>
                           </div>
                         </div>
-                      }
-                    >
-                      <Dropdown.Header>
-                        <span className="block text-sm">{user?.username}</span>
+                      </button>
 
-                        <span className="block truncate text-sm font-medium">
-                          {user?.username}@clarkbank.com
-                        </span>
-                      </Dropdown.Header>
-                      <Dropdown.Item>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.4}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                          />
-                        </svg>
-                        <p className="ml-2" onClick={handlelogout}>
-                          Cerrar Sesión
-                        </p>
-                      </Dropdown.Item>
-                    </Dropdown>
+                      {/* Dropdown menu */}
+                      {dropdownItem && (
+                        <div className="absolute right-0 mt-2 z-10 divide-y divide-gray-100 rounded shadow focus:outline-none transition-opacity duration-100 border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white w-max">
+                          <div className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                            <p className="block text-sm">{user?.username}</p>
+                            <p className="block truncate text-sm font-medium">
+                              {user?.username}@clarkbank.com
+                            </p>
+                          </div>
+
+                          <button
+                            className="flex w-full items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white"
+                            onClick={handlelogout}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.4}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                              />
+                            </svg>
+                            <p className="ml-2">Cerrar Sesión</p>
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </header>
@@ -806,6 +838,8 @@ export const DashboardComponent = () => {
                   {contenidoSeleccionado === "Boveda" && <Boveda />}
                   {contenidoSeleccionado === "Transfers" && <Transfers />}
                   {contenidoSeleccionado === "Cancelación" && <Cancelación />}
+                  {contenidoSeleccionado === "Consignar" && <Consignar />}
+
                   {contenidoSeleccionado === "AperturaCuentaAhorro" && (
                     <AperturaCuentaAhorro />
                   )}
@@ -1002,17 +1036,21 @@ export const DashboardComponent = () => {
                     </div>
 
                     {/* Botón para configuraciones */}
-                    <Dropdown
-                      arrowIcon={false}
-                      inline
-                      label={
-                        <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
+                    <div className="relative inline-block">
+                      {/* Dropdown toggle button */}
+                      <button
+                        className="relative z-10 flex items-center"
+                        onClick={() => setDropdownItem(!dropdownItem)}
+                      >
+                        <div className="flex flex-row items-center text-sm gap-x-3">
                           <div className="flex flex-col justify-end ps-8 my-0">
                             <p className="flex items-center justify-end text-sm font-semibold text-gray-700 dark:text-gray-200">
-                              {data?.nombre}
+                              {userData[0]?.nombre}
                             </p>
                             <p className="flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
-                              {data?.ip_tipodoc + " " + data?.documento}
+                              {userData[0]?.ip_tipodoc +
+                                " " +
+                                userData[0]?.documento}
                             </p>
                           </div>
                           <div className="flex items-center gap-x-6">
@@ -1027,41 +1065,49 @@ export const DashboardComponent = () => {
                             </div>
                           </div>
                         </div>
-                      }
-                    >
-                      <Dropdown.Header>
-                        <span className="block text-sm">
-                          {data?.nombre +
-                            " " +
-                            data?.ip_primerapellido +
-                            " " +
-                            data?.ip_segundoapellido}
-                        </span>
+                      </button>
 
-                        <span className="block truncate text-sm font-medium">
-                          {data?.ip_tipodoc + " " + data?.documento}
-                        </span>
-                      </Dropdown.Header>
-                      <Dropdown.Item>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.4}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                          />
-                        </svg>
-                        <p className="ml-2" onClick={handlelogout}>
-                          Cerrar Sesión
-                        </p>
-                      </Dropdown.Item>
-                    </Dropdown>
+                      {/* Dropdown menu */}
+                      {dropdownItem && (
+                        <div className="absolute right-0 mt-2 z-10 divide-y divide-gray-100 rounded shadow focus:outline-none transition-opacity duration-100 border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white w-max">
+                          <div className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                            <p className="block text-sm">
+                              {userData[0]?.nombre +
+                                " " +
+                                userData[0]?.ip_primerapellido +
+                                " " +
+                                userData[0]?.ip_segundoapellido}
+                            </p>
+                            <p className="block truncate text-sm font-medium">
+                              {userData[0]?.ip_tipodoc +
+                                " " +
+                                userData[0]?.documento}
+                            </p>
+                          </div>
+
+                          <button
+                            className="flex w-full items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white"
+                            onClick={handlelogout}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.4}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                              />
+                            </svg>
+                            <p className="ml-2">Cerrar Sesión</p>
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </header>
@@ -1106,89 +1152,6 @@ export const DashboardComponent = () => {
               </main>
             </div>
           </div>
-          {/* <section className="w-screen h-screen  flex justify-center items-center flex-col">
-            <header>
-              <span className="text-3xl font-bold">Módulo Cliente</span>
-            </header>
-            <main className="h-3/4 w-full bg-white flex justify-center items-center">
-              Lado principal
-              <div
-                className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${
-                  flipped ? "flip" : ""
-                }`}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <div
-                  className={`h-1/3 flex items-end ${flipped ? "hidden" : ""}`}
-                >
-                  <img className="pl-4" src={ChipCard} alt="" />
-                  <img className="text-stone-300" src={""} alt="" />
-                </div>
-                <div
-                  className={`h-2/3 flex justify-end items-end ${
-                    flipped ? "hidden" : ""
-                  }`}
-                >
-                  <img className="w-36 py-5" src={Namelogo} alt="" />
-                  <img className="h-32" src={Logo} alt="" />
-                </div>
-                <div
-                  className={`h-12 mt-8 bg-emerald-700 ${
-                    flipped ? "" : "hidden"
-                  }`}
-                >
-                  Contenido en el reverso de la tarjeta
-                  <div className="flip-content">
-                    <div
-                      className={`text-gray-800 pt-16 flex justify-center text-4xl `}
-                    >
-                      <p>${userData[0].saldo}</p>
-                    </div>
-                    <div
-                      className={`text-gray-800 mt-24 flex flex-col justify-end items-end px-2 `}
-                    >
-                      <p>{userData[0].descripcion}</p>
-                      <p>{userData[0].num_cuenta}</p>
-                      <p className="text-lg">
-                        {userData[0].ip_primernombre}{" "}
-                        {userData.ip_primerapellido}{" "}
-                        {userData[0].ip_primernombre}{" "}
-                        {userData.ip_primerapellido}{" "}
-                        {userData[0].ip_segundoapellido}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </main>
-
-            <div>
-              <Dropdown
-                arrowIcon={false}
-                inline
-                label={
-                  <div className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
-                    {" "}
-                    <p className=" flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 ">
-                      {user?.username} - {user?.id_rol == 2 && <> Asesor </>}
-                      {user?.id_rol == 1 && <> Director </>}{" "}
-                    </p>
-                    <HiUserCircle color="gray" className="w-16 h-10 " />{" "}
-                  </div>
-                }
-              >
-                <Dropdown.Header>
-                  <span className="block text-sm">{user?.username}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {user?.username}@ClarBank.com
-                  </span>
-                </Dropdown.Header>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handlelogout}>Salir</Dropdown.Item>
-              </Dropdown>
-            </div>
-          </section> */}
         </>
       )}
     </>
