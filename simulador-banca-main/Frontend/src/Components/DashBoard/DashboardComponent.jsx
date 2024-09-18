@@ -25,9 +25,8 @@ import AperturaCuentaAhorro from "./Components/Cajero/AperturaCuentaAhorro";
 import { ClientView } from "./Components/Cliente/ClientView";
 import { AllTarjets } from "./Components/Cliente/AllTarjets";
 import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
-import  { Cancelación } from "./Components/Cajero/Cancelación";
-import   Consignar  from "./Components/Cajero/Consignar";
-
+import { Cancelación } from "./Components/Cajero/Cancelación";
+import Consignar from "./Components/Cajero/Consignar";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -394,20 +393,37 @@ export const DashboardComponent = () => {
 
                               <span className="mx-1">Cuenta de Ahorros</span>
                               <button onClick={toggleDropdown}>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="size-4"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                                  />
-                                </svg>
+                                {isOpen ? (
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-4"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                                    />
+                                  </svg>
+                                ) : (
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-4"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                                    />
+                                  </svg>
+                                )}
                               </button>
                             </div>
                             {isOpen && (
@@ -547,12 +563,10 @@ export const DashboardComponent = () => {
                                     Cancelación C. Ahorros
                                   </span>
                                 </button>
-
                               </div>
-                              
                             )}
 
-<button
+                            <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
                                 closeSidebar();
@@ -823,8 +837,8 @@ export const DashboardComponent = () => {
                   )}
                   {contenidoSeleccionado === "Boveda" && <Boveda />}
                   {contenidoSeleccionado === "Transfers" && <Transfers />}
-                  {contenidoSeleccionado === "Cancelación" && <Cancelación/>}
-                  {contenidoSeleccionado === "Consignar" && <Consignar/>}
+                  {contenidoSeleccionado === "Cancelación" && <Cancelación />}
+                  {contenidoSeleccionado === "Consignar" && <Consignar />}
 
                   {contenidoSeleccionado === "AperturaCuentaAhorro" && (
                     <AperturaCuentaAhorro />

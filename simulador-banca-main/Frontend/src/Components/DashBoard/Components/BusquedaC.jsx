@@ -3,6 +3,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { BusquedaInfoC } from "./BusquedaInfoC";
 import { dateFormatter } from "../../../utils/dateFormatter";
+import { saldoFormatter } from "../../../utils/saldoFormatter";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
@@ -170,7 +171,13 @@ export const BusquedaC = () => {
               </div>
 
               <div className="flex flex-col">
-                <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div>
+                  <h1 className="text-lg font-medium text-gray-800 dark:text-white">
+                    Productos Bancarios
+                  </h1>
+                </div>
+
+                <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 mt-2">
                   <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                     <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -182,7 +189,7 @@ export const BusquedaC = () => {
                             >
                               <div className="flex justify-center items-center gap-x-3">
                                 <button>
-                                  <span>N° Documento</span>
+                                  <span>N° Cuenta</span>
                                 </button>
                               </div>
                             </th>
@@ -193,7 +200,7 @@ export const BusquedaC = () => {
                             >
                               <div className="flex justify-center items-center gap-x-3">
                                 <button>
-                                  <span>Nombre Cliente</span>
+                                  <span>Tipo de cuenta</span>
                                 </button>
                               </div>
                             </th>
@@ -204,7 +211,7 @@ export const BusquedaC = () => {
                             >
                               <div className="flex justify-center items-center gap-x-3">
                                 <button>
-                                  <span>Productos bancarios</span>
+                                  <span>Saldo</span>
                                 </button>
                               </div>
                             </th>
@@ -233,18 +240,7 @@ export const BusquedaC = () => {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                          {searchTerm === "" ? (
-                            <tr>
-                              <td
-                                colSpan="5"
-                                className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 text-center"
-                              >
-                                <span>
-                                  Por favor, ingrese un término de búsqueda.
-                                </span>
-                              </td>
-                            </tr>
-                          ) : filteredData.length === 0 ? (
+                          {filteredData.length === 0 ? (
                             <tr>
                               <td
                                 colSpan="5"
@@ -262,37 +258,34 @@ export const BusquedaC = () => {
                                 (acount) => acount.estado === "Autorizado"
                               );
 
-                              const totalAccounts = filterAccounts.length;
-
-                              const creationDate =
-                                clientAccounts.length > 0
-                                  ? dateFormatter(clientAccounts[0].fecha)
-                                  : "No disponible";
-
-                              return (
-                                <React.Fragment key={client.id_cliente}>
+                              return filterAccounts.map((account) => (
+                                <React.Fragment key={account.num_cuenta}>
                                   <tr>
                                     <td className="px-4 py-4 text-sm font-medium text-black dark:text-gray-200 whitespace-nowrap">
                                       <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                        <span>{client.ip_documento}</span>
+                                        <span>{account.num_cuenta}</span>
                                       </div>
                                     </td>
 
                                     <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                       <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                        <span>{client.nombre}</span>
+                                        <span>{account.descripcion}</span>
                                       </div>
                                     </td>
 
                                     <td className="px-4 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">
                                       <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                        <span>{totalAccounts}</span>
+                                        <span>
+                                          {saldoFormatter(account.saldo)}
+                                        </span>
                                       </div>
                                     </td>
 
                                     <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                       <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                        <span>{creationDate}</span>
+                                        <span>
+                                          {dateFormatter(account.fecha)}
+                                        </span>
                                       </div>
                                     </td>
 
@@ -315,29 +308,7 @@ export const BusquedaC = () => {
                                             <path
                                               strokeLinecap="round"
                                               strokeLinejoin="round"
-                                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                            />
-                                          </svg>
-                                        </button>
-
-                                        <button
-                                          onClick={() =>
-                                            openAccount(client.id_cliente)
-                                          }
-                                          className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="size-5"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                                             />
                                           </svg>
                                         </button>
@@ -345,13 +316,37 @@ export const BusquedaC = () => {
                                     </td>
                                   </tr>
                                 </React.Fragment>
-                              );
+                              ));
                             })
                           )}
                         </tbody>
                       </table>
                     </div>
                   </div>
+                </div>
+
+                <div className="flex justify-end items-center mt-4">
+                  <button
+                    type="submit"
+                    className="flex justify-center items-center gap-x-2 bg-emerald-600 text-white text-sm py-2 px-4 rounded hover:"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+
+                    <p>Agregar Producto</p>
+                  </button>
                 </div>
               </div>
             </>
