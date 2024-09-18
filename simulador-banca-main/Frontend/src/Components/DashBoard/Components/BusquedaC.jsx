@@ -4,11 +4,14 @@ import { toast } from "react-toastify";
 import { BusquedaInfoC } from "./BusquedaInfoC";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import { saldoFormatter } from "../../../utils/saldoFormatter";
+import { ModalCreateAccount } from "./ModalCreateAccount";
 
 export const BusquedaC = () => {
   const [dataUser, setDataUser] = useState([]);
   const [accounts, setAccounts] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [openModal, setOpenModal] = useState(false);
 
   const { user } = useAuth();
 
@@ -51,33 +54,9 @@ export const BusquedaC = () => {
     setSearchTerm(term);
   };
 
-  // const openAccount = async (id_cliente) => {
-  //   const id_empleado = user.id_empleado;
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:3000/create_account/${id_cliente}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           idEmpleado: id_empleado,
-  //           tipoCuenta: 1,
-  //         }),
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     toast.success("Cuenta de ahorros creada correctamente.");
-  //     setTimeout(() => {
-  //       window.location = "/DashBoardMenu";
-  //     }, 1500);
-  //   } catch (error) {
-  //     console.error("Error general:", error);
-  //   }
-  // };
+  const handleModal = () => {
+    setOpenModal(true);
+  };
 
   // Filtrar cliente y sus cuentas según la búsqueda por documento.
   const filteredData =
@@ -295,7 +274,7 @@ export const BusquedaC = () => {
                                           onClick={() =>
                                             openUpdate(client.id_cliente)
                                           }
-                                          className="text-gray-500 transition-colors duration-200 hover:text-amber-500 focus:outline-none"
+                                          className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
                                         >
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -327,8 +306,8 @@ export const BusquedaC = () => {
 
                 <div className="flex justify-end items-center mt-4">
                   <button
-                    type="submit"
                     className="flex justify-center items-center gap-x-2 bg-emerald-600 text-white text-sm py-2 px-4 rounded hover:"
+                    onClick={() => handleModal()}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -352,6 +331,13 @@ export const BusquedaC = () => {
             </>
           )}
         </div>
+
+        <ModalCreateAccount
+          data={filteredData[0]}
+          user={user}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
       </section>
     </>
   );
