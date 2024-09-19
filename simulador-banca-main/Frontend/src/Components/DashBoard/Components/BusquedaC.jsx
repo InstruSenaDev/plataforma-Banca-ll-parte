@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
-
 import ModalMovimientoCliente from "./ModalMovimientoCliente";
 import { toast } from "react-toastify";
 import { BusquedaInfoC } from "./BusquedaInfoC";
@@ -286,7 +285,7 @@ export const BusquedaC = () => {
                                       <div className="w-full inline-flex justify-center items-center gap-x-3">
                                         <button
                                           onClick={() =>
-                                            openUpdate(client.id_cliente)
+                                            openMovimientos(client.id_cliente)
                                           }
                                           className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
                                         >
@@ -346,6 +345,12 @@ export const BusquedaC = () => {
           )}
         </div>
 
+        <ModalMovimientoCliente
+                  openMovimientos={showMovimientosModal}
+                  setOpenMovimientos={setShowMovimientosModal}
+                  idClienteDetails={idClienteDetails}
+                  setIdClienteDetails={setIdClienteDetails}
+                />
         <ModalCreateAccount
           data={filteredData[0]}
           user={user}
