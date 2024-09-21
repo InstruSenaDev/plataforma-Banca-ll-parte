@@ -14,7 +14,7 @@ export const BusquedaC = () => {
   const [modalData, setModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showMovimientosModal, setShowMovimientosModal] = useState(false); // Estado para el modal de movimientos
-  const [idClienteDetails, setIdClienteDetails] = useState(null);
+  const [idDetails, setIdDetails] = useState("");
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -77,11 +77,13 @@ export const BusquedaC = () => {
       );
     }) || [];
 
-  const openMovimientos = (id_cliente) => {
-    const clienteDetails = dataUser.find(
-      (data) => data.id_cliente === id_cliente
-    );
-    setIdClienteDetails(clienteDetails); // Establecer los detalles del cliente
+  const openMovimientos = (id_detalle) => {
+    // const clienteDetails = dataUser.find(
+    //   (data) => data.id_cliente === id_cliente
+    // );
+
+    const idDetalle = id_detalle;
+    setIdDetails(idDetalle); // Establecer los detalles del cliente
     setShowMovimientosModal(true); // Abrir el modal de movimientos
   };
 
@@ -285,7 +287,7 @@ export const BusquedaC = () => {
                                       <div className="w-full inline-flex justify-center items-center gap-x-3">
                                         <button
                                           onClick={() =>
-                                            openMovimientos(client.id_cliente)
+                                            openMovimientos(account.id_detalle)
                                           }
                                           className="text-gray-500 transition-colors duration-200 hover:text-emerald-500 focus:outline-none"
                                         >
@@ -346,11 +348,11 @@ export const BusquedaC = () => {
         </div>
 
         <ModalMovimientoCliente
-                  openMovimientos={showMovimientosModal}
-                  setOpenMovimientos={setShowMovimientosModal}
-                  idClienteDetails={idClienteDetails}
-                  setIdClienteDetails={setIdClienteDetails}
-                />
+          openMovimientos={showMovimientosModal}
+          setOpenMovimientos={setShowMovimientosModal}
+          idDetails={idDetails}
+          setIdDetails={setIdDetails}
+        />
         <ModalCreateAccount
           data={filteredData[0]}
           user={user}
