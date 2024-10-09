@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Modal } from "flowbite-react";
 
 export const BusquedaInfoC = ({ data }) => {
   const {
@@ -12,6 +13,8 @@ export const BusquedaInfoC = ({ data }) => {
 
   // Estado para guardar los datos iniciales
   const [initialData, setInitialData] = useState(null);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [formData, setFormData] = useState(initialData);
 
   useEffect(() => {
     // Verifica si usuario tiene valores y accede al primer data
@@ -92,35 +95,40 @@ export const BusquedaInfoC = ({ data }) => {
     }
   }, [data, setValue]);
 
-  const onSubmit = async (formData) => {
-    // Compara los datos del formulario con los datos iniciales
-    const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
-
+  const onSubmit = async (data) => {
+    const isModified = JSON.stringify(data) !== JSON.stringify(initialData);
     if (isModified) {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/update_client/${data[0].id_cliente}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Error al actualizar el cliente");
-        }
-        const result = await response.json();
-        toast.success("Información del cliente actualizada correctamente.");
-        setTimeout(() => {
-          window.location = "/DashBoardMenu";
-        }, 1500);
-      } catch (error) {
-        console.error("Error al actualizar el cliente", error);
-      }
+      setFormData(data); // Almacena formData en el estado
+      setOpenConfirmModal(true); // Abre el modal
     } else {
       toast.info("No se han realizado cambios en el formulario.");
+    }
+  };
+  // Lógica para manejar la confirmación en el modal
+  const handleConfirmUpdate = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/update_client/${data[0].id_cliente}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData), // Usa el estado formData aquí
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al actualizar el cliente");
+      }
+      toast.success("Información del cliente actualizada correctamente.");
+      setTimeout(() => {
+        window.location = "/DashBoardMenu";
+      }, 1500);
+    } catch (error) {
+      console.error("Error al actualizar el cliente", error);
+      toast.error("Error al actualizar el cliente");
+    } finally {
+      setOpenConfirmModal(false); // Cierra el modal después de la actualización
     }
   };
 
@@ -1406,7 +1414,7 @@ export const BusquedaInfoC = ({ data }) => {
         <div className="flex justify-end items-center">
           <button
             type="submit"
-            className="flex justify-center items-center gap-x-2 bg-emerald-600 text-white text-sm py-2 px-4 rounded hover:"
+            className="flex justify-center items-center gap-x-2 bg-emerald-600 text-white text-sm py-2 px-4 rounded hover:bg-emerald-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1422,9 +1430,40 @@ export const BusquedaInfoC = ({ data }) => {
                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
               />
             </svg>
-
             <p>Actualizar Información</p>
           </button>
+          <Modal
+            className="fixed inset-0 flex items-center justify-center z-50"
+            show={openConfirmModal}
+            size="md"
+            onClose={() => setOpenConfirmModal(false)}
+            popup
+          >
+            <Modal.Header>
+              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                Confirmación de Actualización
+              </span>
+            </Modal.Header>
+            <Modal.Body className="flex flex-col items-center justify-center px-5 pt-2 pb-5">
+              <p className="text-gray-700 dark:text-white text-center">
+                ¿Estás seguro de que deseas actualizar la información?
+              </p>
+              <div className="flex justify-between w-full mt-4">
+                <button
+                  onClick={handleConfirmUpdate}
+                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+                >
+                  Aceptar
+                </button>
+                <button
+                  onClick={() => setOpenConfirmModal(false)}
+                  className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </Modal.Body>
+          </Modal>
         </div>
       </form>
     </>

@@ -21,6 +21,8 @@ export const Movimientos = () => {
   const [amount, setAmount] = useState("");
   const [isAccountNumberFilled, setIsAccountNumberFilled] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [openConfirmModal1, setOpenConfirmModal1] = useState(false);
 
   // Abrir Modal
   const [openModal, setOpenModal] = useState(false);
@@ -607,7 +609,7 @@ export const Movimientos = () => {
                 </div>
               </Button>
               <Modal
-                className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
                 show={openModal}
                 size="md"
                 onClose={onCloseModal}
@@ -703,7 +705,9 @@ export const Movimientos = () => {
                     </div>
                     <div className="w-full">
                       <button
-                        onClick={() => handleConsign(dataUser)}
+                        onClick={() => {
+                          setOpenConfirmModal(true);
+                        }}
                         className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
                           isFormDisabled || !isAccountNumberFilled
                             ? "opacity-50 cursor-not-allowed"
@@ -713,6 +717,44 @@ export const Movimientos = () => {
                       >
                         Enviar
                       </button>
+                      <Modal
+                        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                        show={openConfirmModal}
+                        size="md"
+                        onClose={() => setOpenConfirmModal(false)}
+                        popup
+                      >
+                        <Modal.Header>
+                          <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                            Confirmar Consignación
+                          </span>
+                        </Modal.Header>
+                        <Modal.Body className="px-5 pt-2 pb-5">
+                          <div className="space-y-6">
+                            <p className="text-gray-700 dark:text-white">
+                              ¿Estás seguro de que deseas consignar {amount} a
+                              la cuenta {accountNumber}?
+                            </p>
+                            <div className="flex justify-between">
+                              <button
+                                onClick={() => {
+                                  handleConsign(dataUser); // Call the actual function to process the deposit
+                                  setOpenConfirmModal(false); // Close the confirmation modal
+                                }}
+                                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+                              >
+                                Aceptar
+                              </button>
+                              <button
+                                onClick={() => setOpenConfirmModal(false)}
+                                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                              >
+                                Cancelar
+                              </button>
+                            </div>
+                          </div>
+                        </Modal.Body>
+                      </Modal>
                     </div>
                   </div>
                 </Modal.Body>
@@ -862,7 +904,7 @@ export const Movimientos = () => {
                     </div>
                     <div className="w-full">
                       <button
-                        onClick={() => handleRetirar(dataUser)}
+                        onClick={() => setOpenConfirmModal1(true)}
                         className={`w-full bg-red-600 hover:bg-red-600 hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all ${
                           isFormDisabled || !isAccountNumberFilled
                             ? "opacity-50 cursor-not-allowed"
@@ -872,6 +914,46 @@ export const Movimientos = () => {
                       >
                         Retirar
                       </button>
+
+                      {/* Confirmation Modal for Retirar */}
+                      <Modal
+                        className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                        show={openConfirmModal1}
+                        size="md"
+                        onClose={() => setOpenConfirmModal1(false)}
+                        popup
+                      >
+                        <Modal.Header>
+                          <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                            Confirmar Retiro
+                          </span>
+                        </Modal.Header>
+                        <Modal.Body className="px-5 pt-2 pb-5">
+                          <div className="space-y-6">
+                            <p className="text-gray-700 dark:text-white">
+                              ¿Estás seguro de que deseas retirar {amount} de la
+                              cuenta {accountNumber}?
+                            </p>
+                            <div className="flex justify-between">
+                              <button
+                                onClick={() => {
+                                  handleRetirar(dataUser);
+                                  setOpenConfirmModal1(false);
+                                }}
+                                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                              >
+                                Aceptar
+                              </button>
+                              <button
+                                onClick={() => setOpenConfirmModal1(false)}
+                                className="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600 transition duration-200"
+                              >
+                                Cancelar
+                              </button>
+                            </div>
+                          </div>
+                        </Modal.Body>
+                      </Modal>
                     </div>
                   </div>
                 </Modal.Body>

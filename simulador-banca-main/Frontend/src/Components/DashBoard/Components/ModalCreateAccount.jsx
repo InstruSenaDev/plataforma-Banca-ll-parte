@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { Modal } from "flowbite-react";
 
 export const ModalCreateAccount = ({ data, user, openModal, setOpenModal }) => {
   const [tipoCuenta, setTipoCuenta] = useState("");
-
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const { handleSubmit } = useForm();
 
-  const createAccount = async () => {
+  const handleCreateAccount = () => {
+    if (tipoCuenta) {
+      setOpenConfirmModal(true); // Abre el modal si tipoCuenta está lleno
+    } else {
+      toast.warning("Por favor, selecciona un tipo de cuenta.");
+    }
+  };
+
+  const handleConfirmUpdate = async () => {
     const id_cliente = data.id_cliente;
     const id_empleado = user.id_empleado;
 
@@ -25,28 +34,34 @@ export const ModalCreateAccount = ({ data, user, openModal, setOpenModal }) => {
           }),
         }
       );
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
       toast.success("Cuenta creada correctamente.");
-      setOpenModal(!openModal);
+      setOpenModal(false); // Cierra el modal principal
 
+      // Redirigir después de un pequeño retraso
       setTimeout(() => {
         window.location = "/DashBoardMenu";
       }, 1500);
     } catch (error) {
-      console.error("Error general:", error);
+      console.error("Error al crear la cuenta:", error);
+      toast.error("Error al crear la cuenta. Intenta nuevamente.");
+    } finally {
+      setOpenConfirmModal(false); // Cierra el modal de confirmación después de procesar
     }
   };
 
   const closeModal = () => {
     setOpenModal(!openModal);
   };
+
   return (
     <>
       {openModal && (
-        <form onSubmit={handleSubmit(createAccount)}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="fixed inset-0 flex items-center justify-center min-h-screen bg-black bg-opacity-50 z-50">
             <div className="rounded-lg bg-white shadow-sm w-full max-w-md p-4">
               <div className="flex flex-col justify-center items-center gap-y-6">
@@ -92,7 +107,8 @@ export const ModalCreateAccount = ({ data, user, openModal, setOpenModal }) => {
                 </div>
 
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleCreateAccount}
                   className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
                     tipoCuenta
                       ? "bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50"
@@ -105,6 +121,39 @@ export const ModalCreateAccount = ({ data, user, openModal, setOpenModal }) => {
               </div>
             </div>
           </div>
+
+          <Modal
+            className="fixed inset-0 flex items-center justify-center z-50"
+            show={openConfirmModal}
+            size="md"
+            onClose={() => setOpenConfirmModal(false)}
+            popup
+          >
+            <Modal.Header>
+              <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                Confirmación de Creación de Cuenta
+              </span>
+            </Modal.Header>
+            <Modal.Body className="flex flex-col items-center justify-center px-5 pt-2 pb-5">
+              <p className="text-gray-700 dark:text-white text-center">
+                ¿Estás seguro de que deseas crear una cuenta?
+              </p>
+              <div className="flex justify-between w-full mt-4">
+                <button
+                  onClick={handleConfirmUpdate}
+                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+                >
+                  Aceptar
+                </button>
+                <button
+                  onClick={() => setOpenConfirmModal(false)}
+                  className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </Modal.Body>
+          </Modal>
         </form>
       )}
     </>

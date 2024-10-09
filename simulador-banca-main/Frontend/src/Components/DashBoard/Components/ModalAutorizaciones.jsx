@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Modal } from "flowbite-react";
 
 export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
   const [descripcion, setDescripcion] = useState("");
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
   const handleDenegar = (id) => {
     try {
@@ -125,10 +127,50 @@ export const ModalAutorizaciones = ({ data, showModal, closeModal }) => {
               <div className="flex items-center pb-6">
                 <button
                   className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-red-600 hover:bg-red-700 h-10 px-6 py-2 ml-auto"
-                  onClick={() => handleDenegar(data.id_detalle)}
+                  onClick={() => {
+                    setOpenConfirmModal(true);
+                  }}
                 >
                   Denegar
                 </button>
+                <Modal
+  className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  show={openConfirmModal}
+  size="md"
+  onClose={() => setOpenConfirmModal(false)}
+  popup
+>
+  <Modal.Header>
+    <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+      Confirmación de Rechazo
+    </span>
+  </Modal.Header>
+  <Modal.Body className="flex flex-col items-center justify-center px-5 pt-2 pb-5">
+    <div className="space-y-6 text-center">
+      <p className="text-gray-700 dark:text-white">
+        ¿Estás seguro de que deseas rechazar esta cuenta {data?.num_cuenta}?
+      </p>
+      <div className="flex justify-between w-full">
+        <button
+          onClick={() => {
+            handleDenegar(data.id_detalle); // Llama a la función para procesar el rechazo
+            setOpenConfirmModal(false); // Cierra el modal de confirmación
+          }}
+          className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+        >
+          Aceptar
+        </button>
+        <button
+          onClick={() => setOpenConfirmModal(false)}
+          className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </Modal.Body>
+</Modal>
+
               </div>
             </div>
           </div>
