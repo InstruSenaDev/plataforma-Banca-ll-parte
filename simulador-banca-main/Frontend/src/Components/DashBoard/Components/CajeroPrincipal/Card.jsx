@@ -3,15 +3,18 @@ import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { ModalRetirar } from "./ModalRetirar";
 import { ModalDevolver } from "./ModalDevolver";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 const Card = () => {
+  const [empleadoDetails, setEmpleadoDetails] = useState([]);
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
+  const [saldoPrincipal, setSaldoPrincipal] = useState("");
   const [bovedaDetails, setBovedaDetails] = useState("");
+  const [saldoBoveda, setSaldoBoveda] = useState("");
+
   const [isVisible, setIsVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openModal1, setOpenModal1] = useState(false);
-
-  const [empleadoDetails, setEmpleadoDetails] = useState([]);
 
   //Login, user context
   const { user } = useAuth();
@@ -22,8 +25,7 @@ const Card = () => {
       0
     );
 
-    const sumaTotal =
-      sumaSaldosEmpleados + parseFloat(bovedaDetails.saldo_boveda);
+    const sumaTotal = sumaSaldosEmpleados + saldoBoveda;
 
     return sumaTotal;
   };
@@ -40,6 +42,9 @@ const Card = () => {
           (users) => users.id_rol === 4
         );
 
+        const saldoCajeroPrincipal = parseFloat(empleadoPrincipal[0].saldo);
+        setSaldoPrincipal(saldoCajeroPrincipal);
+
         return setIdEmpleadoDetails(empleadoPrincipal[0]);
       } else {
         console.error("Error fetching user info:", response.status);
@@ -53,30 +58,17 @@ const Card = () => {
   const fetchBoveda = async () => {
     try {
       const response = await fetch("http://localhost:3000/get_boveda");
+
       if (response.ok) {
         const data = await response.json();
-        setBovedaDetails(data);
+        const boveda = parseFloat(data.saldo_boveda);
+        setSaldoBoveda(boveda);
       } else {
         console.error("Error fetching data info:", response.status);
       }
     } catch (error) {
       console.error("Error fetching data info:", response.status);
     }
-  };
-
-  
-
-  // Función para formatear el costo a miles sin decimales.
-  const formatSaldo = (saldo) => {
-    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
-    const formatter = new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 2,
-    });
-
-    // Formatea el costo usando la configuración especificada.
-    return formatter.format(saldo);
   };
 
   // Función para manejar el clic del ícono del ojo
@@ -117,10 +109,10 @@ const Card = () => {
                 </svg>
               </div>
               <p className="text-sm font-semibold leading-normal uppercase text-white dark:opacity-60">
-                Saldo T. Cajero Principal
+                Saldo Cajero Principal
               </p>
               <h5 className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold text-white">
-                {formatSaldo(idEmpleadoDetails.saldo)}
+                {saldoFormatter(saldoPrincipal)}
               </h5>
             </div>
           </div>
@@ -149,7 +141,7 @@ const Card = () => {
             </p>
             <div className="flex items-center justify-between">
               <h5 className="text-xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold text-white">
-                {isVisible ? formatSaldo(bovedaDetails.saldo_boveda) : "****"}
+                {isVisible ? saldoFormatter(saldoBoveda) : "****"}
               </h5>
               <div className="text-white flex justify-center items-center">
                 <button onClick={toggleVisibility}>
@@ -219,7 +211,7 @@ const Card = () => {
                 Saldo de oficina
               </p>
               <h5 className="text-3xl sm:text-2xl xl:text-3xl font-bold text-white">
-                {formatSaldo(saldoOficina())}
+                {saldoFormatter(saldoOficina())}
               </h5>
             </div>
           </div>
@@ -269,7 +261,6 @@ const Card = () => {
                 </svg>
 
                 <span>Devolver a Bóveda</span>
-                
               </button>
             </div>
           </div>
@@ -277,9 +268,8 @@ const Card = () => {
       </div>
 
       <ModalRetirar openModal={openModal} setOpenModal={setOpenModal} />
-      
-      <ModalDevolver openModal1={openModal1} setOpenModal1={setOpenModal1} />
 
+      <ModalDevolver openModal1={openModal1} setOpenModal1={setOpenModal1} />
     </div>
   );
 };

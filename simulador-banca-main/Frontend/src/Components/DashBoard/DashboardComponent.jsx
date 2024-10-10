@@ -5,6 +5,7 @@ import { ContentCuentaAhorroJuridica } from "./Components/ContentCuentaAhorroJur
 import { ContentCuentaAhorroNatural } from "./Components/ContentCuentaAhorroNatural/ContentCuentaAhorroNatural";
 import { PrincipalPage } from "./Components/PrincipalPage";
 import userProfile from "../../assets/Img/Login/user.png";
+import Analytics from "../../assets/Img/UsoVario/Analytics.svg";
 import { No_Disponible } from "./Components/NoDisponible";
 import { AutorizacionCuentas } from "./Components/Director/AutorizacionCuentas";
 import { CrearUsuario } from "./Components/Director/CrearUsuario";
@@ -24,9 +25,8 @@ import AperturaCuentaAhorro from "./Components/Cajero/AperturaCuentaAhorro";
 import { ClientView } from "./Components/Cliente/ClientView";
 import { AllTarjets } from "./Components/Cliente/AllTarjets";
 import { ClientMovimientos } from "./Components/Cliente/ClientMovimientos";
-import  { Cancelación } from "./Components/Cajero/Cancelación";
-import   Consignar  from "./Components/Cajero/Consignar";
-
+import { Cancelacion } from "./Components/Cajero/Cancelacion";
+import Consignar from "./Components/Cajero/Consignar";
 
 export const DashboardComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +36,7 @@ export const DashboardComponent = () => {
   const [userData, setUserData] = useState([]); // Variable de estado para almacenar el nombre de usuario
   const [data, setData] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownItem, setDropdownItem] = useState(false);
   const [contenidoSeleccionado, setContenidoSeleccionado] =
     useState("PrincipalPage");
 
@@ -56,7 +57,7 @@ export const DashboardComponent = () => {
         // Verificar que se haya almacenado el nombre de usuario en el estado
         if (userName) {
           const response = await fetch(
-            `http://localhost:3000/get_client/${userName}`
+            `https://plataforma-bancaria.onrender.com/get_client/${userName}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -64,10 +65,6 @@ export const DashboardComponent = () => {
           const data = await response.json();
           setUserData(data); // Almacenar los datos del usuario en el estado
           setData(userData.ip_primernombre);
-          console.log(userData);
-          const dataFetch = await response.json();
-          setUserData(dataFetch); // Almacenar los datos del usuario en el estado
-          setData(dataFetch[0]);
         }
       } catch (error) {
         console.error("Error al obtener información:", error);
@@ -113,13 +110,13 @@ export const DashboardComponent = () => {
   };
 
   const handlelogout = () => {
+    setDropdownItem(false);
     logout();
   };
 
   // console.log(userName);
   // console.log(userData);
   // console.log(user);
-  // console.log(data);
   // console.log({ contenidoSeleccionado });
 
   return (
@@ -305,26 +302,44 @@ export const DashboardComponent = () => {
                             </button>
 
                             <button
-                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                              className="flex justify-between items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={toggleDropdown}
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-5 xl:size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-                                />
-                              </svg>
+                              <div className="flex ">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-5 xl:size-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+                                  />
+                                </svg>
 
-                              <span className="mx-1">Historial cuentas</span>
-                              <button onClick={toggleDropdown}>
+                                <span className="mx-2">Historial cuentas</span>
+                              </div>
+
+                              {isOpen ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                                  />
+                                </svg>
+                              ) : (
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
@@ -339,32 +354,38 @@ export const DashboardComponent = () => {
                                     d="m19.5 8.25-7.5 7.5-7.5-7.5"
                                   />
                                 </svg>
-                              </button>
+                              )}
                             </button>
+
                             {isOpen && (
-                              <div className="mt-2 space-y-2 ">
-                                <button
-                                  className="flex items-center ml-10 px-2 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x- xl:text-sm 2xl:text-base"
-                                  onClick={() => {
-                                    closeSidebar();
-                                    handleBotonClick("Historial");
-                                  }}
-                                >
-                                  <span className="mx-1 text-center px-7 ">
-                                    Cuentas Aceptadas
-                                  </span>
-                                </button>
-                                <button
-                                  className="flex items-center ml-10 px-1 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 xl:text-sm 2xl:text-base"
-                                  onClick={() => {
-                                    closeSidebar();
-                                    handleBotonClick("HistorialD");
-                                  }}
-                                >
-                                  <span className="mx-1 text-center px-7">
-                                    Cuentas Denegadas
-                                  </span>
-                                </button>
+                              <div className="pl-7 relative overflow-hidden transform transition-transform duration-100 ease-in-out origin-top ">
+                                <div className="absolute left-6 top-0 bottom-0 w-px bg-gray-300" />
+
+                                <div className="flex flex-col justify-center items-center gap-y-1">
+                                  <button
+                                    className="flex items-center px-2 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x- xl:text-sm 2xl:text-base"
+                                    onClick={() => {
+                                      closeSidebar();
+                                      handleBotonClick("Historial");
+                                    }}
+                                  >
+                                    <span className="mx-1 text-center px-7 ">
+                                      Cuentas Aceptadas
+                                    </span>
+                                  </button>
+
+                                  <button
+                                    className="flex items-center px-1 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 xl:text-sm 2xl:text-base"
+                                    onClick={() => {
+                                      closeSidebar();
+                                      handleBotonClick("HistorialD");
+                                    }}
+                                  >
+                                    <span className="mx-1 text-center px-7">
+                                      Cuentas Denegadas
+                                    </span>
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </>
@@ -375,27 +396,45 @@ export const DashboardComponent = () => {
                           <>
                             {/* Dropdown */}
 
-                            <div
-                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                            <button
+                              className="flex justify-between items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={toggleDropdown}
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-5 xl:size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-                                />
-                              </svg>
+                              <div className="flex flex-row justify-center items-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-5 xl:size-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+                                  />
+                                </svg>
 
-                              <span className="mx-1">Cuenta de Ahorros</span>
-                              <button onClick={toggleDropdown}>
+                                <span className="mx-1">Cuenta de Ahorros</span>
+                              </div>
+
+                              {isOpen ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                                  />
+                                </svg>
+                              ) : (
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
@@ -410,23 +449,27 @@ export const DashboardComponent = () => {
                                     d="m19.5 8.25-7.5 7.5-7.5-7.5"
                                   />
                                 </svg>
-                              </button>
-                            </div>
+                              )}
+                            </button>
                             {isOpen && (
-                              <div className="mt-2 space-y-2 ">
-                                <button
-                                  className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                                  onClick={() => {
-                                    closeSidebar();
-                                    handleBotonClick(
-                                      "FormularioPersonaNatural"
-                                    );
-                                  }}
-                                >
-                                  <span className="mx-1 text-center px-10">
-                                    Natural
-                                  </span>
-                                </button>
+                              <div className="pl-7 relative overflow-hidden transform transition-transform duration-100 ease-in-out origin-top ">
+                                <div className="absolute left-6 top-0 bottom-0 w-px bg-gray-300" />
+
+                                <div className="flex flex-col justify-center items-center gap-y-1">
+                                  <button
+                                    className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100  hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                    onClick={() => {
+                                      closeSidebar();
+                                      handleBotonClick(
+                                        "FormularioPersonaNatural"
+                                      );
+                                    }}
+                                  >
+                                    <span className="mx-1 text-center px-10">
+                                      Natural
+                                    </span>
+                                  </button>
+                                </div>
                               </div>
                             )}
 
@@ -486,29 +529,47 @@ export const DashboardComponent = () => {
                         {user?.id_rol == 3 && (
                           <>
                             <button
-                              className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                              className="flex justify-between items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
                                 closeSidebar();
                                 toggleDropdown();
                               }}
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-5 xl:size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-                                />
-                              </svg>
+                              <div className="flex flex-row justify-center items-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-5 xl:size-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+                                  />
+                                </svg>
 
-                              <span className="mx-1">Cuenta de Ahorros</span>
-                              <button onClick={toggleDropdown}>
+                                <span className="mx-1">Cuenta de Ahorros</span>
+                              </div>
+
+                              {isOpen ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="size-4"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m4.5 15.75 7.5-7.5 7.5 7.5"
+                                  />
+                                </svg>
+                              ) : (
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
@@ -523,42 +584,46 @@ export const DashboardComponent = () => {
                                     d="m19.5 8.25-7.5 7.5-7.5-7.5"
                                   />
                                 </svg>
-                              </button>
+                              )}
                             </button>
-                            {isOpen && (
-                              <div className="mt-2 space-y-2 ">
-                                <button
-                                  className="flex items-center justify-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                                  onClick={() => {
-                                    closeSidebar();
-                                    handleBotonClick("AperturaCuentaAhorro");
-                                  }}
-                                >
-                                  <span className="mx-1 text-center text-sm ">
-                                    Apertura C. Ahorros
-                                  </span>
-                                </button>
-                                <button
-                                  className="flex items-start justify-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
-                                  onClick={() => {
-                                    closeSidebar();
-                                    handleBotonClick("Cancelación");
-                                  }}
-                                >
-                                  <span className="mx-1 text-center text-sm ">
-                                    Cancelación C. Ahorros
-                                  </span>
-                                </button>
 
+                            {isOpen && (
+                              <div className="pl-7 relative overflow-hidden transform transition-transform duration-100 ease-in-out origin-top ">
+                                <div className="absolute left-6 top-0 bottom-0 w-px bg-gray-300" />
+
+                                <div className="flex flex-col justify-center items-center gap-y-1">
+                                  <button
+                                    className="flex items-center justify-start px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                    onClick={() => {
+                                      closeSidebar();
+                                      handleBotonClick("AperturaCuentaAhorro");
+                                    }}
+                                  >
+                                    <span className="mx-1 text-center text-sm">
+                                      Apertura cuenta ahorros
+                                    </span>
+                                  </button>
+
+                                  <button
+                                    className="flex items-center justify-start px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-gray-100 hover:text-bg-darkGray focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
+                                    onClick={() => {
+                                      closeSidebar();
+                                      handleBotonClick("Cancelacion");
+                                    }}
+                                  >
+                                    <span className="mx-1 text-center text-sm">
+                                      Cancelación cuenta ahorros
+                                    </span>
+                                  </button>
+                                </div>
                               </div>
-                              
                             )}
 
-<button
+                            <button
                               className="flex items-center px-4 py-2 font-medium tracking-wide text-darkGray capitalize transition-colors duration-300 transform bg-transparent rounded-md hover:bg-darkGray hover:text-white focus:outline-none space-x-2 w-full xl:text-sm 2xl:text-base"
                               onClick={() => {
                                 closeSidebar();
-                                handleBotonClick("Consignar");
+                                handleBotonClick("Movimientos");
                               }}
                             >
                               <svg
@@ -576,7 +641,7 @@ export const DashboardComponent = () => {
                                 />
                               </svg>
 
-                              <span className="mx-1">Consignar</span>
+                              <span className="mx-1">Movimientos</span>
                             </button>
                           </>
                         )}
@@ -662,19 +727,6 @@ export const DashboardComponent = () => {
                       </ul>
                       <hr className="border-gray-200 dark:border-gray-700 mt-6" />
                     </div>
-
-                    <div className="mx-4">
-                      <div
-                        className="relative flex flex-col min-w-0 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border"
-                        sidenav-card="true"
-                      >
-                        <img
-                          className="w-1/1 mx-auto"
-                          src="/src/assets/Img/UsoVario/Analytics.svg"
-                          alt="sidebar illustrations"
-                        />
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -720,11 +772,13 @@ export const DashboardComponent = () => {
                     </div>
 
                     {/* Botón para configuraciones */}
-                    <Dropdown
-                      arrowIcon={false}
-                      inline
-                      label={
-                        <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
+                    <div className="relative inline-block">
+                      {/* Dropdown toggle button */}
+                      <button
+                        className="relative z-10 flex items-center"
+                        onClick={() => setDropdownItem(!dropdownItem)}
+                      >
+                        <div className="flex flex-row items-center text-sm gap-x-3">
                           <div className="flex flex-col justify-end ps-8 my-0">
                             <p className="flex items-center justify-end text-sm font-semibold text-gray-700 dark:text-gray-200">
                               {user?.username}
@@ -750,35 +804,41 @@ export const DashboardComponent = () => {
                             </div>
                           </div>
                         </div>
-                      }
-                    >
-                      <Dropdown.Header>
-                        <span className="block text-sm">{user?.username}</span>
+                      </button>
 
-                        <span className="block truncate text-sm font-medium">
-                          {user?.username}@clarkbank.com
-                        </span>
-                      </Dropdown.Header>
-                      <Dropdown.Item>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.4}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                          />
-                        </svg>
-                        <p className="ml-2" onClick={handlelogout}>
-                          Cerrar Sesión
-                        </p>
-                      </Dropdown.Item>
-                    </Dropdown>
+                      {/* Dropdown menu */}
+                      {dropdownItem && (
+                        <div className="absolute right-0 mt-2 z-10 divide-y divide-gray-100 rounded shadow focus:outline-none transition-opacity duration-100 border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white w-max">
+                          <div className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                            <p className="block text-sm">{user?.username}</p>
+                            <p className="block truncate text-sm font-medium">
+                              {user?.username}@clarkbank.com
+                            </p>
+                          </div>
+
+                          <button
+                            className="flex w-full items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white"
+                            onClick={handlelogout}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.4}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                              />
+                            </svg>
+                            <p className="ml-2">Cerrar Sesión</p>
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </header>
@@ -817,8 +877,8 @@ export const DashboardComponent = () => {
                   )}
                   {contenidoSeleccionado === "Boveda" && <Boveda />}
                   {contenidoSeleccionado === "Transfers" && <Transfers />}
-                  {contenidoSeleccionado === "Cancelación" && <Cancelación/>}
-                  {contenidoSeleccionado === "Consignar" && <Consignar/>}
+                  {contenidoSeleccionado === "Cancelacion" && <Cancelacion />}
+                  {contenidoSeleccionado === "Consignar" && <Consignar />}
 
                   {contenidoSeleccionado === "AperturaCuentaAhorro" && (
                     <AperturaCuentaAhorro />
@@ -961,16 +1021,6 @@ export const DashboardComponent = () => {
                       </ul>
                       <hr className="border-gray-200 dark:border-gray-700 mt-6" />
                     </div>
-
-                    <div className="mx-4">
-                      <div className="relative flex flex-col min-w-0 break-words bg-transparent border-0 shadow-none rounded-2xl bg-clip-border">
-                        <img
-                          className="w-1/1 mx-auto"
-                          src="/src/assets/Img/UsoVario/Analytics.svg"
-                          alt="sidebar illustrations"
-                        />
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1016,17 +1066,21 @@ export const DashboardComponent = () => {
                     </div>
 
                     {/* Botón para configuraciones */}
-                    <Dropdown
-                      arrowIcon={false}
-                      inline
-                      label={
-                        <div className="flex flex-row items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 gap-x-3">
+                    <div className="relative inline-block">
+                      {/* Dropdown toggle button */}
+                      <button
+                        className="relative z-10 flex items-center"
+                        onClick={() => setDropdownItem(!dropdownItem)}
+                      >
+                        <div className="flex flex-row items-center text-sm gap-x-3">
                           <div className="flex flex-col justify-end ps-8 my-0">
                             <p className="flex items-center justify-end text-sm font-semibold text-gray-700 dark:text-gray-200">
-                              {data?.nombre}
+                              {userData[0]?.nombre}
                             </p>
                             <p className="flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
-                              {data?.ip_tipodoc + " " + data?.documento}
+                              {userData[0]?.ip_tipodoc +
+                                " " +
+                                userData[0]?.documento}
                             </p>
                           </div>
                           <div className="flex items-center gap-x-6">
@@ -1041,41 +1095,49 @@ export const DashboardComponent = () => {
                             </div>
                           </div>
                         </div>
-                      }
-                    >
-                      <Dropdown.Header>
-                        <span className="block text-sm">
-                          {data?.nombre +
-                            " " +
-                            data?.ip_primerapellido +
-                            " " +
-                            data?.ip_segundoapellido}
-                        </span>
+                      </button>
 
-                        <span className="block truncate text-sm font-medium">
-                          {data?.ip_tipodoc + " " + data?.documento}
-                        </span>
-                      </Dropdown.Header>
-                      <Dropdown.Item>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.4}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                          />
-                        </svg>
-                        <p className="ml-2" onClick={handlelogout}>
-                          Cerrar Sesión
-                        </p>
-                      </Dropdown.Item>
-                    </Dropdown>
+                      {/* Dropdown menu */}
+                      {dropdownItem && (
+                        <div className="absolute right-0 mt-2 z-10 divide-y divide-gray-100 rounded shadow focus:outline-none transition-opacity duration-100 border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white w-max">
+                          <div className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                            <p className="block text-sm">
+                              {userData[0]?.nombre +
+                                " " +
+                                userData[0]?.ip_primerapellido +
+                                " " +
+                                userData[0]?.ip_segundoapellido}
+                            </p>
+                            <p className="block truncate text-sm font-medium">
+                              {userData[0]?.ip_tipodoc +
+                                " " +
+                                userData[0]?.documento}
+                            </p>
+                          </div>
+
+                          <button
+                            className="flex w-full items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white"
+                            onClick={handlelogout}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.4}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                              />
+                            </svg>
+                            <p className="ml-2">Cerrar Sesión</p>
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </header>
@@ -1120,89 +1182,6 @@ export const DashboardComponent = () => {
               </main>
             </div>
           </div>
-          {/* <section className="w-screen h-screen  flex justify-center items-center flex-col">
-            <header>
-              <span className="text-3xl font-bold">Módulo Cliente</span>
-            </header>
-            <main className="h-3/4 w-full bg-white flex justify-center items-center">
-              Lado principal
-              <div
-                className={`bg-white bg-gradient-to-r from-green to-white h-80 w-128 rounded-xl shadow-xl relative ${
-                  flipped ? "flip" : ""
-                }`}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <div
-                  className={`h-1/3 flex items-end ${flipped ? "hidden" : ""}`}
-                >
-                  <img className="pl-4" src={ChipCard} alt="" />
-                  <img className="text-stone-300" src={""} alt="" />
-                </div>
-                <div
-                  className={`h-2/3 flex justify-end items-end ${
-                    flipped ? "hidden" : ""
-                  }`}
-                >
-                  <img className="w-36 py-5" src={Namelogo} alt="" />
-                  <img className="h-32" src={Logo} alt="" />
-                </div>
-                <div
-                  className={`h-12 mt-8 bg-emerald-700 ${
-                    flipped ? "" : "hidden"
-                  }`}
-                >
-                  Contenido en el reverso de la tarjeta
-                  <div className="flip-content">
-                    <div
-                      className={`text-gray-800 pt-16 flex justify-center text-4xl `}
-                    >
-                      <p>${userData[0].saldo}</p>
-                    </div>
-                    <div
-                      className={`text-gray-800 mt-24 flex flex-col justify-end items-end px-2 `}
-                    >
-                      <p>{userData[0].descripcion}</p>
-                      <p>{userData[0].num_cuenta}</p>
-                      <p className="text-lg">
-                        {userData[0].ip_primernombre}{" "}
-                        {userData.ip_primerapellido}{" "}
-                        {userData[0].ip_primernombre}{" "}
-                        {userData.ip_primerapellido}{" "}
-                        {userData[0].ip_segundoapellido}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </main>
-
-            <div>
-              <Dropdown
-                arrowIcon={false}
-                inline
-                label={
-                  <div className="flex flex-row items-center  text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600">
-                    {" "}
-                    <p className=" flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-600 ">
-                      {user?.username} - {user?.id_rol == 2 && <> Asesor </>}
-                      {user?.id_rol == 1 && <> Director </>}{" "}
-                    </p>
-                    <HiUserCircle color="gray" className="w-16 h-10 " />{" "}
-                  </div>
-                }
-              >
-                <Dropdown.Header>
-                  <span className="block text-sm">{user?.username}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {user?.username}@ClarBank.com
-                  </span>
-                </Dropdown.Header>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handlelogout}>Salir</Dropdown.Item>
-              </Dropdown>
-            </div>
-          </section> */}
         </>
       )}
     </>

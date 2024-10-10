@@ -5,16 +5,12 @@ import ChipCard from "../../../../assets/Img/Client/chip.png";
 import Logo from "../../../../assets/Img/Logos/ClarBank LogoOnly.svg";
 import { ClientMovimientos } from "./ClientMovimientos";
 import { AllTarjets } from "./AllTarjets";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 export const ClientView = ({
-  user,
   isLoggedIn,
-  userName,
-  setUserName,
   userData,
-  setUserData,
   contenidoCliente,
-  logout,
   setContenidoCliente,
 }) => {
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -29,19 +25,6 @@ export const ClientView = ({
   const autorizedAccounts = userData.filter(
     (data) => data.estado_cuenta === "Autorizado"
   );
-
-  // Función para formatear el costo a miles sin decimales.
-  const formatSaldo = (saldo) => {
-    // Crea una instancia de Intl.NumberFormat con la configuración regional "es-CO" (Colombia)
-    const formatter = new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
-
-    // Formatea el costo usando la configuración especificada.
-    return formatter.format(saldo);
-  };
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -112,7 +95,7 @@ export const ClientView = ({
                           Saldo total
                         </div>
                         <div className="text-xl md:text-lg lg:text-3xl xl:text-2xl 2xl:text-3xl  font-bold">
-                          {formatSaldo(selectedAccount.saldo)}
+                          {saldoFormatter(selectedAccount.saldo)}
                         </div>
                       </div>
                     </div>
