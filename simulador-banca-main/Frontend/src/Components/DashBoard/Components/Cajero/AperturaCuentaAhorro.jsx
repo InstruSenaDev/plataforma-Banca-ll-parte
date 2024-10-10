@@ -189,7 +189,7 @@ const AperturaCuentaAhorro = () => {
                                     </p>
 
                                     <p className="mt-4 text-gray-500 dark:text-gray-400">
-                                      No se encuentran cajeros solicitantes
+                                      No se encuentran Cuentas nuevas
                                     </p>
                                   </div>
                                 </div>

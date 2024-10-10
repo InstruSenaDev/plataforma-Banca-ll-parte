@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Pagination } from "../../../Pagination/Pagination";
 import { dateFormatter } from "../../../../utils/dateFormatter";
 
-export const Historial = () => {
+export const Cancelacion = () => {
   const [datauser, setdatauser] = useState([]);
 
   const [allMovimientos, setAllMovimientos] = useState([]);
@@ -139,7 +139,7 @@ export const Historial = () => {
 
         <div className="flex flex-col justify-between flex-1">
           <div className="flex flex-col mt-6">
-            <div className="-mx-4 -my-2 overflow-x-auto">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                   <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -246,31 +246,30 @@ export const Historial = () => {
                                 </div>
                               </td>
 
-                              <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                    <span className="text-emerald-500">
+                              <td className="px-6 py-4 text-sm font-medium text-red-700 dark:text-red-200 whitespace-nowrap">
+                                <button className="w-full inline-flex justify-center items-center gap-x-3">
+                                  <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 bg-red-100 dark:bg-gray-800">
+                                    <span className="text-red-500">
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
+                                        strokeWidth="1.5"
                                         stroke="currentColor"
-                                        className="size-4"
+                                        className="size-6"
                                       >
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          d="m4.5 12.75 6 6 9-13.5"
+                                          d="M6 18 18 6M6 6l12 12"
                                         />
                                       </svg>
                                     </span>
-
-                                    <h2 className="text-sm font-normal text-emerald-500">
-                                      {data.estado_cliente}
+                                    <h2 className="text-sm font-normal text-red-500">
+                                      Cancelar cuenta
                                     </h2>
                                   </div>
-                                </div>
+                                </button>
                               </td>
                             </tr>
                           </React.Fragment>

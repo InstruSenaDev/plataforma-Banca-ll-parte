@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../../context/AuthContext";
+import { Modal } from "flowbite-react";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 export const ModalConsignarCajero = ({
   openConsing,
@@ -12,6 +14,7 @@ export const ModalConsignarCajero = ({
   const { user } = useAuth();
   const [amount, setAmount] = useState("");
   const [empleadoDetails, setEmpleadoDetails] = useState([]);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
   // Trae todos los empleados
   const fetchEmpleados = async () => {
@@ -248,10 +251,51 @@ export const ModalConsignarCajero = ({
             <div className="flex items-center p-6">
               <button
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-white text-sm font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 h-10 px-6 py-2 ml-auto"
-                onClick={handleConsign}
+                onClick={() => {
+                  setOpenConfirmModal(true);
+                }}
               >
                 Enviar
               </button>
+              <Modal
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                show={openConfirmModal}
+                size="md"
+                onClose={() => setOpenConfirmModal(false)}
+                popup
+              >
+                <Modal.Header>
+                  <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                    Confirmar Consignacion
+                  </span>
+                </Modal.Header>
+                <Modal.Body className="px-5 pt-2 pb-5">
+                  <div className="space-y-6">
+                    <p className="text-gray-700 dark:text-white">
+                      ¿Estás seguro de que deseas consignar{" "}
+                      {saldoFormatter(amount)} al Empleado{" "}
+                      {idEmpleadoDetails?.username}?
+                    </p>
+                    <div className="flex justify-between">
+                      <button
+                        onClick={() => {
+                          handleConsign(); // Call the actual function to process the deposit
+                          setOpenConfirmModal(false); // Close the confirmation modal
+                        }}
+                        className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+                      >
+                        Aceptar
+                      </button>
+                      <button
+                        onClick={() => setOpenConfirmModal(false)}
+                        className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                </Modal.Body>
+              </Modal>
             </div>
           </div>
         </div>
