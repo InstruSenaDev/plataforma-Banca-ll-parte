@@ -297,7 +297,7 @@ export const ClientMovimientos = ({
                 {allMovimientosLocal && allMovimientosLocal.length > 0 ? (
                   allMovimientosLocal.slice(0, 9).map((data) => (
                     <React.Fragment key={data.id_movimiento}>
-                      <div className="flex w-full border-b border-gray-200 py-3">
+                      <div className="flex flex-col md:flex-row w-full border-b border-gray-200 py-3">
                         <div className="w-full inline-flex justify-start items-center gap-x-3">
                           <div className="flex justify-start w-48">
                             <div className="flex items-center gap-x-2">

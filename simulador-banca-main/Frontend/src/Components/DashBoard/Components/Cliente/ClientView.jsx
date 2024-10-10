@@ -86,7 +86,7 @@ export const ClientView = ({
               <ul className="flex flex-col gap-x-4">
                 <li>
                   <div className="flex flex-col justify-between items-start gap-6 mx-auto p-4 bg-white rounded sm:flex-row sm:items-center">
-                    <div className="py-6 px-8 flex flex-col gap-4 w-full bg-gradient-to-r from-teal-600 to-teal-300 shadow-xl relative rounded-lg sm:w-96">
+                    <div className="py-6 px-8 flex flex-col gap-4 w-full bg-gradient-to-r from-teal-600 to-teal-300 shadow-xl rounded-lg sm:w-96">
                       <div>
                         <img src={Logo} alt="ClarkBank" className="h-10" />
                       </div>
@@ -108,10 +108,10 @@ export const ClientView = ({
                     </div>
                     <div className="flex flex-col gap-4 flex-auto">
                       <div className="bg-card rounded-lg p-6 flex items-center justify-between">
-                        <div className="text-muted-foreground text-xl md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl font-medium">
+                        <div className="text-muted-foreground text-2sm md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl font-medium">
                           Saldo total
                         </div>
-                        <div className="text-xl md:text-lg lg:text-3xl xl:text-2xl 2xl:text-3xl  font-bold">
+                        <div className="text-2sm md:text-lg lg:text-3xl xl:text-2xl 2xl:text-3xl  font-bold">
                           {formatSaldo(selectedAccount.saldo)}
                         </div>
                       </div>

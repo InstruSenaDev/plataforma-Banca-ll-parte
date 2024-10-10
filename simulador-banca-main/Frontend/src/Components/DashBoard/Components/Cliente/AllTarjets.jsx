@@ -27,11 +27,11 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                   <React.Fragment key={data.id_detalle}>
                     <div className="w-full border-b border-gray-200 py-3">
                       <li>
-                        <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-col sm:flex-row justify-between items-center">
                           <div className="flex flex-row justify-center items-center">
                             <img src={CreditCard} className="h-16 sm:h-20" />
-                            <div className="py-6 px-8 flex flex-col gap-4">
-                              <div className="flex flex-col items-start justify-center   font-semibold leading-normal text-black">
+                            <div className="py-6 px-4 flex flex-col justify-center">
+                              <div className="font-semibold leading-normal text-black">
                                 <div className="text-normal sm:text-lg md:text-xl">
                                   {data.num_cuenta}
                                 </div>
@@ -41,7 +41,7 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                               </div>
                             </div>
                           </div>
-                          <div className="flex flex-col justify-center items-end gap-4">
+                          <div className="flex flex-col justify-center items-end gap-4 mt-4 sm:mt-0">
                             <div className="flex flex-col justify-center items-center gap-4">
                               <div className="flex justify-center items-center px-3 py-2 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                                 <span className="text-emerald-500 text-xs sm:text-sm md:text-base">
@@ -83,11 +83,11 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                 <React.Fragment key={data.id_detalle}>
                   <div className="w-full border-b border-gray-200 py-3">
                     <li>
-                      <div className="flex flex-row justify-between items-center">
+                      <div className="flex flex-col sm:flex-row justify-between items-center">
                         <div className="flex flex-row justify-center items-center">
                           <img src={CreditCard} className="h-16 sm:h-20" />
-                          <div className="py-6 px-8 flex flex-col gap-4">
-                            <div className="flex flex-col items-start justify-center   font-semibold leading-normal text-black">
+                          <div className="py-6 px-4 flex flex-col justify-center">
+                            <div className="font-semibold leading-normal text-black">
                               <div className="text-normal sm:text-lg md:text-xl">
                                 {data.num_cuenta}
                               </div>
@@ -117,12 +117,10 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                                     />
                                   </svg>
                                 </span>
-
                                 <h2 className="text-xs sm:text-sm md:text-md font-normal text-emerald-500">
                                   Activa
                                 </h2>
                               </div>
-
                               <button
                                 className="border-solid border border-DarkSlate px-2 py-1 text-sm rounded-md text-DarkSlate hover:bg-DarkSlate hover:text-white transition sm:px-4 sm:py-2 sm:text-base sm:rounded-lg"
                                 onClick={() => onSelectAccount(data)}
@@ -150,7 +148,6 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                                   />
                                 </svg>
                               </span>
-
                               <h2 className="text-md font-normal text-amber-500">
                                 Pendiente
                               </h2>
@@ -175,7 +172,6 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                                   />
                                 </svg>
                               </span>
-
                               <h2 className="text-md font-normal text-red-500">
                                 Cuenta Rechazada
                               </h2>
@@ -200,7 +196,6 @@ export const AllTarjets = ({ userData, onSelectAccount, contenidoCliente }) => {
                                   />
                                 </svg>
                               </span>
-
                               <h2 className="text-md font-normal text-amber-500">
                                 Pendiente
                               </h2>
