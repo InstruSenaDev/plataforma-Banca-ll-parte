@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { Modal } from "flowbite-react";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 export const ModalDevolver = ({ openModal1, setOpenModal1 }) => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState({});
@@ -198,7 +199,8 @@ export const ModalDevolver = ({ openModal1, setOpenModal1 }) => {
                 <Modal.Body className="px-5 pt-2 pb-5">
                   <div className="space-y-6">
                     <p className="text-gray-700 dark:text-white">
-                      ¿Estás seguro de que deseas devolver {amount} a la Bóveda.
+                      ¿Estás seguro de que deseas devolver{" "}
+                      {saldoFormatter(amount)} a la Bóveda?
                     </p>
                     <div className="flex justify-between">
                       <button

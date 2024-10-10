@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../../context/AuthContext";
 import { Modal } from "flowbite-react";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 export const ModalConsignarCajero = ({
   openConsing,
@@ -271,7 +272,8 @@ export const ModalConsignarCajero = ({
                 <Modal.Body className="px-5 pt-2 pb-5">
                   <div className="space-y-6">
                     <p className="text-gray-700 dark:text-white">
-                      ¿Estás seguro de que deseas consignar {amount} al Empleado{" "}
+                      ¿Estás seguro de que deseas consignar{" "}
+                      {saldoFormatter(amount)} al Empleado{" "}
                       {idEmpleadoDetails?.username}?
                     </p>
                     <div className="flex justify-between">

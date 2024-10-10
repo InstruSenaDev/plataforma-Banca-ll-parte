@@ -331,43 +331,44 @@ export const Inicio = () => {
                               Enviar
                             </button>
                             <Modal
-                        className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                        show={openConfirmModal}
-                        size="md"
-                        onClose={() => setOpenConfirmModal(false)}
-                        popup
-                      >
-                        <Modal.Header>
-                          <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                            Confirmar Entrega
-                          </span>
-                        </Modal.Header>
-                        <Modal.Body className="px-5 pt-2 pb-5">
-                          <div className="space-y-6">
-                            <p className="text-gray-700 dark:text-white">
-                              ¿Estás seguro de que deseas Entregar {amount} a la cuenta
-                              {/*  {modalData?.num_cuenta}? */}
-                            </p>
-                            <div className="flex justify-between">
-                              <button
-                                onClick={() => {
-                                  handleDevolverSaldo();// Call the actual function to process the deposit
-                                  setOpenConfirmModal(false); // Close the confirmation modal
-                                }}
-                                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
-                              >
-                                Aceptar
-                              </button>
-                              <button
-                                onClick={() => setOpenConfirmModal(false)}
-                                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
-                              >
-                                Cancelar
-                              </button>
-                            </div>
-                          </div>
-                        </Modal.Body>
-                      </Modal>
+                              className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                              show={openConfirmModal}
+                              size="md"
+                              onClose={() => setOpenConfirmModal(false)}
+                              popup
+                            >
+                              <Modal.Header>
+                                <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                                  Confirmar Entrega
+                                </span>
+                              </Modal.Header>
+                              <Modal.Body className="px-5 pt-2 pb-5">
+                                <div className="space-y-6">
+                                  <p className="text-gray-700 dark:text-white">
+                                    ¿Estás seguro de que deseas Entregar{" "}
+                                    {saldoFormatter(amount)} a la cuenta?
+                                    {/*  {modalData?.num_cuenta}? */}
+                                  </p>
+                                  <div className="flex justify-between">
+                                    <button
+                                      onClick={() => {
+                                        handleDevolverSaldo(); // Call the actual function to process the deposit
+                                        setOpenConfirmModal(false); // Close the confirmation modal
+                                      }}
+                                      className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+                                    >
+                                      Aceptar
+                                    </button>
+                                    <button
+                                      onClick={() => setOpenConfirmModal(false)}
+                                      className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                                    >
+                                      Cancelar
+                                    </button>
+                                  </div>
+                                </div>
+                              </Modal.Body>
+                            </Modal>
                           </div>
                         </div>
                       </Modal.Body>
@@ -450,51 +451,54 @@ export const Inicio = () => {
                                 </div>
                                 <div className="w-full">
                                   <button
-                                onClick={() => {
-                                  setOpenConfirmModal1(true);
-                                }}
+                                    onClick={() => {
+                                      setOpenConfirmModal1(true);
+                                    }}
                                     className={`w-full bg-green hover:bg-green hover:scale-105 duration-100 text-white font-bold py-2 px-4 rounded transition-all`}
                                   >
                                     Enviar
                                   </button>
                                   <Modal
-                        className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
-                        show={openConfirmModal1}
-                        size="md"
-                        onClose={() => setOpenConfirmModal1(false)}
-                        popup
-                      >
-                        <Modal.Header>
-                          <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                            Confirmar Solicitud
-                          </span>
-                        </Modal.Header>
-                        <Modal.Body className="px-5 pt-2 pb-5">
-                          <div className="space-y-6">
-                            <p className="text-gray-700 dark:text-white">
-                              ¿Estás seguro de que deseas Solicitar {amount} a la cuenta
-                              {/*  {modalData?.num_cuenta}? */}
-                            </p>
-                            <div className="flex justify-between">
-                              <button
-                                onClick={() => {
-                                  handleSolicitarSaldo();// Call the actual function to process the deposit
-                                  setOpenConfirmModal1(false); // Close the confirmation modal
-                                }}
-                                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
-                              >
-                                Aceptar
-                              </button>
-                              <button
-                                onClick={() => setOpenConfirmModal1(false)}
-                                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
-                              >
-                                Cancelar
-                              </button>
-                            </div>
-                          </div>
-                        </Modal.Body>
-                      </Modal>
+                                    className="bg-black bg-opacity-60 flex justify-center items-center w-screen h-screen p-0"
+                                    show={openConfirmModal1}
+                                    size="md"
+                                    onClose={() => setOpenConfirmModal1(false)}
+                                    popup
+                                  >
+                                    <Modal.Header>
+                                      <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
+                                        Confirmar Solicitud
+                                      </span>
+                                    </Modal.Header>
+                                    <Modal.Body className="px-5 pt-2 pb-5">
+                                      <div className="space-y-6">
+                                        <p className="text-gray-700 dark:text-white">
+                                          ¿Estás seguro de que deseas Solicitar{" "}
+                                          {saldoFormatter(amount)} a la cuenta?
+                                          {/*  {modalData?.num_cuenta}? */}
+                                        </p>
+                                        <div className="flex justify-between">
+                                          <button
+                                            onClick={() => {
+                                              handleSolicitarSaldo(); // Call the actual function to process the deposit
+                                              setOpenConfirmModal1(false); // Close the confirmation modal
+                                            }}
+                                            className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
+                                          >
+                                            Aceptar
+                                          </button>
+                                          <button
+                                            onClick={() =>
+                                              setOpenConfirmModal1(false)
+                                            }
+                                            className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
+                                          >
+                                            Cancelar
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </Modal.Body>
+                                  </Modal>
                                 </div>
                               </div>
                             </Modal.Body>

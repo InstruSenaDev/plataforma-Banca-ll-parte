@@ -10,6 +10,8 @@ export const AutorizacionCuentas = () => {
   const [showModal, setShowModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
+  const [account, setAccount] = useState("");
+
   const waitingAccounts = async () => {
     try {
       const response = await fetch("http://localhost:3000/waiting");
@@ -25,7 +27,7 @@ export const AutorizacionCuentas = () => {
 
   const estado = dataUser.map((user) => user.estado_cliente == "Pendiente");
 
-  const autorizar = (id) => {
+  const handleAuthorize = (id) => {
     console.log(id);
     try {
       // Realiza una solicitud al servidor para cambiar el estado del cliente con el ID proporcionado
@@ -66,6 +68,11 @@ export const AutorizacionCuentas = () => {
   };
 
   const waitingLength = dataUser.length;
+
+  const openConfirm = (account) => {
+    setOpenConfirmModal(true);
+    setAccount(account);
+  };
 
   const openModal = (dataUser) => {
     setModalData(dataUser);
@@ -243,7 +250,7 @@ export const AutorizacionCuentas = () => {
 
                                 <button
                                   onClick={() => {
-                                    setOpenConfirmModal(true);
+                                    openConfirm(data.num_cuenta);
                                   }}
                                   href="#"
                                   className="ext-gray-500 transition-colors duration-200 dark:hover:text-emerald-500 dark:text-gray-300 hover:text-emerald-600 focus:outline-none"
@@ -272,29 +279,31 @@ export const AutorizacionCuentas = () => {
                                 >
                                   <Modal.Header>
                                     <span className="text-xl py-2 pl-4 pr-3 font-medium text-gray-900 dark:text-white">
-                                     Autorizar Cuenta
+                                      Autorizar Cuenta
                                     </span>
                                   </Modal.Header>
                                   <Modal.Body className="px-5 pt-2 pb-5">
                                     <div className="space-y-6">
                                       <p className="text-gray-700 dark:text-white">
                                         ¿Estás seguro de que deseas Autorizar
-                                        esta cuenta {data.num_cuenta} ?
+                                        esta cuenta {account}?
                                       </p>
                                       <div className="flex justify-between">
                                         <button
                                           onClick={() => {
-                                            autorizar(data.id_detalle); // Call the actual function to process the deposit
+                                            handleAuthorize(data.id_detalle); // Call the actual function to process the deposit
                                             setOpenConfirmModal(false); // Close the confirmation modal
+                                            setAccount("");
                                           }}
                                           className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
                                         >
                                           Aceptar
                                         </button>
                                         <button
-                                          onClick={() =>
-                                            setOpenConfirmModal(false)
-                                          }
+                                          onClick={() => {
+                                            setOpenConfirmModal(false);
+                                            setAccount("");
+                                          }}
                                           className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition duration-200"
                                         >
                                           Cancelar

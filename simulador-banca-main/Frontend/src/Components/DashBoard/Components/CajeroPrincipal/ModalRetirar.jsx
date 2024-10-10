@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../../context/AuthContext";
 import { toast } from "react-toastify";
 import { Modal } from "flowbite-react";
+import { saldoFormatter } from "../../../../utils/saldoFormatter";
 
 export const ModalRetirar = ({ openModal, setOpenModal }) => {
   const [idEmpleadoDetails, setIdEmpleadoDetails] = useState("");
@@ -211,7 +212,8 @@ export const ModalRetirar = ({ openModal, setOpenModal }) => {
                 <Modal.Body className="px-5 pt-2 pb-5">
                   <div className="space-y-6">
                     <p className="text-gray-700 dark:text-white">
-                      ¿Estás seguro de que deseas Retirar {amount} de Bóveda.
+                      ¿Estás seguro de que deseas Retirar{" "}
+                      {saldoFormatter(amount)} de Bóveda?
                     </p>
                     <div className="flex justify-between">
                       <button
