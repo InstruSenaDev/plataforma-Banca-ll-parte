@@ -260,7 +260,7 @@ export const ClientMovimientos = ({
 
       {contenidoCliente === "ClientView" && (
         <>
-          <section className="w-full md:flex-auto md:w-0">
+          <section className="w-full md:flex-auto lg:md:w-0">
             <div className="bg-white flex flex-col justify-between flex-1 rounded p-4">
               <h1 className="text-xl font-semibold">Tus movimientos</h1>
 
@@ -268,9 +268,9 @@ export const ClientMovimientos = ({
                 {allMovimientosLocal && allMovimientosLocal.length > 0 ? (
                   allMovimientosLocal.slice(0, 9).map((data) => (
                     <React.Fragment key={data.id_movimiento}>
-                      <div className="flex flex-col md:flex-row w-full border-b border-gray-200 py-3">
+                      <div className="flex w-full border-b border-gray-200 py-3">
                         <div className="w-full inline-flex justify-start items-center gap-x-3">
-                          <div className="flex justify-start w-48">
+                          <div className="flex justify-start sm:w-48">
                             <div className="flex items-center gap-x-2">
                               <img
                                 className="object-cover w-10 h-10 rounded-full"

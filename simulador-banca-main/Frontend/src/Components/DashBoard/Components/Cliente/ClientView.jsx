@@ -90,13 +90,11 @@ export const ClientView = ({
                       </div>
                     </div>
                     <div className="flex flex-col gap-4 flex-auto">
-                      <div className="bg-card rounded-lg p-6 flex items-center justify-between">
-                        <div className="text-muted-foreground text-2sm md:text-lg lg:text-xl xl:text-xl 2xl:text-2xl font-medium">
+                      <div className="bg-card rounded-lg p-6 flex flex-col 2xl:flex-row items-center justify-between">
+                        <div className="text-muted-foreground text-2sm md:text-lg lg:text-lg xl:text-lg 2xl:text-2xl font-medium">
                           Saldo total
                         </div>
-                        <div className="text-2sm md:text-lg lg:text-3xl xl:text-2xl 2xl:text-3xl  font-bold">
-                          {formatSaldo(selectedAccount.saldo)}
-                        <div className="text-xl md:text-lg lg:text-3xl xl:text-2xl 2xl:text-3xl  font-bold">
+                        <div className="text-xl md:text-lg lg:text-lg xl:text-xl 2xl:text-3xl font-bold">
                           {saldoFormatter(selectedAccount.saldo)}
                         </div>
                       </div>
